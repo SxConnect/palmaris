@@ -59,10 +59,18 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${TRAEFIK_NETWORK:-portainer_default}"
-      - "traefik.http.routers.palmaris.rule=Host(`palmaris.com.br`) || Host(`www.palmaris.com.br`)"
-      - "traefik.http.routers.palmaris.entrypoints=web,websecure"
-      - "traefik.http.services.palmaris.loadbalancer.server.port=3000"
+      # Router HTTPS (websecure)
+      - "traefik.http.routers.palmaris.rule=Host(`palmaris.com.br`)"
+      - "traefik.http.routers.palmaris.entrypoints=websecure"
+      - "traefik.http.routers.palmaris.tls=true"
       - "traefik.http.routers.palmaris.tls.certresolver=leresolver"
+      - "traefik.http.services.palmaris.loadbalancer.server.port=3000"
+      # Router HTTP (porta 80) redirecionando automaticamente para HTTPS
+      - "traefik.http.routers.palmaris-http.rule=Host(`palmaris.com.br`)"
+      - "traefik.http.routers.palmaris-http.entrypoints=web"
+      - "traefik.http.routers.palmaris-http.middlewares=palmaris-redirect"
+      - "traefik.http.middlewares.palmaris-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.palmaris-redirect.redirectscheme.permanent=true"
 
 volumes:
   palmaris-db:
