@@ -1,5 +1,5 @@
 #!/bin/sh
-# Entrypoint do container do site ALMZO (imagem única e auto-migrante).
+# Entrypoint do container do site Palmaris Representações (imagem auto-migrante).
 #
 # 1. espera o PostgreSQL ficar disponível;
 # 2. aplica as migrações do Prisma;
@@ -9,7 +9,7 @@ set -e
 
 DB_HOST="${DB_HOST:-db}"
 DB_PORT="${DB_PORT:-5432}"
-DB_USER="${DB_USER:-almzo}"
+DB_USER="${DB_USER:-palmaris}"
 
 echo "==> Aguardando o PostgreSQL (${DB_HOST}:${DB_PORT})..."
 until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" >/dev/null 2>&1; do
@@ -23,5 +23,5 @@ node ./node_modules/prisma/build/index.js migrate deploy
 echo "==> Carregando o conteúdo inicial (idempotente)..."
 node --import tsx prisma/seed.ts
 
-echo "==> ALMZO no ar em http://0.0.0.0:${PORT:-3000} (painel em /admin)"
+echo "==> Palmaris Representações no ar em http://0.0.0.0:${PORT:-3000} (painel em /admin)"
 exec node server.js
