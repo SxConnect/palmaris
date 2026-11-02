@@ -1,0 +1,233 @@
+// ALMZO — esquema do banco (Prisma 7 / PostgreSQL)
+// Documentação: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+/// Usuário do painel administrativo.
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(USER)
+  /// Conta bloqueada: não entra no painel, não recupera senha e não pode se
+  /// cadastrar novamente com este e-mail.
+  blocked      Boolean  @default(false)
+  /// Conta principal do dono do site. Ninguém (nem outros administradores)
+  /// pode apagá-la, rebaixá-la ou bloqueá-la.
+  owner        Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions       Session[]
+  posts          Post[]
+  passwordResets PasswordResetToken[]
+
+  @@map("users")
+}
+
+/// Sessão autenticada. O cookie guarda o token bruto;
+/// no banco guardamos apenas o hash.
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  userAgent String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+/// Token de recuperação de senha (uso único, com validade curta).
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+/// Imagem enviada pelo painel. O arquivo é guardado no próprio banco,
+/// então o site funciona sem depender de filesystem (compatível com Docker/VPS).
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  mimeType  String
+  data      Bytes
+  size      Int
+  altText   String?
+  createdAt DateTime @default(now())
+
+  posts         Post[]
+  galleryImages GalleryImage[]
+
+  @@map("media")
+}
+
+/// Galeria de fotos. Pode ser inserida em notícias e páginas pelo shortcode
+/// `[galeria slug="..."]`.
+model Gallery {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  images GalleryImage[]
+
+  @@map("galleries")
+}
+
+/// Imagem de uma galeria (ordem e legenda).
+model GalleryImage {
+  id        String  @id @default(cuid())
+  galleryId String
+  gallery   Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  mediaId   String
+  media     Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  position  Int     @default(0)
+  caption   String?
+
+  @@index([galleryId, position])
+  @@map("gallery_images")
+}
+
+/// Notícia/artigo publicado no site (seção "Notícias").
+model Post {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  excerpt      String?
+  content      String
+  category     String?
+  published    Boolean  @default(false)
+  showOnHome   Boolean  @default(true)
+  coverImageId String?
+  coverImage   Media?   @relation(fields: [coverImageId], references: [id], onDelete: SetNull)
+  authorId     String?
+  author       User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([published, createdAt])
+  @@index([showOnHome])
+  @@map("posts")
+}
+
+/// Página do site (Quem Somos, Nossa Luta, Transparência, Contato, Filiados...).
+model Page {
+  id         String   @id @default(cuid())
+  title      String
+  slug       String   @unique
+  content    String
+  published  Boolean  @default(true)
+  showInMenu Boolean  @default(false)
+  menuOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  menuItems MenuItem[]
+  sections  Section[]
+
+  @@map("pages")
+}
+
+/// Bloco de conteúdo de uma página.
+///
+/// `kind` define o tipo do bloco e muda como ele é renderizado no site:
+///  - "html"     → conteúdo em HTML livre (campo `content`)
+///  - "hero"     → bloco de capa (título, subtítulo, imagem de fundo e botão)
+///  - "about"    → "Quem somos" (texto corrido + lista de pilares)
+///  - "projects" → "Nossos projetos" (lista de cards)
+///  - "news"     → últimas notícias publicadas (bloco automático)
+///  - "cta"      → faixa de chamada para ação
+///
+/// `data` guarda os campos estruturados do bloco (JSON).
+model Section {
+  id           String   @id @default(cuid())
+  pageId       String
+  page         Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  title        String?
+  kind         String   @default("html")
+  content      String   @default("")
+  data         Json?
+  visible      Boolean  @default(true)
+  sectionOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([pageId, sectionOrder])
+  @@map("sections")
+}
+
+/// Item de menu do cabeçalho. `highlight` renderiza o item como botão
+/// em pílula (usado no botão "Filiados").
+model MenuItem {
+  id        String     @id @default(cuid())
+  label     String
+  url       String?
+  pageId    String?
+  page      Page?      @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  parentId  String?
+  parent    MenuItem?  @relation("MenuChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children  MenuItem[] @relation("MenuChildren")
+  menuOrder Int        @default(0)
+  target    String     @default("_self")
+  highlight Boolean    @default(false)
+  visible   Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([parentId])
+  @@map("menu_items")
+}
+
+/// Mensagem enviada pelo formulário de contato do site.
+/// Fica guardada no banco para o administrador ler no painel, mesmo que o
+/// envio de e-mail (SMTP) não esteja configurado.
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  ip        String?
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("contact_messages")
+}
+
+/// Configurações gerais do site (logotipo, endereço, CNPJ, redes sociais...).
+/// O valor é guardado em JSON e editável pelo painel.
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}

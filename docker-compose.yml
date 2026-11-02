@@ -1,0 +1,57 @@
+# docker-compose.yml
+#
+# Stack completa: PostgreSQL + site (frontend + painel CMS).
+# O container do site é auto-migrante: aplica as migrações, carrega o conteúdo
+# inicial (idempotente) e sobe o servidor.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-palmaris}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-troque-esta-senha}
+      POSTGRES_DB: ${POSTGRES_DB:-palmaris}
+    volumes:
+      - palmaris-db:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-palmaris} -d ${POSTGRES_DB:-palmaris}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: palmaris-site:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-palmaris}:${POSTGRES_PASSWORD:-troque-esta-senha}@db:5432/${POSTGRES_DB:-palmaris}?schema=public
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-contato@palmarisrepresentacoes.com.br}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Palmaris@2026}
+      ADMIN_NAME: ${ADMIN_NAME:-Palmaris Representações}
+      ADMIN_RESET: ${ADMIN_RESET:-false}
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: ${POSTGRES_USER:-palmaris}
+    healthcheck:
+      test:
+        ["CMD-SHELL", "wget -q -O - http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+volumes:
+  palmaris-db:
