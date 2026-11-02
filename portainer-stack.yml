@@ -55,11 +55,12 @@ services:
       - "traefik.http.routers.palmaris-http.rule=Host(`palmaris.com.br`)"
       - "traefik.http.routers.palmaris-http.entrypoints=web"
       - "traefik.http.routers.palmaris-http.service=palmaris"
-      # Rota HTTPS (porta 443) — responde se acessado via HTTPS
+      # Rota HTTPS (porta 443) — com emissão de certificado Let's Encrypt
       - "traefik.http.routers.palmaris-https.rule=Host(`palmaris.com.br`)"
       - "traefik.http.routers.palmaris-https.entrypoints=websecure"
       - "traefik.http.routers.palmaris-https.service=palmaris"
       - "traefik.http.routers.palmaris-https.tls=true"
+      - "traefik.http.routers.palmaris-https.tls.certresolver=leresolver"
       # Serviço conectando na porta 3000 do container
       - "traefik.http.services.palmaris.loadbalancer.server.port=3000"
 
