@@ -59,8 +59,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${TRAEFIK_NETWORK:-portainer_default}"
-      - "traefik.http.routers.palmaris.rule=Host(`${TRAEFIK_DOMAIN:-palmaris.com.br}`) || Host(`www.${TRAEFIK_DOMAIN:-palmaris.com.br}`)"
-      - "traefik.http.routers.palmaris.entrypoints=websecure"
+      - "traefik.http.routers.palmaris.rule=Host(`palmaris.com.br`) || Host(`www.palmaris.com.br`)"
+      - "traefik.http.routers.palmaris.entrypoints=web,websecure"
       - "traefik.http.services.palmaris.loadbalancer.server.port=3000"
       - "traefik.http.routers.palmaris.tls.certresolver=leresolver"
 
