@@ -94,26 +94,41 @@ const TEXTO_PROJETOS = `
 /* ------------------------------------------------------------------ */
 
 async function main() {
-  const email = (process.env.ADMIN_EMAIL || "contato@palmarisrepresentacoes.com.br").toLowerCase();
+  const email = (process.env.ADMIN_EMAIL || "contato@palmaris.com.br").toLowerCase();
   const password = process.env.ADMIN_PASSWORD || "Palmaris@2026";
-  const name = process.env.ADMIN_NAME || "Diretoria Palmaris";
+  const name = process.env.ADMIN_NAME || "Contato / Super Admin";
 
-  /* 1. Usuário administrador --------------------------------------- */
+  /* 1. Usuários do sistema ----------------------------------------- */
   const passwordHash = await bcrypt.hash(password, 10);
-  const wantsReset = /^(1|true|yes)$/i.test(process.env.ADMIN_RESET || "");
-  const existingAdmin = await prisma.user.findUnique({ where: { email } });
 
-  if (!existingAdmin) {
-    await prisma.user.create({
-      data: { email, name, passwordHash, role: "ADMIN", owner: true },
+  // Super Admin (contato@palmaris.com.br)
+  await prisma.user.upsert({
+    where: { email },
+    update: { name, passwordHash, role: "ADMIN", owner: true, blocked: false },
+    create: { email, name, passwordHash, role: "ADMIN", owner: true },
+  });
+  console.log(`Super Admin garantido: ${email}`);
+
+  // Usuários de e-mail corporativo (comercial, engenharia, projetos)
+  const corporateUsers = [
+    { email: "comercial@palmaris.com.br", name: "Comercial Palmaris" },
+    { email: "engenharia@palmaris.com.br", name: "Engenharia Palmaris" },
+    { email: "projetos@palmaris.com.br", name: "Projetos Palmaris" },
+  ];
+
+  for (const u of corporateUsers) {
+    await prisma.user.upsert({
+      where: { email: u.email },
+      update: { name: u.name, passwordHash, blocked: false },
+      create: {
+        email: u.email,
+        name: u.name,
+        passwordHash,
+        role: "USER",
+        owner: false,
+      },
     });
-    console.log(`Admin criado: ${email}`);
-  } else if (wantsReset) {
-    await prisma.user.update({
-      where: { email },
-      data: { passwordHash },
-    });
-    console.log(`Senha do admin redefinida via ADMIN_RESET: ${email}`);
+    console.log(`Usuário corporativo configurado: ${u.email}`);
   }
 
   /* 2. Configurações gerais da Palmaris ---------------------------- */
@@ -123,7 +138,7 @@ async function main() {
     logoUrl: "/img/logo-palmaris.jpg",
     address: "Av. Industrial, 1000 - Rio de Janeiro - RJ, CEP 22775-000",
     cnpj: "",
-    email: "contato@palmarisrepresentacoes.com.br",
+    email: "contato@palmaris.com.br",
     phone: "(21) 99876-5432",
     facebookUrl: "",
     instagramUrl: "https://instagram.com/palmarisrepresentacoes",

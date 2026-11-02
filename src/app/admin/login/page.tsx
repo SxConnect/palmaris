@@ -15,8 +15,17 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto max-w-md px-4 py-16">
-      <div className="card">
-        <h1 className="mb-6 text-2xl font-bold">Admin</h1>
+      <div className="card shadow-lg border-slate-200">
+        <div className="mb-6 flex flex-col items-center justify-center text-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/img/logo-palmaris.jpg"
+            alt="Palmaris Representações"
+            className="h-14 w-auto object-contain mb-2.5"
+          />
+          <h1 className="text-xl font-bold text-slate-900">Portal Palmaris</h1>
+          <p className="text-xs text-slate-500">Painel administrativo e Webmail corporativo</p>
+        </div>
         <form action={action} className="space-y-4">
           <div>
             <label className="mb-1 block text-sm font-medium">E-mail</label>

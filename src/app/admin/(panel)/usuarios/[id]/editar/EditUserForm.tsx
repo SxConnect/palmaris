@@ -53,8 +53,8 @@ export default function EditUserForm({
             defaultValue={user.role}
             disabled={!canManageAccess || user.owner}
           >
-            <option value="ADMIN">Administrador — gerencia o site</option>
-            <option value="USER">Usuário — somente leitura</option>
+            <option value="ADMIN">Administrador — Acesso total ao site, CMS e Webmail</option>
+            <option value="USER">Usuário comum — Acesso restrito apenas ao Webmail</option>
           </select>
           {!canManageAccess && !user.owner ? (
             <p className="mt-1 text-xs text-gray-500">

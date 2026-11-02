@@ -18,7 +18,7 @@ export async function loginAction(formData: FormData) {
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || user.role !== "ADMIN") {
+  if (!user) {
     return { error: "Credenciais inválidas." };
   }
 
@@ -33,7 +33,12 @@ export async function loginAction(formData: FormData) {
   }
 
   await createSession(user.id);
-  redirect("/admin");
+
+  if (user.role === "ADMIN" || user.owner) {
+    redirect("/admin");
+  } else {
+    redirect("/admin/email");
+  }
 }
 
 export async function logoutAction() {
