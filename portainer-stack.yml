@@ -1,12 +1,6 @@
 # portainer-stack.yml
-# Stack pronta para colar no Portainer (Stacks → Add stack), integrada ao Traefik
-# e com suporte a HTTPS automático (Let's Encrypt).
-#
-# A imagem do container é auto-migrante:
-# 1. Aguarda o PostgreSQL ficar pronto (healthcheck).
-# 2. Executa as migrações (prisma migrate deploy).
-# 3. Executa o seed idempotente com todo o layout e dados da Palmaris.
-# 4. Inicia o servidor Next.js em produção.
+# Stack pronta para Portainer com suporte a HTTP direto (sem depender de HTTPS)
+# e suporte a HTTPS caso esteja disponível ou via Cloudflare.
 
 version: '3.8'
 
@@ -16,7 +10,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-palmaris}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-troque-esta-senha}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-1We5LDFlzqpVmnx}
       POSTGRES_DB: ${POSTGRES_DB:-palmaris}
     volumes:
       - palmaris-db:/var/lib/postgresql/data
@@ -34,12 +28,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "127.0.0.1:${APP_PORT:-3000}:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-palmaris}:${POSTGRES_PASSWORD:-troque-esta-senha}@db:5432/${POSTGRES_DB:-palmaris}?schema=public
-      - APP_URL=${APP_URL:-https://palmaris.com.br}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-palmaris}:${POSTGRES_PASSWORD:-1We5LDFlzqpVmnx}@db:5432/${POSTGRES_DB:-palmaris}?schema=public
+      - APP_URL=${APP_URL:-http://palmaris.com.br}
       - ADMIN_EMAIL=${ADMIN_EMAIL:-contato@palmaris.com.br}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Palmaris@2026}
       - ADMIN_NAME=${ADMIN_NAME:-Palmaris Representações}
@@ -59,18 +51,17 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${TRAEFIK_NETWORK:-portainer_default}"
-      # Router HTTPS (websecure)
-      - "traefik.http.routers.palmaris.rule=Host(`palmaris.com.br`)"
-      - "traefik.http.routers.palmaris.entrypoints=websecure"
-      - "traefik.http.routers.palmaris.tls=true"
-      - "traefik.http.routers.palmaris.tls.certresolver=leresolver"
-      - "traefik.http.services.palmaris.loadbalancer.server.port=3000"
-      # Router HTTP (porta 80) redirecionando automaticamente para HTTPS
+      # Rota HTTP (porta 80) — responde direto para qualquer navegador sem forçar HTTPS
       - "traefik.http.routers.palmaris-http.rule=Host(`palmaris.com.br`)"
       - "traefik.http.routers.palmaris-http.entrypoints=web"
-      - "traefik.http.routers.palmaris-http.middlewares=palmaris-redirect"
-      - "traefik.http.middlewares.palmaris-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.palmaris-redirect.redirectscheme.permanent=true"
+      - "traefik.http.routers.palmaris-http.service=palmaris"
+      # Rota HTTPS (porta 443) — responde se acessado via HTTPS
+      - "traefik.http.routers.palmaris-https.rule=Host(`palmaris.com.br`)"
+      - "traefik.http.routers.palmaris-https.entrypoints=websecure"
+      - "traefik.http.routers.palmaris-https.service=palmaris"
+      - "traefik.http.routers.palmaris-https.tls=true"
+      # Serviço conectando na porta 3000 do container
+      - "traefik.http.services.palmaris.loadbalancer.server.port=3000"
 
 volumes:
   palmaris-db:
