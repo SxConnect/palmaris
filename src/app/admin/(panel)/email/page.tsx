@@ -18,6 +18,7 @@ export default async function WebmailPage({ searchParams }: Props) {
   let emails: any[] = [];
   let selectedEmail: any = null;
   let currentBoxId = "";
+  let errorMessage = "";
 
   try {
     mailboxes = await listMailboxes(user.email, DEFAULT_MAIL_PASSWORD);
@@ -32,6 +33,7 @@ export default async function WebmailPage({ searchParams }: Props) {
       selectedEmail = await getEmailDetail(user.email, DEFAULT_MAIL_PASSWORD, params.id);
     }
   } catch (err: any) {
+    errorMessage = err?.message || "Erro ao carregar e-mails";
     console.error("Erro ao carregar dados do Webmail JMAP:", err);
   }
 
@@ -46,6 +48,7 @@ export default async function WebmailPage({ searchParams }: Props) {
       emails={emails}
       selectedEmail={selectedEmail}
       currentMailboxId={currentBoxId}
+      errorMessage={errorMessage}
     />
   );
 }

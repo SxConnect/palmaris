@@ -10,12 +10,14 @@ export default function WebmailClient({
   emails,
   selectedEmail,
   currentMailboxId,
+  errorMessage,
 }: {
   currentUser: { email: string; name: string | null; owner: boolean };
   mailboxes: MailboxItem[];
   emails: EmailSummary[];
   selectedEmail: EmailDetail | null;
   currentMailboxId: string;
+  errorMessage?: string;
 }) {
   const [composing, setComposing] = useState(false);
   const [replyTo, setReplyTo] = useState<{ to: string; subject: string } | null>(null);
@@ -109,6 +111,50 @@ export default function WebmailClient({
           <span>Nova Mensagem</span>
         </button>
       </div>
+
+      {/* Cards de resumo por caixa de e-mail */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+        {mailboxes.map((box) => {
+          const active = box.id === currentMailboxId;
+          const folderName = getFolderName(box.name, box.role);
+          const icon = getFolderIcon(box.role);
+          return (
+            <a
+              key={box.id}
+              href={`/admin/email?box=${box.id}`}
+              className={`flex items-center gap-3 rounded-xl border px-3.5 py-2.5 transition shadow-xs ${
+                active
+                  ? "border-brand-300 bg-brand-50/80 shadow-sm"
+                  : "border-slate-200 bg-white hover:border-brand-200 hover:shadow-sm"
+              }`}
+            >
+              <span className="text-xl shrink-0">{icon}</span>
+              <div className="min-w-0">
+                <p className={`text-xs font-bold truncate ${active ? "text-brand-700" : "text-slate-700"}`}>
+                  {folderName}
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="text-[11px] text-slate-500">
+                    {box.totalEmails} {box.totalEmails === 1 ? "e-mail" : "e-mails"}
+                  </span>
+                  {box.unreadEmails > 0 && (
+                    <span className="rounded-full bg-brand-600 px-1.5 py-0.5 text-[10px] font-bold text-white leading-none">
+                      {box.unreadEmails} não lidos
+                    </span>
+                  )}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      {/* Erro de conexão */}
+      {errorMessage && (
+        <div className="mx-4 mt-3 rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700 font-medium">
+          ⚠️ Erro ao carregar e-mails: {errorMessage}
+        </div>
+      )}
 
       {/* Grid de 3 colunas: Pastas | Lista | Leitura */}
       <div className="grid grid-cols-12 flex-1 overflow-hidden">
