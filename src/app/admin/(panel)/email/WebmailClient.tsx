@@ -360,7 +360,7 @@ export default function WebmailClient({
               </button>
             </div>
 
-            <form onSubmit={handleSendSubmit} className="flex flex-col flex-1 overflow-hidden p-5 space-y-3.5">
+            <form onSubmit={handleSendSubmit} className="flex flex-col flex-1 overflow-y-auto p-5 space-y-3.5">
               <div className="text-xs text-slate-500 flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
                 <span className="font-semibold text-slate-700">Remetente:</span>
                 <span>{currentUser.name ? `${currentUser.name} ` : ""}&lt;{currentUser.email}&gt;</span>
@@ -395,7 +395,7 @@ export default function WebmailClient({
                 <textarea
                   name="body"
                   required
-                  rows={8}
+                  rows={5}
                   placeholder="Escreva sua mensagem aqui..."
                   className="w-full flex-1 rounded-lg border border-slate-200 p-3 text-xs focus:border-brand-500 focus:outline-none leading-relaxed"
                 />
@@ -436,7 +436,7 @@ export default function WebmailClient({
                 <p className="rounded-lg bg-green-50 p-2.5 text-xs text-green-700 font-medium">{sendResult.success}</p>
               )}
 
-              <div className="flex items-center justify-end gap-3 pt-2">
+              <div className="sticky bottom-0 bg-white pt-3 pb-1 -mx-5 px-5 border-t border-slate-100 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setComposing(false)}
