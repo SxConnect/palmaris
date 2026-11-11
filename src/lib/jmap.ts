@@ -1,6 +1,7 @@
 /**
  * Biblioteca de integração JMAP (JSON Mail Access Protocol) com o servidor Stalwart.
- * Permite listar caixas postais, ler e-mails em tempo real e enviar mensagens.
+ * Permite listar caixas postais, ler e-mails em tempo real, enviar mensagens com anexos
+ * e baixar anexos recebidos.
  */
 
 const JMAP_URL = process.env.STALWART_JMAP_URL || "https://mail.palmaris.com.br/jmap/";
@@ -12,6 +13,15 @@ export type MailboxItem = {
   role: "inbox" | "sent" | "drafts" | "trash" | "junk" | string;
   totalEmails: number;
   unreadEmails: number;
+};
+
+export type EmailAttachment = {
+  blobId: string;
+  name: string;
+  type: string;
+  size: number;
+  cid?: string;
+  disposition?: string;
 };
 
 export type EmailSummary = {
@@ -31,6 +41,7 @@ export type EmailSummary = {
 export type EmailDetail = EmailSummary & {
   htmlBody: string;
   textBody: string;
+  attachments: EmailAttachment[];
 };
 
 function getAuthHeader(user: string, pass: string): string {
@@ -38,12 +49,9 @@ function getAuthHeader(user: string, pass: string): string {
   return `Basic ${token}`;
 }
 
-/** Descobre o accountId principal de e-mail do usuário no Stalwart */
 export async function getJmapSession(user: string, pass: string) {
   const res = await fetch(WELL_KNOWN_URL, {
-    headers: {
-      Authorization: getAuthHeader(user, pass),
-    },
+    headers: { Authorization: getAuthHeader(user, pass) },
     cache: "no-store",
   });
 
@@ -63,27 +71,23 @@ export async function getJmapSession(user: string, pass: string) {
   };
 }
 
-/** Executa uma chamada genérica no endpoint JMAP */
 async function callJmap(user: string, pass: string, payload: unknown) {
   const auth = getAuthHeader(user, pass);
   const res = await fetch(JMAP_URL, {
     method: "POST",
-    headers: {
-      Authorization: auth,
-      "Content-Type": "application/json",
-    },
+    headers: { Authorization: auth, "Content-Type": "application/json" },
     body: JSON.stringify(payload),
     cache: "no-store",
   });
 
   if (!res.ok) {
-    throw new Error(`Erro na chamada JMAP (${res.status})`);
+    const errText = await res.text();
+    throw new Error(`Erro na chamada JMAP (${res.status}): ${errText}`);
   }
 
   return res.json();
 }
 
-/** Lista todas as pastas/caixas postais do usuário (Inbox, Sent, Trash, etc.) */
 export async function listMailboxes(user: string, pass: string): Promise<MailboxItem[]> {
   const { accountId } = await getJmapSession(user, pass);
 
@@ -104,7 +108,6 @@ export async function listMailboxes(user: string, pass: string): Promise<Mailbox
   }));
 }
 
-/** Lista mensagens de uma pasta específica */
 export async function listEmails(
   user: string,
   pass: string,
@@ -118,37 +121,8 @@ export async function listEmails(
   const payload = {
     using: ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail"],
     methodCalls: [
-      [
-        "Email/query",
-        {
-          accountId,
-          filter,
-          sort: [{ property: "receivedAt", isAscending: false }],
-          limit,
-        },
-        "query_emails",
-      ],
-      [
-        "Email/get",
-        {
-          accountId,
-          "#ids": { resultOf: "query_emails", name: "Email/query", path: "/ids" },
-          properties: [
-            "id",
-            "threadId",
-            "subject",
-            "from",
-            "to",
-            "receivedAt",
-            "sentAt",
-            "preview",
-            "hasAttachment",
-            "keywords",
-            "size",
-          ],
-        },
-        "get_emails",
-      ],
+      ["Email/query", { accountId, filter, sort: [{ property: "receivedAt", isAscending: false }], limit }, "query_emails"],
+      ["Email/get", { accountId, "#ids": { resultOf: "query_emails", name: "Email/query", path: "/ids" }, properties: ["id", "threadId", "subject", "from", "to", "receivedAt", "sentAt", "preview", "hasAttachment", "keywords", "size"] }, "get_emails"],
     ],
   };
 
@@ -170,7 +144,6 @@ export async function listEmails(
   }));
 }
 
-/** Obtém o conteúdo completo de um e-mail */
 export async function getEmailDetail(
   user: string,
   pass: string,
@@ -187,22 +160,7 @@ export async function getEmailDetail(
           accountId,
           ids: [emailId],
           fetchAllBodyValues: true,
-          properties: [
-            "id",
-            "threadId",
-            "subject",
-            "from",
-            "to",
-            "receivedAt",
-            "sentAt",
-            "preview",
-            "hasAttachment",
-            "keywords",
-            "size",
-            "htmlBody",
-            "textBody",
-            "bodyValues",
-          ],
+          properties: ["id", "threadId", "subject", "from", "to", "cc", "receivedAt", "sentAt", "preview", "hasAttachment", "keywords", "size", "htmlBody", "textBody", "bodyValues", "attachments"],
         },
         "get_email",
       ],
@@ -231,6 +189,15 @@ export async function getEmailDetail(
     }
   }
 
+  const attachments: EmailAttachment[] = (email.attachments || []).map((att: any) => ({
+    blobId: att.blobId,
+    name: att.name || "arquivo",
+    type: att.type || "application/octet-stream",
+    size: att.size || 0,
+    cid: att.cid,
+    disposition: att.disposition,
+  }));
+
   return {
     id: email.id,
     threadId: email.threadId,
@@ -240,15 +207,38 @@ export async function getEmailDetail(
     receivedAt: email.receivedAt,
     sentAt: email.sentAt,
     preview: email.preview || "",
-    hasAttachment: Boolean(email.hasAttachment),
+    hasAttachment: Boolean(email.hasAttachment) || attachments.length > 0,
     size: email.size || 0,
     isUnread: !(email.keywords && email.keywords["$seen"]),
     htmlBody: htmlBody || textBody || "",
     textBody: textBody || email.preview || "",
+    attachments,
   };
 }
 
-/** Envia um e-mail através do motor JMAP */
+export async function uploadBlob(
+  user: string,
+  pass: string,
+  file: Buffer,
+  mimeType: string,
+): Promise<string> {
+  const { accountId } = await getJmapSession(user, pass);
+  const auth = getAuthHeader(user, pass);
+
+  const res = await fetch(`${JMAP_URL}upload/${accountId}/`, {
+    method: "POST",
+    headers: { Authorization: auth, "Content-Type": mimeType },
+    body: file as any,
+  });
+
+  if (!res.ok) {
+    throw new Error(`Falha no upload do anexo (${res.status})`);
+  }
+
+  const data = await res.json();
+  return data.blobId;
+}
+
 export async function sendJmapEmail({
   user,
   pass,
@@ -256,6 +246,7 @@ export async function sendJmapEmail({
   subject,
   html,
   text,
+  attachments,
 }: {
   user: string;
   pass: string;
@@ -263,10 +254,10 @@ export async function sendJmapEmail({
   subject: string;
   html: string;
   text?: string;
+  attachments?: Array<{ blobId: string; name: string; type: string; size: number }>;
 }) {
   const { accountId } = await getJmapSession(user, pass);
 
-  // 1. Obtém as identities e a pasta 'Sent'
   const prepPayload = {
     using: ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail", "urn:ietf:params:jmap:submission"],
     methodCalls: [
@@ -289,7 +280,14 @@ export async function sendJmapEmail({
   const toRecipients = to.map((addr) => ({ name: "", email: addr.trim() }));
   const now = new Date().toISOString();
 
-  // 2. Cria o e-mail na pasta 'Sent' e faz o submit
+  const emailAttachments = (attachments || []).map((att) => ({
+    blobId: att.blobId,
+    name: att.name,
+    type: att.type,
+    size: att.size,
+    disposition: "attachment",
+  }));
+
   const sendPayload = {
     using: ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail", "urn:ietf:params:jmap:submission"],
     methodCalls: [
@@ -305,12 +303,9 @@ export async function sendJmapEmail({
               to: toRecipients,
               subject,
               sentAt: now,
-              bodyValues: {
-                part1: {
-                  value: html,
-                },
-              },
+              bodyValues: { part1: { value: html } },
               htmlBody: [{ partId: "part1", type: "text/html" }],
+              attachments: emailAttachments,
             },
           },
         },
@@ -338,4 +333,8 @@ export async function sendJmapEmail({
 
   const result = await callJmap(user, pass, sendPayload);
   return result;
+}
+
+export function getAttachmentDownloadUrl(accountId: string, blobId: string, name: string): string {
+  return `/admin/email/download?blobId=${blobId}&name=${encodeURIComponent(name)}&accountId=${accountId}`;
 }

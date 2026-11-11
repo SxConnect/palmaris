@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
 import { requireAuth } from "@/lib/auth/guard";
-import { sendJmapEmail } from "@/lib/jmap";
+import { sendJmapEmail, uploadBlob } from "@/lib/jmap";
 
 const DEFAULT_MAIL_PASSWORD = process.env.MAIL_DEFAULT_PASSWORD || "Palmaris@2026";
 
@@ -88,6 +88,25 @@ export async function sendEmailAction(
 </html>
   `;
 
+  // Upload dos anexos (se houver)
+  const uploadedAttachments: Array<{ blobId: string; name: string; type: string; size: number }> = [];
+  const files = formData.getAll("attachments") as File[];
+  for (const file of files) {
+    if (file.size === 0) continue;
+    try {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const blobId = await uploadBlob(user.email, DEFAULT_MAIL_PASSWORD, buffer, file.type || "application/octet-stream");
+      uploadedAttachments.push({
+        blobId,
+        name: file.name,
+        type: file.type || "application/octet-stream",
+        size: file.size,
+      });
+    } catch (err: any) {
+      return { error: `Erro ao enviar anexo "${file.name}": ${err.message}` };
+    }
+  }
+
   try {
     await sendJmapEmail({
       user: user.email,
@@ -96,6 +115,7 @@ export async function sendEmailAction(
       subject,
       html: finalHtml,
       text: bodyText,
+      attachments: uploadedAttachments,
     });
 
     revalidatePath("/admin/email");
