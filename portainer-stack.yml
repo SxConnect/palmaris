@@ -37,6 +37,8 @@ services:
       - ADMIN_NAME=${ADMIN_NAME:-Palmaris Representações}
       - ADMIN_RESET=${ADMIN_RESET:-true}
       - MAIL_DEFAULT_PASSWORD=${MAIL_DEFAULT_PASSWORD:-Palmaris@2026}
+      - STALWART_JMAP_URL=${STALWART_JMAP_URL:-https://mail.palmaris.com.br/jmap/}
+      - STALWART_WELL_KNOWN_URL=${STALWART_WELL_KNOWN_URL:-https://mail.palmaris.com.br/.well-known/jmap}
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=${POSTGRES_USER:-palmaris}

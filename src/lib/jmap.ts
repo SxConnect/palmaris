@@ -50,10 +50,15 @@ function getAuthHeader(user: string, pass: string): string {
 }
 
 export async function getJmapSession(user: string, pass: string) {
-  const res = await fetch(WELL_KNOWN_URL, {
-    headers: { Authorization: getAuthHeader(user, pass) },
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(WELL_KNOWN_URL, {
+      headers: { Authorization: getAuthHeader(user, pass) },
+      cache: "no-store",
+    });
+  } catch (err: any) {
+    throw new Error(`Não foi possível conectar ao servidor de e-mail: ${err?.message || "fetch failed"}`);
+  }
 
   if (!res.ok) {
     throw new Error(`Falha na autenticação do e-mail (${res.status})`);
@@ -73,12 +78,17 @@ export async function getJmapSession(user: string, pass: string) {
 
 async function callJmap(user: string, pass: string, payload: unknown) {
   const auth = getAuthHeader(user, pass);
-  const res = await fetch(JMAP_URL, {
-    method: "POST",
-    headers: { Authorization: auth, "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(JMAP_URL, {
+      method: "POST",
+      headers: { Authorization: auth, "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+  } catch (err: any) {
+    throw new Error(`Não foi possível conectar ao servidor de e-mail: ${err?.message || "fetch failed"}`);
+  }
 
   if (!res.ok) {
     const errText = await res.text();
@@ -222,10 +232,10 @@ export async function uploadBlob(
   file: Buffer,
   mimeType: string,
 ): Promise<string> {
-  const { accountId } = await getJmapSession(user, pass);
+  const { accountId, apiUrl } = await getJmapSession(user, pass);
   const auth = getAuthHeader(user, pass);
 
-  const res = await fetch(`${JMAP_URL}upload/${accountId}/`, {
+  const res = await fetch(`${apiUrl}upload/${accountId}/`, {
     method: "POST",
     headers: { Authorization: auth, "Content-Type": mimeType },
     body: file as any,
