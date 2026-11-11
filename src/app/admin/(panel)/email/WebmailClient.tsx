@@ -44,14 +44,16 @@ export default function WebmailClient({
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    setSendResult(null);
     startTransition(async () => {
       const res = await sendEmailAction(null, formData);
       setSendResult(res);
       if (res.success) {
+        form.reset();
         setTimeout(() => {
           setComposing(false);
           setSendResult(null);
-        }, 1500);
+        }, 2000);
       }
     });
   };
@@ -361,6 +363,17 @@ export default function WebmailClient({
             </div>
 
             <form onSubmit={handleSendSubmit} className="flex flex-col flex-1 overflow-y-auto p-5 space-y-3.5">
+              {sendResult?.error && (
+                <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-xs font-semibold text-red-700 sticky top-0 z-10">
+                  ⚠️ {sendResult.error}
+                </div>
+              )}
+              {sendResult?.success && (
+                <div className="rounded-lg bg-green-50 border border-green-200 p-3 text-xs font-semibold text-green-700 sticky top-0 z-10">
+                  ✅ {sendResult.success}
+                </div>
+              )}
+
               <div className="text-xs text-slate-500 flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
                 <span className="font-semibold text-slate-700">Remetente:</span>
                 <span>{currentUser.name ? `${currentUser.name} ` : ""}&lt;{currentUser.email}&gt;</span>
@@ -428,13 +441,6 @@ export default function WebmailClient({
                   <span>Incluir</span>
                 </label>
               </div>
-
-              {sendResult?.error && (
-                <p className="rounded-lg bg-red-50 p-2.5 text-xs text-red-600 font-medium">{sendResult.error}</p>
-              )}
-              {sendResult?.success && (
-                <p className="rounded-lg bg-green-50 p-2.5 text-xs text-green-700 font-medium">{sendResult.success}</p>
-              )}
 
               <div className="sticky bottom-0 bg-white pt-3 pb-1 -mx-5 px-5 border-t border-slate-100 flex items-center justify-end gap-3">
                 <button
