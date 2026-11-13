@@ -408,7 +408,8 @@ export const ModelName = {
   Section: 'Section',
   MenuItem: 'MenuItem',
   ContactMessage: 'ContactMessage',
-  Setting: 'Setting'
+  Setting: 'Setting',
+  ScheduledCampaign: 'ScheduledCampaign'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting"
+    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1316,6 +1317,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ScheduledCampaign: {
+      payload: Prisma.$ScheduledCampaignPayload<ExtArgs>
+      fields: Prisma.ScheduledCampaignFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ScheduledCampaignFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ScheduledCampaignFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+        }
+        findFirst: {
+          args: Prisma.ScheduledCampaignFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ScheduledCampaignFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+        }
+        findMany: {
+          args: Prisma.ScheduledCampaignFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>[]
+        }
+        create: {
+          args: Prisma.ScheduledCampaignCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+        }
+        createMany: {
+          args: Prisma.ScheduledCampaignCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ScheduledCampaignCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>[]
+        }
+        delete: {
+          args: Prisma.ScheduledCampaignDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+        }
+        update: {
+          args: Prisma.ScheduledCampaignUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+        }
+        deleteMany: {
+          args: Prisma.ScheduledCampaignDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ScheduledCampaignUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ScheduledCampaignUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>[]
+        }
+        upsert: {
+          args: Prisma.ScheduledCampaignUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+        }
+        aggregate: {
+          args: Prisma.ScheduledCampaignAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateScheduledCampaign>
+        }
+        groupBy: {
+          args: Prisma.ScheduledCampaignGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScheduledCampaignGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ScheduledCampaignCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ScheduledCampaignCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1518,6 +1593,28 @@ export const SettingScalarFieldEnum = {
 } as const
 
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
+
+
+export const ScheduledCampaignScalarFieldEnum = {
+  id: 'id',
+  fromEmail: 'fromEmail',
+  subject: 'subject',
+  body: 'body',
+  recipients: 'recipients',
+  delaySec: 'delaySec',
+  status: 'status',
+  scheduledAt: 'scheduledAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  sentCount: 'sentCount',
+  totalCount: 'totalCount',
+  errorMessage: 'errorMessage',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ScheduledCampaignScalarFieldEnum = (typeof ScheduledCampaignScalarFieldEnum)[keyof typeof ScheduledCampaignScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1841,6 +1938,7 @@ export type GlobalOmitConfig = {
   menuItem?: Prisma.MenuItemOmit
   contactMessage?: Prisma.ContactMessageOmit
   setting?: Prisma.SettingOmit
+  scheduledCampaign?: Prisma.ScheduledCampaignOmit
 }
 
 /* Types for Logging */

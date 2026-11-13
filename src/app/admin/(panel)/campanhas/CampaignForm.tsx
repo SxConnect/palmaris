@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { sendCampaignAction } from "@/lib/actions/email";
+import { sendCampaignAction, scheduleCampaignAction } from "@/lib/actions/email";
 
 export default function CampaignForm({
   availableSenders,
@@ -12,6 +12,8 @@ export default function CampaignForm({
   const [result, setResult] = useState<{ error?: string; success?: string; sentCount?: number } | null>(null);
   const [recipientsText, setRecipientsText] = useState("");
   const [delay, setDelay] = useState(2);
+  const [scheduleMode, setScheduleMode] = useState(false);
+  const [scheduledAt, setScheduledAt] = useState("");
 
   const recipientList = recipientsText
     .split(/[\n,;]/)
@@ -21,11 +23,17 @@ export default function CampaignForm({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const action = (e.nativeEvent as any)?.submitter?.value || "send";
 
     startTransition(async () => {
       setResult(null);
-      const res = await sendCampaignAction(null, formData);
-      setResult(res);
+      if (action === "schedule") {
+        const res = await scheduleCampaignAction(null, formData);
+        setResult(res);
+      } else {
+        const res = await sendCampaignAction(null, formData);
+        setResult(res);
+      }
     });
   };
 
@@ -71,6 +79,35 @@ export default function CampaignForm({
             Pausa entre cada disparo (recomendado: 2 a 5 segundos).
           </p>
         </div>
+      </div>
+
+      {/* Modo de agendamento */}
+      <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+        <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-slate-700">
+          <input
+            type="checkbox"
+            checked={scheduleMode}
+            onChange={(e) => setScheduleMode(e.target.checked)}
+            className="rounded text-brand-600"
+          />
+          <span>📅 Agendar envio para data/hora específica</span>
+        </label>
+        {scheduleMode && (
+          <div className="mt-3">
+            <label className="label">Data e hora do envio (horário de Brasília)</label>
+            <input
+              name="scheduledAt"
+              type="datetime-local"
+              className="input"
+              value={scheduledAt}
+              onChange={(e) => setScheduledAt(e.target.value)}
+              required={scheduleMode}
+            />
+            <p className="mt-1 text-[11px] text-slate-500">
+              A campanha será enviada automaticamente no horário agendado via cron job na VPS.
+            </p>
+          </div>
+        )}
       </div>
 
       <div>
@@ -128,15 +165,32 @@ export default function CampaignForm({
         <div className="rounded-lg bg-green-50 p-3 text-xs font-semibold text-green-700">{result.success}</div>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending || recipientList.length === 0}
-        className="btn btn-primary w-full py-3 text-sm font-bold shadow-md transition disabled:opacity-50"
-      >
-        {isPending
-          ? `Disparando campanha para ${recipientList.length} contatos... Não feche a página.`
-          : `Disparar Campanha para ${recipientList.length} Contato(s)`}
-      </button>
+      <input type="hidden" name="scheduledAt" value={scheduleMode ? scheduledAt : ""} />
+
+      <div className="flex gap-3">
+        <button
+          type="submit"
+          name="action"
+          value="send"
+          disabled={isPending || recipientList.length === 0 || scheduleMode}
+          className="btn btn-primary flex-1 py-3 text-sm font-bold shadow-md transition disabled:opacity-50"
+        >
+          {isPending && !scheduleMode
+            ? `Disparando campanha para ${recipientList.length} contatos... Não feche a página.`
+            : `Disparar Agora (${recipientList.length} Contato(s))`}
+        </button>
+        <button
+          type="submit"
+          name="action"
+          value="schedule"
+          disabled={isPending || recipientList.length === 0 || !scheduleMode}
+          className="btn flex-1 py-3 text-sm font-bold shadow-md transition disabled:opacity-50 bg-amber-500 text-white hover:bg-amber-600"
+        >
+          {isPending && scheduleMode
+            ? `Agendando...`
+            : `Agendar para ${scheduledAt ? new Date(scheduledAt).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "data selecionada"}`}
+        </button>
+      </div>
     </form>
   );
 }

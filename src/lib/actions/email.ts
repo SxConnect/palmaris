@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
 import { requireAuth } from "@/lib/auth/guard";
 import { sendJmapEmail, uploadBlob } from "@/lib/jmap";
+import { prisma } from "@/lib/prisma";
 
 const DEFAULT_MAIL_PASSWORD = process.env.MAIL_DEFAULT_PASSWORD || "Palmaris@2026";
 
@@ -207,4 +208,73 @@ export async function sendCampaignAction(
     success: `Campanha disparada com sucesso! ${sent} de ${recipients.length} e-mails enviados.`,
     sentCount: sent,
   };
+}
+
+/** Agenda uma campanha de e-mail para envio futuro */
+export async function scheduleCampaignAction(
+  _prev: { error?: string; success?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string; success?: string }> {
+  const user = await requireAuth();
+
+  if (user.role !== "ADMIN" && !user.owner) {
+    return { error: "Apenas administradores podem agendar campanhas." };
+  }
+
+  const fromEmail = String(formData.get("fromEmail") ?? user.email).trim();
+  const subject = String(formData.get("subject") ?? "").trim();
+  const bodyText = String(formData.get("body") ?? "").trim();
+  const recipientsRaw = String(formData.get("recipients") ?? "").trim();
+  const delaySec = Math.max(1, Math.min(10, Number(formData.get("delay") ?? 2)));
+  const scheduledAtRaw = String(formData.get("scheduledAt") ?? "").trim();
+
+  const recipients = recipientsRaw
+    .split(/[\n,;]/)
+    .map((r) => r.trim())
+    .filter((r) => r.includes("@") && r.includes("."));
+
+  if (recipients.length === 0) {
+    return { error: "Informe ao menos um destinatário válido na lista." };
+  }
+  if (!subject) {
+    return { error: "Informe o assunto da campanha." };
+  }
+  if (!bodyText) {
+    return { error: "Escreva o texto do e-mail da campanha." };
+  }
+
+  let scheduledAt: Date | null = null;
+  if (scheduledAtRaw) {
+    scheduledAt = new Date(scheduledAtRaw);
+    if (isNaN(scheduledAt.getTime())) {
+      return { error: "Data/hora de agendamento inválida." };
+    }
+    if (scheduledAt.getTime() < Date.now()) {
+      return { error: "A data de agendamento deve ser no futuro." };
+    }
+  }
+
+  try {
+    await prisma.scheduledCampaign.create({
+      data: {
+        fromEmail,
+        subject,
+        body: bodyText,
+        recipients: JSON.stringify(recipients),
+        delaySec,
+        status: "pending",
+        scheduledAt,
+        totalCount: recipients.length,
+        createdBy: user.email,
+      },
+    });
+
+    const when = scheduledAt
+      ? `Agendada para ${scheduledAt.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`
+      : "Agendada para envio imediato (próximo ciclo do cron)";
+
+    return { success: `${when}. ${recipients.length} destinatários na fila.` };
+  } catch (err: any) {
+    return { error: err.message || "Erro ao agendar campanha." };
+  }
 }

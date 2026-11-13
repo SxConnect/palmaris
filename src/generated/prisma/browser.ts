@@ -94,3 +94,8 @@ export type ContactMessage = Prisma.ContactMessageModel
  * O valor é guardado em JSON e editável pelo painel.
  */
 export type Setting = Prisma.SettingModel
+/**
+ * Model ScheduledCampaign
+ * Campanha de e-mail agendada ou disparada.
+ */
+export type ScheduledCampaign = Prisma.ScheduledCampaignModel
