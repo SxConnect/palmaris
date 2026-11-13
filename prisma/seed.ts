@@ -89,6 +89,50 @@ const TEXTO_PROJETOS = `
 </ul>
 `;
 
+const TEXTO_PORTFOLIO = `
+<h2>Portfólio de Soluções Industriais</h2>
+<p>
+  A <strong>Palmaris Representações</strong> conecta empresas a soluções tecnológicas de alta performance
+  para a indústria, oferecendo atendimento técnico-comercial e acesso a produtos e serviços especializados.
+</p>
+<h3>ENGEZER — Instrumentação e Análise de Processos</h3>
+<ul>
+  <li>Instrumentação e análise de gases e líquidos</li>
+  <li>Detecção de gases e segurança industrial</li>
+  <li>Monitoramento ambiental (emissões e efluentes)</li>
+  <li>Combustão e controle de processos</li>
+  <li>Analisadores de processo e CEMS</li>
+</ul>
+<h3>PESCO — Automação e Painéis Elétricos</h3>
+<ul>
+  <li>Projetos e fabricação de painéis elétricos</li>
+  <li>Automação industrial (CLPs, IHMs, redes)</li>
+  <li>Sistemas de controle e supervisão (SCADA)</li>
+  <li>Instalações elétricas industriais</li>
+  <li>Telemetria e monitoramento remoto</li>
+</ul>
+<h3>Setores Atendidos</h3>
+<ul>
+  <li>Petroquímico e Químico</li>
+  <li>Alimentício e Bebidas</li>
+  <li>Papel e Celulose</li>
+  <li>Energia e Saneamento</li>
+  <li>Metalúrgico e Manufatura</li>
+</ul>
+<p>
+  <strong>Conheça nosso portfólio completo:</strong>
+  <a href="/img/portfolio-palmaris.pdf" target="_blank">Baixar Portfólio em PDF</a>
+</p>
+<p>
+  Entre em contato para consultas, cotações ou para agendar uma breve reunião/visita.
+</p>
+<ul>
+  <li><strong>Site:</strong> <a href="https://palmaris.com.br" target="_blank">https://palmaris.com.br</a></li>
+  <li><strong>WhatsApp:</strong> (21) 98896-4221</li>
+  <li><strong>E-mail:</strong> comercial@palmaris.com.br</li>
+</ul>
+`;
+
 /* ------------------------------------------------------------------ */
 /* Seed Principal                                                     */
 /* ------------------------------------------------------------------ */
@@ -180,10 +224,16 @@ async function main() {
       menuOrder: 4,
     },
     {
+      title: "Portfólio",
+      slug: "portfolio",
+      content: TEXTO_PORTFOLIO,
+      menuOrder: 5,
+    },
+    {
       title: "Contato",
       slug: "contato",
       content: "<p>Entre em contato com nossos consultores técnicos e receba atendimento sob medida para a sua indústria.</p>",
-      menuOrder: 5,
+      menuOrder: 6,
     },
   ];
 
@@ -396,9 +446,23 @@ async function main() {
       },
       {
         pageId: home.id,
-        title: "Chamada de Ação Final",
+        title: "Portfólio de Soluções",
         kind: "cta",
         sectionOrder: 6,
+        visible: true,
+        data: {
+          eyebrow: "CONHEÇA NOSSO PORTFÓLIO",
+          title: "Soluções industriais completas para sua operação.",
+          text: "Baixe nosso portfólio em PDF e conheça as soluções da ENGEZER e PESCO representadas pela Palmaris.",
+          buttonLabel: "Baixar Portfólio (PDF)",
+          buttonUrl: "/img/portfolio-palmaris.pdf",
+        },
+      },
+      {
+        pageId: home.id,
+        title: "Chamada de Ação Final",
+        kind: "cta",
+        sectionOrder: 7,
         visible: true,
         data: {
           eyebrow: "VAMOS CONVERSAR?",
@@ -441,8 +505,9 @@ async function main() {
     { label: "Mercados", url: "/p/mercados", menuOrder: 1, highlight: false },
     { label: "Parceiros", url: "/p/parceiros", menuOrder: 2, highlight: false },
     { label: "Projetos", url: "/p/projetos", menuOrder: 3, highlight: false },
-    { label: "Contato", url: "/p/contato", menuOrder: 4, highlight: false },
-    { label: "Fale com um especialista", url: "/p/contato", menuOrder: 5, highlight: true },
+    { label: "Portfólio", url: "/p/portfolio", menuOrder: 4, highlight: false },
+    { label: "Contato", url: "/p/contato", menuOrder: 5, highlight: false },
+    { label: "Fale com um especialista", url: "/p/contato", menuOrder: 6, highlight: true },
   ];
 
   for (const item of menu) {
