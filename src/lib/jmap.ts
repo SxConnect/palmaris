@@ -71,7 +71,7 @@ export async function getJmapSession(user: string, pass: string) {
   return {
     accountId,
     submissionAccountId,
-    apiUrl: data.apiUrl || JMAP_URL,
+    apiUrl: JMAP_URL,
     username: data.username,
   };
 }
@@ -238,7 +238,7 @@ export async function uploadBlob(
   const res = await fetch(`${apiUrl}upload/${accountId}/`, {
     method: "POST",
     headers: { Authorization: auth, "Content-Type": mimeType },
-    body: file as any,
+    body: new Uint8Array(file),
   });
 
   if (!res.ok) {

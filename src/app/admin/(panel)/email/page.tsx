@@ -22,8 +22,8 @@ export default async function WebmailPage({ searchParams }: Props) {
 
   try {
     mailboxes = await listMailboxes(user.email, DEFAULT_MAIL_PASSWORD);
-    const inbox = mailboxes.find((b) => b.role === "inbox") || mailboxes[0];
-    currentBoxId = params.box || inbox?.id || "";
+    const inbox = mailboxes.find((b) => b.role === "inbox");
+    currentBoxId = params.box || inbox?.id || (mailboxes.length > 0 ? mailboxes[0].id : "");
 
     if (currentBoxId) {
       emails = await listEmails(user.email, DEFAULT_MAIL_PASSWORD, currentBoxId);
@@ -36,6 +36,10 @@ export default async function WebmailPage({ searchParams }: Props) {
     errorMessage = err?.message || "Erro ao carregar e-mails";
     console.error("Erro ao carregar dados do Webmail JMAP:", err);
   }
+
+  // Garantir que mailboxes e emails sejam arrays válidos
+  if (!Array.isArray(mailboxes)) mailboxes = [];
+  if (!Array.isArray(emails)) emails = [];
 
   return (
     <WebmailClient
