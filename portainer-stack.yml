@@ -37,6 +37,7 @@ services:
       - ADMIN_NAME=${ADMIN_NAME:-Palmaris Representações}
       - ADMIN_RESET=${ADMIN_RESET:-true}
       - MAIL_DEFAULT_PASSWORD=${MAIL_DEFAULT_PASSWORD:-Palmaris@2026}
+      - CRON_SECRET=${CRON_SECRET:-palmaris-cron-secret-2026}
       - STALWART_JMAP_URL=${STALWART_JMAP_URL:-http://stalwart-mail:8080/jmap/}
       - STALWART_WELL_KNOWN_URL=${STALWART_WELL_KNOWN_URL:-http://stalwart-mail:8080/.well-known/jmap}
       - DB_HOST=db
