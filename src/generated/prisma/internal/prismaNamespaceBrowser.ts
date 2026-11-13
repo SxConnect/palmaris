@@ -63,7 +63,8 @@ export const ModelName = {
   MenuItem: 'MenuItem',
   ContactMessage: 'ContactMessage',
   Setting: 'Setting',
-  ScheduledCampaign: 'ScheduledCampaign'
+  ScheduledCampaign: 'ScheduledCampaign',
+  EmailOpen: 'EmailOpen'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -254,6 +255,8 @@ export const ScheduledCampaignScalarFieldEnum = {
   body: 'body',
   recipients: 'recipients',
   delaySec: 'delaySec',
+  batchSize: 'batchSize',
+  warmUp: 'warmUp',
   status: 'status',
   scheduledAt: 'scheduledAt',
   startedAt: 'startedAt',
@@ -267,6 +270,19 @@ export const ScheduledCampaignScalarFieldEnum = {
 } as const
 
 export type ScheduledCampaignScalarFieldEnum = (typeof ScheduledCampaignScalarFieldEnum)[keyof typeof ScheduledCampaignScalarFieldEnum]
+
+
+export const EmailOpenScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  recipient: 'recipient',
+  trackingId: 'trackingId',
+  openedAt: 'openedAt',
+  userAgent: 'userAgent',
+  ip: 'ip'
+} as const
+
+export type EmailOpenScalarFieldEnum = (typeof EmailOpenScalarFieldEnum)[keyof typeof EmailOpenScalarFieldEnum]
 
 
 export const SortOrder = {

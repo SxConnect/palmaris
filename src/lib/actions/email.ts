@@ -168,7 +168,14 @@ export async function sendCampaignAction(
     .map((p) => `<p style="margin: 0 0 12px 0; line-height: 1.6; color: #1e293b;">${p.replace(/\n/g, "<br>")}</p>`)
     .join("");
 
-  const finalHtml = `
+  let sent = 0;
+  // Dispara com intervalo controlado para proteger a reputação do IP da VPS
+  for (const recipient of recipients) {
+    // Gerar tracking ID único para este destinatário
+    const trackingId = `trk_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    const trackingPixel = `<img src="https://palmaris.com.br/api/track/open?id=${trackingId}" width="1" height="1" style="display:none;border:0;" alt="" />`;
+
+    const finalHtml = `
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
@@ -179,13 +186,11 @@ export async function sendCampaignAction(
     Você recebeu esta mensagem porque mantém contato com a Palmaris Representações.<br>
     Caso não deseje mais receber comunicações, responda este e-mail com o assunto "Descadastrar".
   </div>
+  ${trackingPixel}
 </body>
 </html>
   `;
 
-  let sent = 0;
-  // Dispara com intervalo controlado para proteger a reputação do IP da VPS
-  for (const recipient of recipients) {
     try {
       await sendJmapEmail({
         user: fromEmail,
@@ -195,6 +200,21 @@ export async function sendCampaignAction(
         html: finalHtml,
         text: bodyText,
       });
+
+      // Registrar o tracking no banco
+      try {
+        await prisma.emailOpen.create({
+          data: {
+            trackingId,
+            recipient,
+            userAgent: null,
+            ip: null,
+          },
+        });
+      } catch {
+        // Ignorar erros de tracking
+      }
+
       sent++;
       if (delaySec > 0 && sent < recipients.length) {
         await new Promise((resolve) => setTimeout(resolve, delaySec * 1000));
@@ -227,6 +247,8 @@ export async function scheduleCampaignAction(
   const recipientsRaw = String(formData.get("recipients") ?? "").trim();
   const delaySec = Math.max(1, Math.min(10, Number(formData.get("delay") ?? 2)));
   const scheduledAtRaw = String(formData.get("scheduledAt") ?? "").trim();
+  const warmUp = formData.get("warmUp") === "true";
+  const batchSize = warmUp ? Math.max(10, Math.min(200, Number(formData.get("batchSize") ?? 50))) : 0;
 
   const recipients = recipientsRaw
     .split(/[\n,;]/)
@@ -262,6 +284,8 @@ export async function scheduleCampaignAction(
         body: bodyText,
         recipients: JSON.stringify(recipients),
         delaySec,
+        batchSize,
+        warmUp,
         status: "pending",
         scheduledAt,
         totalCount: recipients.length,

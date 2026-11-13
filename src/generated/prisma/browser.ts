@@ -99,3 +99,8 @@ export type Setting = Prisma.SettingModel
  * Campanha de e-mail agendada ou disparada.
  */
 export type ScheduledCampaign = Prisma.ScheduledCampaignModel
+/**
+ * Model EmailOpen
+ * Rastreamento de abertura de e-mails.
+ */
+export type EmailOpen = Prisma.EmailOpenModel

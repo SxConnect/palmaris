@@ -240,6 +240,8 @@ model ScheduledCampaign {
   body          String
   recipients    String    // JSON array of email addresses
   delaySec      Int       @default(2)
+  batchSize     Int       @default(0)  // 0 = send all at once; >0 = warm-up batch size
+  warmUp        Boolean   @default(false) // true = send in increasing batches over multiple days
   status        String    @default("pending") // pending, sending, sent, failed
   scheduledAt   DateTime?
   startedAt     DateTime?
@@ -253,4 +255,19 @@ model ScheduledCampaign {
 
   @@index([status, scheduledAt])
   @@map("scheduled_campaigns")
+}
+
+/// Rastreamento de abertura de e-mails.
+model EmailOpen {
+  id          String   @id @default(cuid())
+  campaignId  String?
+  recipient   String
+  trackingId  String   @unique
+  openedAt    DateTime @default(now())
+  userAgent   String?
+  ip          String?
+
+  @@index([campaignId])
+  @@index([recipient])
+  @@map("email_opens")
 }

@@ -14,6 +14,8 @@ export default function CampaignForm({
   const [delay, setDelay] = useState(2);
   const [scheduleMode, setScheduleMode] = useState(false);
   const [scheduledAt, setScheduledAt] = useState("");
+  const [warmUp, setWarmUp] = useState(false);
+  const [batchSize, setBatchSize] = useState(50);
 
   const recipientList = recipientsText
     .split(/[\n,;]/)
@@ -110,6 +112,39 @@ export default function CampaignForm({
         )}
       </div>
 
+      {/* Warm-up (aquecimento de IP) */}
+      <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+        <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-slate-700">
+          <input
+            type="checkbox"
+            checked={warmUp}
+            onChange={(e) => setWarmUp(e.target.checked)}
+            className="rounded text-brand-600"
+          />
+          <span>🔥 Aquecimento de IP (Warm-up) — envio gradual</span>
+        </label>
+        <p className="mt-1 text-[11px] text-slate-500">
+          Envia em lotes crescentes (50, 100, 150, 200...) ao longo de vários dias para não queimar a reputação do IP.
+        </p>
+        {warmUp && (
+          <div className="mt-3">
+            <label className="label">Tamanho do lote inicial (e-mails por dia)</label>
+            <input
+              name="batchSize"
+              type="number"
+              min={10}
+              max={200}
+              className="input"
+              value={batchSize}
+              onChange={(e) => setBatchSize(Number(e.target.value))}
+            />
+            <p className="mt-1 text-[11px] text-slate-500">
+              Lote 1: {batchSize} e-mails, Lote 2: {batchSize * 2}, Lote 3: {batchSize * 3}, etc. (até completar todos)
+            </p>
+          </div>
+        )}
+      </div>
+
       <div>
         <label className="label">Assunto da Campanha *</label>
         <input
@@ -166,6 +201,8 @@ export default function CampaignForm({
       )}
 
       <input type="hidden" name="scheduledAt" value={scheduleMode ? scheduledAt : ""} />
+      <input type="hidden" name="warmUp" value={warmUp ? "true" : "false"} />
+      <input type="hidden" name="batchSize" value={warmUp ? String(batchSize) : "0"} />
 
       <div className="flex gap-3">
         <button

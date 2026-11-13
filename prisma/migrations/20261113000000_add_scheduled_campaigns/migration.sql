@@ -6,6 +6,8 @@ CREATE TABLE "scheduled_campaigns" (
     "body" TEXT NOT NULL,
     "recipients" TEXT NOT NULL,
     "delaySec" INTEGER NOT NULL DEFAULT 2,
+    "batchSize" INTEGER NOT NULL DEFAULT 0,
+    "warmUp" BOOLEAN NOT NULL DEFAULT false,
     "status" TEXT NOT NULL DEFAULT 'pending',
     "scheduledAt" TIMESTAMP(3),
     "startedAt" TIMESTAMP(3),

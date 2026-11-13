@@ -28,12 +28,14 @@ export type AggregateScheduledCampaign = {
 
 export type ScheduledCampaignAvgAggregateOutputType = {
   delaySec: number | null
+  batchSize: number | null
   sentCount: number | null
   totalCount: number | null
 }
 
 export type ScheduledCampaignSumAggregateOutputType = {
   delaySec: number | null
+  batchSize: number | null
   sentCount: number | null
   totalCount: number | null
 }
@@ -45,6 +47,8 @@ export type ScheduledCampaignMinAggregateOutputType = {
   body: string | null
   recipients: string | null
   delaySec: number | null
+  batchSize: number | null
+  warmUp: boolean | null
   status: string | null
   scheduledAt: Date | null
   startedAt: Date | null
@@ -64,6 +68,8 @@ export type ScheduledCampaignMaxAggregateOutputType = {
   body: string | null
   recipients: string | null
   delaySec: number | null
+  batchSize: number | null
+  warmUp: boolean | null
   status: string | null
   scheduledAt: Date | null
   startedAt: Date | null
@@ -83,6 +89,8 @@ export type ScheduledCampaignCountAggregateOutputType = {
   body: number
   recipients: number
   delaySec: number
+  batchSize: number
+  warmUp: number
   status: number
   scheduledAt: number
   startedAt: number
@@ -99,12 +107,14 @@ export type ScheduledCampaignCountAggregateOutputType = {
 
 export type ScheduledCampaignAvgAggregateInputType = {
   delaySec?: true
+  batchSize?: true
   sentCount?: true
   totalCount?: true
 }
 
 export type ScheduledCampaignSumAggregateInputType = {
   delaySec?: true
+  batchSize?: true
   sentCount?: true
   totalCount?: true
 }
@@ -116,6 +126,8 @@ export type ScheduledCampaignMinAggregateInputType = {
   body?: true
   recipients?: true
   delaySec?: true
+  batchSize?: true
+  warmUp?: true
   status?: true
   scheduledAt?: true
   startedAt?: true
@@ -135,6 +147,8 @@ export type ScheduledCampaignMaxAggregateInputType = {
   body?: true
   recipients?: true
   delaySec?: true
+  batchSize?: true
+  warmUp?: true
   status?: true
   scheduledAt?: true
   startedAt?: true
@@ -154,6 +168,8 @@ export type ScheduledCampaignCountAggregateInputType = {
   body?: true
   recipients?: true
   delaySec?: true
+  batchSize?: true
+  warmUp?: true
   status?: true
   scheduledAt?: true
   startedAt?: true
@@ -260,6 +276,8 @@ export type ScheduledCampaignGroupByOutputType = {
   body: string
   recipients: string
   delaySec: number
+  batchSize: number
+  warmUp: boolean
   status: string
   scheduledAt: Date | null
   startedAt: Date | null
@@ -302,6 +320,8 @@ export type ScheduledCampaignWhereInput = {
   body?: Prisma.StringFilter<"ScheduledCampaign"> | string
   recipients?: Prisma.StringFilter<"ScheduledCampaign"> | string
   delaySec?: Prisma.IntFilter<"ScheduledCampaign"> | number
+  batchSize?: Prisma.IntFilter<"ScheduledCampaign"> | number
+  warmUp?: Prisma.BoolFilter<"ScheduledCampaign"> | boolean
   status?: Prisma.StringFilter<"ScheduledCampaign"> | string
   scheduledAt?: Prisma.DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
   startedAt?: Prisma.DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
@@ -321,6 +341,8 @@ export type ScheduledCampaignOrderByWithRelationInput = {
   body?: Prisma.SortOrder
   recipients?: Prisma.SortOrder
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
+  warmUp?: Prisma.SortOrder
   status?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -343,6 +365,8 @@ export type ScheduledCampaignWhereUniqueInput = Prisma.AtLeast<{
   body?: Prisma.StringFilter<"ScheduledCampaign"> | string
   recipients?: Prisma.StringFilter<"ScheduledCampaign"> | string
   delaySec?: Prisma.IntFilter<"ScheduledCampaign"> | number
+  batchSize?: Prisma.IntFilter<"ScheduledCampaign"> | number
+  warmUp?: Prisma.BoolFilter<"ScheduledCampaign"> | boolean
   status?: Prisma.StringFilter<"ScheduledCampaign"> | string
   scheduledAt?: Prisma.DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
   startedAt?: Prisma.DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
@@ -362,6 +386,8 @@ export type ScheduledCampaignOrderByWithAggregationInput = {
   body?: Prisma.SortOrder
   recipients?: Prisma.SortOrder
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
+  warmUp?: Prisma.SortOrder
   status?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -389,6 +415,8 @@ export type ScheduledCampaignScalarWhereWithAggregatesInput = {
   body?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
   recipients?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
   delaySec?: Prisma.IntWithAggregatesFilter<"ScheduledCampaign"> | number
+  batchSize?: Prisma.IntWithAggregatesFilter<"ScheduledCampaign"> | number
+  warmUp?: Prisma.BoolWithAggregatesFilter<"ScheduledCampaign"> | boolean
   status?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
   scheduledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ScheduledCampaign"> | Date | string | null
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ScheduledCampaign"> | Date | string | null
@@ -408,6 +436,8 @@ export type ScheduledCampaignCreateInput = {
   body: string
   recipients: string
   delaySec?: number
+  batchSize?: number
+  warmUp?: boolean
   status?: string
   scheduledAt?: Date | string | null
   startedAt?: Date | string | null
@@ -427,6 +457,8 @@ export type ScheduledCampaignUncheckedCreateInput = {
   body: string
   recipients: string
   delaySec?: number
+  batchSize?: number
+  warmUp?: boolean
   status?: string
   scheduledAt?: Date | string | null
   startedAt?: Date | string | null
@@ -446,6 +478,8 @@ export type ScheduledCampaignUpdateInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   recipients?: Prisma.StringFieldUpdateOperationsInput | string
   delaySec?: Prisma.IntFieldUpdateOperationsInput | number
+  batchSize?: Prisma.IntFieldUpdateOperationsInput | number
+  warmUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -465,6 +499,8 @@ export type ScheduledCampaignUncheckedUpdateInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   recipients?: Prisma.StringFieldUpdateOperationsInput | string
   delaySec?: Prisma.IntFieldUpdateOperationsInput | number
+  batchSize?: Prisma.IntFieldUpdateOperationsInput | number
+  warmUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -484,6 +520,8 @@ export type ScheduledCampaignCreateManyInput = {
   body: string
   recipients: string
   delaySec?: number
+  batchSize?: number
+  warmUp?: boolean
   status?: string
   scheduledAt?: Date | string | null
   startedAt?: Date | string | null
@@ -503,6 +541,8 @@ export type ScheduledCampaignUpdateManyMutationInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   recipients?: Prisma.StringFieldUpdateOperationsInput | string
   delaySec?: Prisma.IntFieldUpdateOperationsInput | number
+  batchSize?: Prisma.IntFieldUpdateOperationsInput | number
+  warmUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -522,6 +562,8 @@ export type ScheduledCampaignUncheckedUpdateManyInput = {
   body?: Prisma.StringFieldUpdateOperationsInput | string
   recipients?: Prisma.StringFieldUpdateOperationsInput | string
   delaySec?: Prisma.IntFieldUpdateOperationsInput | number
+  batchSize?: Prisma.IntFieldUpdateOperationsInput | number
+  warmUp?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.StringFieldUpdateOperationsInput | string
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -541,6 +583,8 @@ export type ScheduledCampaignCountOrderByAggregateInput = {
   body?: Prisma.SortOrder
   recipients?: Prisma.SortOrder
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
+  warmUp?: Prisma.SortOrder
   status?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -555,6 +599,7 @@ export type ScheduledCampaignCountOrderByAggregateInput = {
 
 export type ScheduledCampaignAvgOrderByAggregateInput = {
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
   sentCount?: Prisma.SortOrder
   totalCount?: Prisma.SortOrder
 }
@@ -566,6 +611,8 @@ export type ScheduledCampaignMaxOrderByAggregateInput = {
   body?: Prisma.SortOrder
   recipients?: Prisma.SortOrder
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
+  warmUp?: Prisma.SortOrder
   status?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -585,6 +632,8 @@ export type ScheduledCampaignMinOrderByAggregateInput = {
   body?: Prisma.SortOrder
   recipients?: Prisma.SortOrder
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
+  warmUp?: Prisma.SortOrder
   status?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -599,6 +648,7 @@ export type ScheduledCampaignMinOrderByAggregateInput = {
 
 export type ScheduledCampaignSumOrderByAggregateInput = {
   delaySec?: Prisma.SortOrder
+  batchSize?: Prisma.SortOrder
   sentCount?: Prisma.SortOrder
   totalCount?: Prisma.SortOrder
 }
@@ -612,6 +662,8 @@ export type ScheduledCampaignSelect<ExtArgs extends runtime.Types.Extensions.Int
   body?: boolean
   recipients?: boolean
   delaySec?: boolean
+  batchSize?: boolean
+  warmUp?: boolean
   status?: boolean
   scheduledAt?: boolean
   startedAt?: boolean
@@ -631,6 +683,8 @@ export type ScheduledCampaignSelectCreateManyAndReturn<ExtArgs extends runtime.T
   body?: boolean
   recipients?: boolean
   delaySec?: boolean
+  batchSize?: boolean
+  warmUp?: boolean
   status?: boolean
   scheduledAt?: boolean
   startedAt?: boolean
@@ -650,6 +704,8 @@ export type ScheduledCampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   body?: boolean
   recipients?: boolean
   delaySec?: boolean
+  batchSize?: boolean
+  warmUp?: boolean
   status?: boolean
   scheduledAt?: boolean
   startedAt?: boolean
@@ -669,6 +725,8 @@ export type ScheduledCampaignSelectScalar = {
   body?: boolean
   recipients?: boolean
   delaySec?: boolean
+  batchSize?: boolean
+  warmUp?: boolean
   status?: boolean
   scheduledAt?: boolean
   startedAt?: boolean
@@ -681,7 +739,7 @@ export type ScheduledCampaignSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ScheduledCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fromEmail" | "subject" | "body" | "recipients" | "delaySec" | "status" | "scheduledAt" | "startedAt" | "completedAt" | "sentCount" | "totalCount" | "errorMessage" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["scheduledCampaign"]>
+export type ScheduledCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fromEmail" | "subject" | "body" | "recipients" | "delaySec" | "batchSize" | "warmUp" | "status" | "scheduledAt" | "startedAt" | "completedAt" | "sentCount" | "totalCount" | "errorMessage" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["scheduledCampaign"]>
 
 export type $ScheduledCampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ScheduledCampaign"
@@ -693,6 +751,8 @@ export type $ScheduledCampaignPayload<ExtArgs extends runtime.Types.Extensions.I
     body: string
     recipients: string
     delaySec: number
+    batchSize: number
+    warmUp: boolean
     status: string
     scheduledAt: Date | null
     startedAt: Date | null
@@ -1132,6 +1192,8 @@ export interface ScheduledCampaignFieldRefs {
   readonly body: Prisma.FieldRef<"ScheduledCampaign", 'String'>
   readonly recipients: Prisma.FieldRef<"ScheduledCampaign", 'String'>
   readonly delaySec: Prisma.FieldRef<"ScheduledCampaign", 'Int'>
+  readonly batchSize: Prisma.FieldRef<"ScheduledCampaign", 'Int'>
+  readonly warmUp: Prisma.FieldRef<"ScheduledCampaign", 'Boolean'>
   readonly status: Prisma.FieldRef<"ScheduledCampaign", 'String'>
   readonly scheduledAt: Prisma.FieldRef<"ScheduledCampaign", 'DateTime'>
   readonly startedAt: Prisma.FieldRef<"ScheduledCampaign", 'DateTime'>
