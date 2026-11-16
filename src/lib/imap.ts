@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 const IMAP_HOST = process.env.IMAP_HOST || "172.24.0.2";
 const IMAP_PORT = parseInt(process.env.IMAP_PORT || "993");
 const SMTP_HOST = process.env.SMTP_HOST || "172.24.0.2";
-const SMTP_PORT = parseInt(process.env.SMTP_PORT || "465");
+const SMTP_PORT = parseInt(process.env.SMTP_PORT || "587");
 
 export type MailboxItem = {
   id: string;
@@ -81,6 +81,7 @@ export async function listMailboxes(user: string, pass: string): Promise<Mailbox
   }
 
   const mailboxes = await client.list();
+  console.error("IMAP LIST returned", mailboxes.length, "mailboxes");
   const result: MailboxItem[] = [];
 
   for (const box of mailboxes) {
@@ -250,7 +251,7 @@ export async function sendImapEmail({
   const transporter = nodemailer.createTransport({
     host: SMTP_HOST,
     port: SMTP_PORT,
-    secure: SMTP_PORT === 465,
+    secure: false,
     auth: { user, pass },
     tls: { rejectUnauthorized: false },
   });
