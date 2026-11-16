@@ -21,6 +21,7 @@ export default async function WebmailPage({ searchParams }: Props) {
   let errorMessage = "";
 
   try {
+    console.error("WEBMAIL PAGE: user=", user.email, "pass=", DEFAULT_MAIL_PASSWORD);
     mailboxes = await listMailboxes(user.email, DEFAULT_MAIL_PASSWORD);
     const inbox = mailboxes.find((b) => b.role === "inbox");
     currentBoxId = params.box || inbox?.id || (mailboxes.length > 0 ? mailboxes[0].id : "");

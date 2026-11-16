@@ -271,6 +271,53 @@ export async function sendImapEmail({
     attachments: mailAttachments,
   });
 
+  // Salvar o email enviado na pasta "Sent" via IMAP
+  try {
+    const boundary = "----=_Part_" + Date.now();
+    const fromName = user.split("@")[0];
+    let mime = "";
+    mime += `From: =?UTF-8?B?${Buffer.from(fromName).toString("base64")}?= <${user}>\r\n`;
+    mime += `To: ${to.join(", ")}\r\n`;
+    mime += `Subject: =?UTF-8?B?${Buffer.from(subject).toString("base64")}?=\r\n`;
+    mime += `Date: ${new Date().toUTCString()}\r\n`;
+    mime += `MIME-Version: 1.0\r\n`;
+
+    if (mailAttachments.length > 0) {
+      mime += `Content-Type: multipart/mixed; boundary="${boundary}"\r\n\r\n`;
+      mime += `--${boundary}\r\n`;
+      mime += `Content-Type: text/html; charset=UTF-8\r\n\r\n`;
+      mime += `${html}\r\n`;
+      for (const att of mailAttachments) {
+        if (att.content) {
+          mime += `--${boundary}\r\n`;
+          mime += `Content-Type: ${att.contentType || "application/octet-stream"}\r\n`;
+          mime += `Content-Transfer-Encoding: base64\r\n`;
+          mime += `Content-Disposition: attachment; filename="${att.filename}"\r\n\r\n`;
+          mime += att.content.toString("base64") + "\r\n";
+        }
+      }
+      mime += `--${boundary}--\r\n`;
+    } else {
+      mime += `Content-Type: text/html; charset=UTF-8\r\n\r\n`;
+      mime += `${html}\r\n`;
+    }
+
+    const mimeMessage = Buffer.from(mime, "utf8");
+
+    const imapClient = createImapClient(user, pass);
+    await imapClient.connect();
+    const boxes = await imapClient.list();
+    const sentBox = boxes.find(
+      (b) => /\/Sent$/i.test(b.path) || /^Sent$/i.test(b.name) || /sent|enviad/i.test(b.name),
+    );
+    if (sentBox) {
+      await imapClient.append(sentBox.path, mimeMessage, ["\\Seen"]);
+    }
+    await imapClient.logout();
+  } catch (err: any) {
+    console.error("Erro ao salvar no Sent:", err?.message);
+  }
+
   return info;
 }
 

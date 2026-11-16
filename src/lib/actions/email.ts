@@ -25,7 +25,7 @@ function buildPalmarisSignature(userName: string, userEmail: string): string {
         <div style="font-size: 12px; font-weight: bold; color: #0066f5;">Palmaris Representações</div>
         <div style="font-size: 11px; color: #64748b;">Conectamos indústria, tecnologia e soluções.</div>
         <div style="font-size: 12px; color: #334155; margin-top: 4px;">
-          📞 (21) 99876-5432 &nbsp;|&nbsp; ✉️ <a href="mailto:${userEmail}" style="color: #0066f5; text-decoration: none;">${userEmail}</a>
+          📞 (21) 98864-4221 &nbsp;|&nbsp; ✉️ <a href="mailto:${userEmail}" style="color: #0066f5; text-decoration: none;">${userEmail}</a>
         </div>
         <div style="font-size: 11px; margin-top: 2px;">
           🌐 <a href="https://palmaris.com.br" target="_blank" style="color: #0066f5; text-decoration: none; font-weight: 600;">www.palmaris.com.br</a>
