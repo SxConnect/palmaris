@@ -70,9 +70,11 @@ function getRole(name: string): string {
 }
 
 export async function listMailboxes(user: string, pass: string): Promise<MailboxItem[]> {
+  console.error("LISTMAILBOXES called with user:", user, "host:", process.env.IMAP_HOST, "port:", process.env.IMAP_PORT);
   const client = createImapClient(user, pass);
   try {
     await client.connect();
+    console.error("IMAP CONNECTED");
   } catch (err: any) {
     console.error("IMAP CONNECT ERROR:", err?.message, err?.stack);
     throw new Error(`IMAP connect failed: ${err?.message || err}`);
