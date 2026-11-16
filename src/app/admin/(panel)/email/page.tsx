@@ -1,5 +1,5 @@
 import { requireAuth } from "@/lib/auth/guard";
-import { listMailboxes, listEmails, getEmailDetail } from "@/lib/jmap";
+import { listMailboxes, listEmails, getEmailDetail } from "@/lib/imap";
 import WebmailClient from "./WebmailClient";
 
 export const dynamic = "force-dynamic";

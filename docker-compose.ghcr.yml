@@ -46,6 +46,11 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Palmaris@2026}
       ADMIN_NAME: ${ADMIN_NAME:-Palmaris Representações}
       ADMIN_RESET: ${ADMIN_RESET:-false}
+      MAIL_DEFAULT_PASSWORD: ${MAIL_DEFAULT_PASSWORD:-Palmaris@2026}
+      IMAP_HOST: ${IMAP_HOST:-mail.palmaris.com.br}
+      IMAP_PORT: ${IMAP_PORT:-993}
+      SMTP_HOST: ${SMTP_HOST:-mail.palmaris.com.br}
+      SMTP_PORT: ${SMTP_PORT:-465}
       DB_HOST: db
       DB_PORT: "5432"
       DB_USER: ${POSTGRES_USER:-palmaris}

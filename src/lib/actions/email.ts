@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
 import { requireAuth } from "@/lib/auth/guard";
-import { sendJmapEmail, uploadBlob } from "@/lib/jmap";
+import { sendImapEmail, uploadBlob } from "@/lib/imap";
 import { prisma } from "@/lib/prisma";
 
 const DEFAULT_MAIL_PASSWORD = process.env.MAIL_DEFAULT_PASSWORD || "Palmaris@2026";
@@ -90,18 +90,16 @@ export async function sendEmailAction(
   `;
 
   // Upload dos anexos (se houver)
-  const uploadedAttachments: Array<{ blobId: string; name: string; type: string; size: number }> = [];
+  const uploadedAttachments: Array<{ filename: string; content: Buffer; contentType: string }> = [];
   const files = formData.getAll("attachments") as File[];
   for (const file of files) {
     if (file.size === 0) continue;
     try {
       const buffer = Buffer.from(await file.arrayBuffer());
-      const blobId = await uploadBlob(user.email, DEFAULT_MAIL_PASSWORD, buffer, file.type || "application/octet-stream");
       uploadedAttachments.push({
-        blobId,
-        name: file.name,
-        type: file.type || "application/octet-stream",
-        size: file.size,
+        filename: file.name,
+        content: buffer,
+        contentType: file.type || "application/octet-stream",
       });
     } catch (err: any) {
       return { error: `Erro ao enviar anexo "${file.name}": ${err.message}` };
@@ -109,7 +107,7 @@ export async function sendEmailAction(
   }
 
   try {
-    await sendJmapEmail({
+    await sendImapEmail({
       user: user.email,
       pass: DEFAULT_MAIL_PASSWORD,
       to: toList,
@@ -192,7 +190,7 @@ export async function sendCampaignAction(
   `;
 
     try {
-      await sendJmapEmail({
+      await sendImapEmail({
         user: fromEmail,
         pass: DEFAULT_MAIL_PASSWORD,
         to: [recipient],

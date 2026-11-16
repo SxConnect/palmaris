@@ -20,6 +20,7 @@
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
     "bcryptjs": "^3.0.3",
+    "imapflow": "^2.12.1",
     "next": "16.4.2",
     "nodemailer": "^10.1.7",
     "pg": "^8.23.1",

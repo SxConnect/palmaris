@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import type { MailboxItem, EmailSummary, EmailDetail } from "@/lib/jmap";
+import type { MailboxItem, EmailSummary, EmailDetail } from "@/lib/imap";
 import { sendEmailAction } from "@/lib/actions/email";
 
 export default function WebmailClient({

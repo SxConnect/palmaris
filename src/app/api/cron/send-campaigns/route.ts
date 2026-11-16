@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { sendJmapEmail } from "@/lib/jmap";
+import { sendImapEmail } from "@/lib/imap";
 
 const DEFAULT_MAIL_PASSWORD = process.env.MAIL_DEFAULT_PASSWORD || "Palmaris@2026";
 const CRON_SECRET = process.env.CRON_SECRET || "palmaris-cron-secret-2026";
@@ -114,7 +114,7 @@ export async function GET(request: Request) {
   `;
 
         try {
-          await sendJmapEmail({
+          await sendImapEmail({
             user: campaign.fromEmail,
             pass: DEFAULT_MAIL_PASSWORD,
             to: [recipient],
