@@ -175,11 +175,13 @@ export async function getEmailDetail(
   user: string,
   pass: string,
   emailId: string,
+  mailbox?: string,
 ): Promise<EmailDetail | null> {
   const client = createImapClient(user, pass);
   await client.connect();
 
-  const lock = await client.getMailboxLock("INBOX");
+  const box = mailbox || "INBOX";
+  const lock = await client.getMailboxLock(box);
   try {
     const uid = parseInt(emailId);
     const msg = await client.fetchOne(uid, {
@@ -187,7 +189,6 @@ export async function getEmailDetail(
       flags: true,
       size: true,
       bodyStructure: true,
-      source: true,
     }, { uid: true });
 
     if (!msg) return null;
@@ -195,19 +196,56 @@ export async function getEmailDetail(
     const envelope = msg.envelope;
     const flags = msg.flags || new Set();
 
-    // Parse body
     let htmlBody = "";
     let textBody = "";
     const attachments: EmailAttachment[] = [];
 
-    if (msg.source) {
-      const source = msg.source.toString();
-      // Simple extraction - in production, use a proper MIME parser
-      const htmlMatch = source.match(/Content-Type: text\/html[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|\r\n\r\n$)/i);
-      const textMatch = source.match(/Content-Type: text\/plain[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|\r\n\r\n$)/i);
+    // Usa client.download() para decodificar corretamente quoted-printable/base64
+    try {
+      const download = await client.download(String(uid), undefined, { uid: true });
+      if (download && download.content) {
+        const content = download.content;
+        const meta = download.meta || {};
+        const disposition = meta.disposition || "";
+        const contentType = meta.contentType || "";
+        const filename = meta.filename;
 
-      if (htmlMatch) htmlBody = htmlMatch[1].trim();
-      if (textMatch) textBody = textMatch[1].trim();
+        if (filename && disposition === "attachment") {
+          const chunks: Buffer[] = [];
+          for await (const chunk of content) chunks.push(Buffer.from(chunk));
+          attachments.push({
+            blobId: "",
+            name: filename,
+            type: contentType,
+            size: (meta as any).size || 0,
+            disposition,
+          });
+        } else if (/text\/html/i.test(contentType)) {
+          const chunks: Buffer[] = [];
+          for await (const chunk of content) chunks.push(Buffer.from(chunk));
+          htmlBody = Buffer.concat(chunks).toString("utf8");
+        } else if (/text\/plain/i.test(contentType)) {
+          const chunks: Buffer[] = [];
+          for await (const chunk of content) chunks.push(Buffer.from(chunk));
+          textBody = Buffer.concat(chunks).toString("utf8");
+        }
+      }
+    } catch (err: any) {
+      console.error("Erro ao baixar corpo:", err?.message);
+    }
+
+    // Se não conseguiu via download, tenta source bruto
+    if (!htmlBody && !textBody) {
+      try {
+        const full = await client.fetchOne(uid, { source: true }, { uid: true });
+        if (full && full.source) {
+          const source = full.source.toString();
+          const htmlMatch = source.match(/Content-Type: text\/html[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
+          const textMatch = source.match(/Content-Type: text\/plain[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
+          if (htmlMatch) htmlBody = decodeQP(htmlMatch[1]);
+          if (textMatch) textBody = decodeQP(textMatch[1]);
+        }
+      } catch {}
     }
 
     return {
@@ -216,7 +254,7 @@ export async function getEmailDetail(
       subject: envelope?.subject || "(Sem assunto)",
       from: (envelope?.from || []).map((a: any) => ({ name: a.name || "", email: a.address || "" })),
       to: (envelope?.to || []).map((a: any) => ({ name: a.name || "", email: a.address || "" })),
-      receivedAt: envelope?.date ? new Date(envelope.date).toISOString() : new Date().toISOString() || new Date().toISOString(),
+      receivedAt: envelope?.date ? new Date(envelope.date).toISOString() : new Date().toISOString(),
       preview: "",
       hasAttachment: hasAttachments(msg.bodyStructure),
       size: msg.size || 0,
@@ -228,6 +266,17 @@ export async function getEmailDetail(
   } finally {
     lock.release();
     await client.logout();
+  }
+}
+
+function decodeQP(input: string): string {
+  try {
+    const qp = require("quoted-printable");
+    return qp.decode(input.replace(/=\r?\n/g, ""));
+  } catch {
+    return input
+      .replace(/=\r?\n/g, "")
+      .replace(/=([0-9A-Fa-f]{2})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
   }
 }
 

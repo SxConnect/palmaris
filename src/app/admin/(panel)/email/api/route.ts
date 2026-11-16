@@ -12,13 +12,14 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const emailId = searchParams.get("id");
+  const box = searchParams.get("box") || undefined;
 
   if (!emailId) {
     return NextResponse.json({ error: "ID ausente" }, { status: 400 });
   }
 
   try {
-    const detail = await getEmailDetail(user.email, DEFAULT_MAIL_PASSWORD, emailId);
+    const detail = await getEmailDetail(user.email, DEFAULT_MAIL_PASSWORD, emailId, box);
     return NextResponse.json(detail);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

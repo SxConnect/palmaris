@@ -234,7 +234,7 @@ export default function WebmailClient({
                     onClick={() => {
                       setActiveEmail(item);
                       // Carrega detalhe se necessário
-                      fetch(`/admin/email/api?id=${item.id}`)
+                      fetch(`/admin/email/api?id=${item.id}&box=${encodeURIComponent(currentMailboxId)}`)
                         .then((res) => res.json())
                         .then((data) => data && setActiveEmail(data))
                         .catch(() => {});

@@ -31,7 +31,7 @@ export default async function WebmailPage({ searchParams }: Props) {
     }
 
     if (params.id) {
-      selectedEmail = await getEmailDetail(user.email, DEFAULT_MAIL_PASSWORD, params.id);
+      selectedEmail = await getEmailDetail(user.email, DEFAULT_MAIL_PASSWORD, params.id, params.box);
     }
   } catch (err: any) {
     errorMessage = err?.message || "Erro ao carregar e-mails";
