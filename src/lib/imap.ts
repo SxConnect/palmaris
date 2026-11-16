@@ -71,7 +71,11 @@ function getRole(name: string): string {
 
 export async function listMailboxes(user: string, pass: string): Promise<MailboxItem[]> {
   const client = createImapClient(user, pass);
-  await client.connect();
+  try {
+    await client.connect();
+  } catch (err: any) {
+    throw new Error(`IMAP connect failed: ${err?.message || err}`);
+  }
 
   const mailboxes = await client.list();
   const result: MailboxItem[] = [];
