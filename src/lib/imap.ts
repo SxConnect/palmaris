@@ -84,14 +84,25 @@ export async function listMailboxes(user: string, pass: string): Promise<Mailbox
   const result: MailboxItem[] = [];
 
   for (const box of mailboxes) {
-    const status = await client.status(box.path, { messages: true, unseen: true });
-    result.push({
-      id: box.path,
-      name: box.name,
-      role: getRole(box.name),
-      totalEmails: (status as any).messages || 0,
-      unreadEmails: (status as any).unseen || 0,
-    });
+    try {
+      const status = await client.status(box.path, { messages: true, unseen: true });
+      result.push({
+        id: box.path,
+        name: box.name,
+        role: getRole(box.name),
+        totalEmails: (status as any).messages || 0,
+        unreadEmails: (status as any).unseen || 0,
+      });
+    } catch (err: any) {
+      console.error("STATUS ERROR for", box.path, ":", err?.message);
+      result.push({
+        id: box.path,
+        name: box.name,
+        role: getRole(box.name),
+        totalEmails: 0,
+        unreadEmails: 0,
+      });
+    }
   }
 
   await client.logout();
