@@ -34,7 +34,7 @@ export default async function WebmailPage({ searchParams }: Props) {
     }
   } catch (err: any) {
     errorMessage = err?.message || "Erro ao carregar e-mails";
-    console.error("Erro ao carregar dados do Webmail JMAP:", err);
+    console.error("WEBMAIL ERROR:", err?.message, err?.stack);
   }
 
   // Garantir que mailboxes e emails sejam arrays válidos
