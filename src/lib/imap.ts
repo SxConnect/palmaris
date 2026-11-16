@@ -74,6 +74,7 @@ export async function listMailboxes(user: string, pass: string): Promise<Mailbox
   try {
     await client.connect();
   } catch (err: any) {
+    console.error("IMAP CONNECT ERROR:", err?.message, err?.stack);
     throw new Error(`IMAP connect failed: ${err?.message || err}`);
   }
 
