@@ -46,7 +46,7 @@ COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 RUN rm -rf node_modules/typescript node_modules/@types node_modules/eslint \
     node_modules/eslint-config-next node_modules/@eslint node_modules/tailwindcss \
     node_modules/@tailwindcss node_modules/.cache node_modules/.bin/next \
-    node_modules/.bin/tsc node_modules/.bin/eslint node_modules/nodemailer
+    node_modules/.bin/tsc node_modules/.bin/eslint
 # Assets estáticos
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
