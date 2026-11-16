@@ -1,9 +1,9 @@
 import { ImapFlow } from "imapflow";
 import nodemailer from "nodemailer";
 
-const IMAP_HOST = process.env.IMAP_HOST || "mail.palmaris.com.br";
+const IMAP_HOST = process.env.IMAP_HOST || "172.24.0.2";
 const IMAP_PORT = parseInt(process.env.IMAP_PORT || "993");
-const SMTP_HOST = process.env.SMTP_HOST || "mail.palmaris.com.br";
+const SMTP_HOST = process.env.SMTP_HOST || "172.24.0.2";
 const SMTP_PORT = parseInt(process.env.SMTP_PORT || "465");
 
 export type MailboxItem = {
