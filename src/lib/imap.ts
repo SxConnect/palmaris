@@ -50,6 +50,7 @@ function createImapClient(user: string, pass: string): ImapFlow {
     secure: IMAP_PORT === 993,
     auth: { user, pass },
     logger: false,
+    tls: { rejectUnauthorized: false },
   });
 }
 
@@ -233,6 +234,7 @@ export async function sendImapEmail({
     port: SMTP_PORT,
     secure: SMTP_PORT === 465,
     auth: { user, pass },
+    tls: { rejectUnauthorized: false },
   });
 
   const mailAttachments = (attachments || []).map((att) => ({
