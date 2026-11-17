@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/auth/guard";
 import CampaignForm from "./CampaignForm";
+import CampaignList from "./CampaignList";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,16 @@ export default async function CampaignsPage() {
       </div>
 
       <CampaignForm availableSenders={availableSenders} />
+
+      <section className="mt-10">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-slate-900">Campanhas salvas</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Histórico de campanhas enviadas e agendadas. Clique para ver a mensagem.
+          </p>
+        </div>
+        <CampaignList />
+      </section>
     </div>
   );
 }

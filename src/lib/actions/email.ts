@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
-import { requireAuth } from "@/lib/auth/guard";
+import { requireAuth, requireAdmin } from "@/lib/auth/guard";
 import { sendImapEmail, uploadBlob, deleteEmail } from "@/lib/imap";
 import { prisma } from "@/lib/prisma";
 
@@ -166,6 +166,24 @@ export async function sendCampaignAction(
     .map((p) => `<p style="margin: 0 0 12px 0; line-height: 1.6; color: #1e293b;">${p.replace(/\n/g, "<br>")}</p>`)
     .join("");
 
+  // Salva a campanha no banco ANTES de disparar, para não se perder
+  const campaign = await prisma.scheduledCampaign.create({
+    data: {
+      fromEmail,
+      subject,
+      body: bodyText,
+      recipients: JSON.stringify(recipients),
+      delaySec,
+      batchSize: 0,
+      warmUp: false,
+      status: "sending",
+      scheduledAt: null,
+      startedAt: new Date(),
+      totalCount: recipients.length,
+      createdBy: user.email,
+    },
+  });
+
   let sent = 0;
   // Dispara com intervalo controlado para proteger a reputação do IP da VPS
   for (const recipient of recipients) {
@@ -221,6 +239,15 @@ export async function sendCampaignAction(
       // continua para os próximos
     }
   }
+
+  await prisma.scheduledCampaign.update({
+    where: { id: campaign.id },
+    data: {
+      status: sent > 0 ? "sent" : "failed",
+      sentCount: sent,
+      completedAt: new Date(),
+    },
+  });
 
   return {
     success: `Campanha disparada com sucesso! ${sent} de ${recipients.length} e-mails enviados.`,
@@ -325,4 +352,38 @@ export async function deleteEmailAction(
   } catch (err: any) {
     return { error: err.message || "Erro ao excluir a mensagem." };
   }
+}
+
+/** Lista as campanhas salvas no banco (mais recentes primeiro) */
+export async function listCampaignsAction(): Promise<
+  Array<{
+    id: string;
+    subject: string;
+    fromEmail: string;
+    body: string;
+    recipientCount: number;
+    status: string;
+    scheduledAt: string | null;
+    createdAt: string;
+    sentCount: number;
+  }>
+> {
+  await requireAdmin();
+  const campaigns = await prisma.scheduledCampaign.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+  return campaigns.map((c) => ({
+    id: c.id,
+    subject: c.subject,
+    fromEmail: c.fromEmail,
+    body: c.body,
+    recipientCount: Array.isArray(c.recipients)
+      ? c.recipients.length
+      : (() => { try { return JSON.parse(c.recipients).length; } catch { return 0; } })(),
+    status: c.status,
+    scheduledAt: c.scheduledAt ? c.scheduledAt.toISOString() : null,
+    createdAt: c.createdAt.toISOString(),
+    sentCount: c.sentCount,
+  }));
 }
