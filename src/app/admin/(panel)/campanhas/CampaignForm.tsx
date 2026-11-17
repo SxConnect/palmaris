@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { sendCampaignAction, scheduleCampaignAction } from "@/lib/actions/email";
+import RecipientInsights from "./RecipientInsights";
 
 export default function CampaignForm({
   availableSenders,
@@ -21,6 +22,20 @@ export default function CampaignForm({
     .split(/[\n,;]/)
     .map((e) => e.trim())
     .filter((e) => e.includes("@") && e.includes("."));
+
+  const toggleRecipient = (email: string, remove: boolean) => {
+    const current = recipientsText
+      .split(/[\n,;]/)
+      .map((e) => e.trim())
+      .filter(Boolean);
+    if (remove) {
+      setRecipientsText(
+        current.filter((e) => e.toLowerCase() !== email.toLowerCase()).join("\n"),
+      );
+    } else if (!current.some((e) => e.toLowerCase() === email.toLowerCase())) {
+      setRecipientsText([...current, email].join("\n"));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -171,6 +186,10 @@ export default function CampaignForm({
           placeholder="Cole a lista de e-mails aqui (um por linha ou separados por vírgula):&#10;cliente1@empresa.com.br&#10;gerente@industria.com.br"
           className="input font-mono text-xs"
         />
+
+        <div className="mt-4">
+          <RecipientInsights onToggleRecipient={toggleRecipient} currentRecipients={recipientList} />
+        </div>
       </div>
 
       <div>

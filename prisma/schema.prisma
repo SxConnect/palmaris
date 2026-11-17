@@ -257,6 +257,20 @@ model ScheduledCampaign {
   @@map("scheduled_campaigns")
 }
 
+/// Registro de cada envio de e-mail (para contagem de tentativas por destinatário).
+model EmailSend {
+  id          String   @id @default(cuid())
+  campaignId  String?
+  recipient   String
+  subject     String?
+  sentAt      DateTime @default(now())
+  trackingId  String   @unique
+
+  @@index([recipient])
+  @@index([campaignId])
+  @@map("email_sends")
+}
+
 /// Rastreamento de abertura de e-mails.
 model EmailOpen {
   id          String   @id @default(cuid())

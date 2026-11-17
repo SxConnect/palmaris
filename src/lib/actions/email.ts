@@ -219,12 +219,12 @@ export async function sendCampaignAction(
 
       // Registrar o tracking no banco
       try {
-        await prisma.emailOpen.create({
+        await prisma.emailSend.create({
           data: {
             trackingId,
             recipient,
-            userAgent: null,
-            ip: null,
+            subject,
+            campaignId: campaign.id,
           },
         });
       } catch {
@@ -386,4 +386,62 @@ export async function listCampaignsAction(): Promise<
     createdAt: c.createdAt.toISOString(),
     sentCount: c.sentCount,
   }));
+}
+
+export type RecipientStats = {
+  recipient: string;
+  timesSent: number;
+  timesOpened: number;
+  lastSentAt: string | null;
+  lastOpenedAt: string | null;
+  neverOpened: boolean;
+};
+
+/** Estatísticas por destinatário: quantas vezes foi enviado e quantas abriu */
+export async function getRecipientStatsAction(): Promise<RecipientStats[]> {
+  await requireAdmin();
+
+  const [sends, opens] = await Promise.all([
+    prisma.emailSend.findMany({
+      orderBy: { sentAt: "desc" },
+      select: { recipient: true, sentAt: true, trackingId: true },
+    }),
+    prisma.emailOpen.findMany({
+      select: { recipient: true, trackingId: true, openedAt: true },
+    }),
+  ]);
+
+  // Mapa de trackingId -> abertura
+  const openByTracking = new Map(opens.map((o) => [o.trackingId, o]));
+  const stats = new Map<string, RecipientStats>();
+
+  for (const send of sends) {
+    const key = send.recipient.toLowerCase();
+    const existing = stats.get(key) || {
+      recipient: send.recipient,
+      timesSent: 0,
+      timesOpened: 0,
+      lastSentAt: null,
+      lastOpenedAt: null,
+      neverOpened: true,
+    };
+    existing.timesSent += 1;
+    const opened = openByTracking.get(send.trackingId);
+    if (opened) {
+      existing.timesOpened += 1;
+      if (!existing.lastOpenedAt || opened.openedAt > new Date(existing.lastOpenedAt)) {
+        existing.lastOpenedAt = opened.openedAt.toISOString();
+      }
+    }
+    if (!existing.lastSentAt) {
+      existing.lastSentAt = send.sentAt.toISOString();
+    }
+    stats.set(key, existing);
+  }
+
+  const result = Array.from(stats.values());
+  result.forEach((r) => {
+    r.neverOpened = r.timesOpened === 0;
+  });
+  return result.sort((a, b) => b.timesSent - a.timesSent);
 }

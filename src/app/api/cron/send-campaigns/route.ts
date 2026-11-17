@@ -124,10 +124,11 @@ export async function GET(request: Request) {
           });
 
           try {
-            await prisma.emailOpen.create({
+            await prisma.emailSend.create({
               data: {
                 trackingId,
                 recipient,
+                subject: campaign.subject,
                 campaignId: campaign.id,
               },
             });

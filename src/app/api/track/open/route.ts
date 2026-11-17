@@ -21,7 +21,12 @@ export async function GET(request: Request) {
       .upsert({
         where: { trackingId },
         update: { openedAt: new Date(), userAgent, ip },
-        create: { trackingId, recipient: "unknown", userAgent, ip },
+        create: {
+          trackingId,
+          recipient: "unknown",
+          userAgent,
+          ip,
+        },
       })
       .catch(() => {});
   }

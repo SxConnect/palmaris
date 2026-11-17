@@ -100,6 +100,11 @@ export type Setting = Prisma.SettingModel
  */
 export type ScheduledCampaign = Prisma.ScheduledCampaignModel
 /**
+ * Model EmailSend
+ * Registro de cada envio de e-mail (para contagem de tentativas por destinatário).
+ */
+export type EmailSend = Prisma.EmailSendModel
+/**
  * Model EmailOpen
  * Rastreamento de abertura de e-mails.
  */
