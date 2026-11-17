@@ -41,7 +41,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   logoUrl: "/img/logo-palmaris.jpg",
   address: "Av. Industrial, 1000 - Rio de Janeiro - RJ, CEP 22775-000",
   cnpj: "",
-  email: "contato@palmarisrepresentacoes.com.br",
+  email: "contato@palmaris.com.br",
   phone: "(21) 98864-4221",
   facebookUrl: "",
   instagramUrl: "https://instagram.com/palmarisrepresentacoes",

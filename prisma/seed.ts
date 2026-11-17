@@ -183,7 +183,7 @@ async function main() {
     address: "Av. Industrial, 1000 - Rio de Janeiro - RJ, CEP 22775-000",
     cnpj: "",
     email: "contato@palmaris.com.br",
-    phone: "(21) 99876-5432",
+    phone: "(21) 98864-4221",
     facebookUrl: "",
     instagramUrl: "https://instagram.com/palmarisrepresentacoes",
     linkedinUrl: "https://linkedin.com/company/palmarisrepresentacoes",
