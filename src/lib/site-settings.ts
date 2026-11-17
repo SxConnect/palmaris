@@ -44,8 +44,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   email: "contato@palmaris.com.br",
   phone: "(21) 98864-4221",
   facebookUrl: "",
-  instagramUrl: "https://instagram.com/palmarisrepresentacoes",
-  linkedinUrl: "https://linkedin.com/company/palmarisrepresentacoes",
+  instagramUrl: "https://instagram.com/",
+  linkedinUrl: "https://linkedin.com/",
   footerNote: "Representação e integração de soluções industriais de alta performance.",
 };
 

@@ -185,17 +185,18 @@ async function main() {
     email: "contato@palmaris.com.br",
     phone: "(21) 98864-4221",
     facebookUrl: "",
-    instagramUrl: "https://instagram.com/palmarisrepresentacoes",
-    linkedinUrl: "https://linkedin.com/company/palmarisrepresentacoes",
+    instagramUrl: "https://instagram.com/",
+    linkedinUrl: "https://linkedin.com/",
     footerNote: "Representação comercial e integração de soluções industriais de alta performance.",
   };
 
-  await prisma.setting.upsert({
-    where: { key: "site" },
-    update: { value: settings },
-    create: { key: "site", value: settings },
-  });
-  console.log("Configurações da Palmaris atualizadas.");
+  const existingSettings = await prisma.setting.findUnique({ where: { key: "site" } });
+  if (!existingSettings) {
+    await prisma.setting.create({ data: { key: "site", value: settings } });
+    console.log("Configurações da Palmaris criadas.");
+  } else {
+    console.log("Configurações da Palmaris preservadas (já existem no banco).");
+  }
 
   /* 3. Páginas institucionais -------------------------------------- */
   const pages = [
