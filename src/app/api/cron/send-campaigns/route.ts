@@ -76,16 +76,21 @@ export async function GET(request: Request) {
         .map((p) => `<p style="margin: 0 0 12px 0; line-height: 1.6; color: #1e293b;">${p.replace(/\n/g, "<br>")}</p>`)
         .join("");
 
-      // Determine batch size for warm-up
+      // Determine batch size for warm-up (progressive: base, base*2, base*3, ...)
       let batchSize = 0;
       if (campaign.warmUp && campaign.batchSize > 0) {
-        // Calculate how many have been sent already
+        const base = campaign.batchSize;
         const alreadySent = campaign.sentCount;
         const remaining = allRecipients.length - alreadySent;
-        // Increase batch size each day (batchSize, batchSize*2, batchSize*3, ...)
-        const dayNumber = Math.floor(alreadySent / campaign.batchSize) + 1;
-        batchSize = Math.min(campaign.batchSize * dayNumber, remaining);
-        if (batchSize <= 0) batchSize = Math.min(campaign.batchSize, remaining);
+        // Descobre em qual "dia" estamos somando base*1 + base*2 + ... até atingir alreadySent.
+        // Soma triangular: S(n) = base * n(n+1)/2. Achamos o maior n com S(n) <= alreadySent.
+        let n = 0;
+        while (base * ((n + 1) * (n + 2)) / 2 <= alreadySent) {
+          n++;
+        }
+        const nextBatch = base * (n + 1); // progressão: base, base*2, base*3...
+        batchSize = Math.min(nextBatch, remaining);
+        if (batchSize <= 0) batchSize = Math.min(base, remaining);
       }
 
       const recipients = batchSize > 0 ? allRecipients.slice(campaign.sentCount, campaign.sentCount + batchSize) : allRecipients.slice(campaign.sentCount);
@@ -164,7 +169,7 @@ export async function GET(request: Request) {
             status: "pending",
             scheduledAt: nextDay,
             sentCount: totalSent,
-            errorMessage: `${totalSent} de ${allRecipients.length} enviados. Próximo lote amanhã às 9h.`,
+            errorMessage: `${totalSent} de ${allRecipients.length} enviados neste ciclo. Próximo lote amanhã às 9h (aquecimento progressivo).`,
           },
         });
       } else {

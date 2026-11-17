@@ -42,6 +42,7 @@ export type ScheduledCampaignSumAggregateOutputType = {
 
 export type ScheduledCampaignMinAggregateOutputType = {
   id: string | null
+  name: string | null
   fromEmail: string | null
   subject: string | null
   body: string | null
@@ -63,6 +64,7 @@ export type ScheduledCampaignMinAggregateOutputType = {
 
 export type ScheduledCampaignMaxAggregateOutputType = {
   id: string | null
+  name: string | null
   fromEmail: string | null
   subject: string | null
   body: string | null
@@ -84,6 +86,7 @@ export type ScheduledCampaignMaxAggregateOutputType = {
 
 export type ScheduledCampaignCountAggregateOutputType = {
   id: number
+  name: number
   fromEmail: number
   subject: number
   body: number
@@ -121,6 +124,7 @@ export type ScheduledCampaignSumAggregateInputType = {
 
 export type ScheduledCampaignMinAggregateInputType = {
   id?: true
+  name?: true
   fromEmail?: true
   subject?: true
   body?: true
@@ -142,6 +146,7 @@ export type ScheduledCampaignMinAggregateInputType = {
 
 export type ScheduledCampaignMaxAggregateInputType = {
   id?: true
+  name?: true
   fromEmail?: true
   subject?: true
   body?: true
@@ -163,6 +168,7 @@ export type ScheduledCampaignMaxAggregateInputType = {
 
 export type ScheduledCampaignCountAggregateInputType = {
   id?: true
+  name?: true
   fromEmail?: true
   subject?: true
   body?: true
@@ -271,6 +277,7 @@ export type ScheduledCampaignGroupByArgs<ExtArgs extends runtime.Types.Extension
 
 export type ScheduledCampaignGroupByOutputType = {
   id: string
+  name: string | null
   fromEmail: string
   subject: string
   body: string
@@ -315,6 +322,7 @@ export type ScheduledCampaignWhereInput = {
   OR?: Prisma.ScheduledCampaignWhereInput[]
   NOT?: Prisma.ScheduledCampaignWhereInput | Prisma.ScheduledCampaignWhereInput[]
   id?: Prisma.StringFilter<"ScheduledCampaign"> | string
+  name?: Prisma.StringNullableFilter<"ScheduledCampaign"> | string | null
   fromEmail?: Prisma.StringFilter<"ScheduledCampaign"> | string
   subject?: Prisma.StringFilter<"ScheduledCampaign"> | string
   body?: Prisma.StringFilter<"ScheduledCampaign"> | string
@@ -336,6 +344,7 @@ export type ScheduledCampaignWhereInput = {
 
 export type ScheduledCampaignOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   body?: Prisma.SortOrder
@@ -360,6 +369,7 @@ export type ScheduledCampaignWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ScheduledCampaignWhereInput | Prisma.ScheduledCampaignWhereInput[]
   OR?: Prisma.ScheduledCampaignWhereInput[]
   NOT?: Prisma.ScheduledCampaignWhereInput | Prisma.ScheduledCampaignWhereInput[]
+  name?: Prisma.StringNullableFilter<"ScheduledCampaign"> | string | null
   fromEmail?: Prisma.StringFilter<"ScheduledCampaign"> | string
   subject?: Prisma.StringFilter<"ScheduledCampaign"> | string
   body?: Prisma.StringFilter<"ScheduledCampaign"> | string
@@ -381,6 +391,7 @@ export type ScheduledCampaignWhereUniqueInput = Prisma.AtLeast<{
 
 export type ScheduledCampaignOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   body?: Prisma.SortOrder
@@ -410,6 +421,7 @@ export type ScheduledCampaignScalarWhereWithAggregatesInput = {
   OR?: Prisma.ScheduledCampaignScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ScheduledCampaignScalarWhereWithAggregatesInput | Prisma.ScheduledCampaignScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
+  name?: Prisma.StringNullableWithAggregatesFilter<"ScheduledCampaign"> | string | null
   fromEmail?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
   subject?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
   body?: Prisma.StringWithAggregatesFilter<"ScheduledCampaign"> | string
@@ -431,6 +443,7 @@ export type ScheduledCampaignScalarWhereWithAggregatesInput = {
 
 export type ScheduledCampaignCreateInput = {
   id?: string
+  name?: string | null
   fromEmail: string
   subject: string
   body: string
@@ -452,6 +465,7 @@ export type ScheduledCampaignCreateInput = {
 
 export type ScheduledCampaignUncheckedCreateInput = {
   id?: string
+  name?: string | null
   fromEmail: string
   subject: string
   body: string
@@ -473,6 +487,7 @@ export type ScheduledCampaignUncheckedCreateInput = {
 
 export type ScheduledCampaignUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
@@ -494,6 +509,7 @@ export type ScheduledCampaignUpdateInput = {
 
 export type ScheduledCampaignUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
@@ -515,6 +531,7 @@ export type ScheduledCampaignUncheckedUpdateInput = {
 
 export type ScheduledCampaignCreateManyInput = {
   id?: string
+  name?: string | null
   fromEmail: string
   subject: string
   body: string
@@ -536,6 +553,7 @@ export type ScheduledCampaignCreateManyInput = {
 
 export type ScheduledCampaignUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
@@ -557,6 +575,7 @@ export type ScheduledCampaignUpdateManyMutationInput = {
 
 export type ScheduledCampaignUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   body?: Prisma.StringFieldUpdateOperationsInput | string
@@ -578,6 +597,7 @@ export type ScheduledCampaignUncheckedUpdateManyInput = {
 
 export type ScheduledCampaignCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   body?: Prisma.SortOrder
@@ -606,6 +626,7 @@ export type ScheduledCampaignAvgOrderByAggregateInput = {
 
 export type ScheduledCampaignMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   body?: Prisma.SortOrder
@@ -627,6 +648,7 @@ export type ScheduledCampaignMaxOrderByAggregateInput = {
 
 export type ScheduledCampaignMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   body?: Prisma.SortOrder
@@ -657,6 +679,7 @@ export type ScheduledCampaignSumOrderByAggregateInput = {
 
 export type ScheduledCampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  name?: boolean
   fromEmail?: boolean
   subject?: boolean
   body?: boolean
@@ -678,6 +701,7 @@ export type ScheduledCampaignSelect<ExtArgs extends runtime.Types.Extensions.Int
 
 export type ScheduledCampaignSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  name?: boolean
   fromEmail?: boolean
   subject?: boolean
   body?: boolean
@@ -699,6 +723,7 @@ export type ScheduledCampaignSelectCreateManyAndReturn<ExtArgs extends runtime.T
 
 export type ScheduledCampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  name?: boolean
   fromEmail?: boolean
   subject?: boolean
   body?: boolean
@@ -720,6 +745,7 @@ export type ScheduledCampaignSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 
 export type ScheduledCampaignSelectScalar = {
   id?: boolean
+  name?: boolean
   fromEmail?: boolean
   subject?: boolean
   body?: boolean
@@ -739,13 +765,14 @@ export type ScheduledCampaignSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ScheduledCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fromEmail" | "subject" | "body" | "recipients" | "delaySec" | "batchSize" | "warmUp" | "status" | "scheduledAt" | "startedAt" | "completedAt" | "sentCount" | "totalCount" | "errorMessage" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["scheduledCampaign"]>
+export type ScheduledCampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "fromEmail" | "subject" | "body" | "recipients" | "delaySec" | "batchSize" | "warmUp" | "status" | "scheduledAt" | "startedAt" | "completedAt" | "sentCount" | "totalCount" | "errorMessage" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["scheduledCampaign"]>
 
 export type $ScheduledCampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ScheduledCampaign"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    name: string | null
     fromEmail: string
     subject: string
     body: string
@@ -1187,6 +1214,7 @@ export interface Prisma__ScheduledCampaignClient<T, Null = never, ExtArgs extend
  */
 export interface ScheduledCampaignFieldRefs {
   readonly id: Prisma.FieldRef<"ScheduledCampaign", 'String'>
+  readonly name: Prisma.FieldRef<"ScheduledCampaign", 'String'>
   readonly fromEmail: Prisma.FieldRef<"ScheduledCampaign", 'String'>
   readonly subject: Prisma.FieldRef<"ScheduledCampaign", 'String'>
   readonly body: Prisma.FieldRef<"ScheduledCampaign", 'String'>

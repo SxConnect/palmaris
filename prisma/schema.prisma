@@ -235,6 +235,7 @@ model Setting {
 /// Campanha de e-mail agendada ou disparada.
 model ScheduledCampaign {
   id            String    @id @default(cuid())
+  name          String?
   fromEmail     String
   subject       String
   body          String

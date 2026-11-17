@@ -136,6 +136,7 @@ export async function sendCampaignAction(
   }
 
   const fromEmail = String(formData.get("fromEmail") ?? user.email).trim();
+  const campaignName = String(formData.get("campaignName") ?? "").trim();
   const subject = String(formData.get("subject") ?? "").trim();
   const bodyText = String(formData.get("body") ?? "").trim();
   const recipientsRaw = String(formData.get("recipients") ?? "").trim();
@@ -169,6 +170,7 @@ export async function sendCampaignAction(
   // Salva a campanha no banco ANTES de disparar, para não se perder
   const campaign = await prisma.scheduledCampaign.create({
     data: {
+      name: campaignName || null,
       fromEmail,
       subject,
       body: bodyText,
@@ -267,6 +269,7 @@ export async function scheduleCampaignAction(
   }
 
   const fromEmail = String(formData.get("fromEmail") ?? user.email).trim();
+  const campaignName = String(formData.get("campaignName") ?? "").trim();
   const subject = String(formData.get("subject") ?? "").trim();
   const bodyText = String(formData.get("body") ?? "").trim();
   const recipientsRaw = String(formData.get("recipients") ?? "").trim();
@@ -309,6 +312,7 @@ export async function scheduleCampaignAction(
   try {
     await prisma.scheduledCampaign.create({
       data: {
+        name: campaignName || null,
         fromEmail,
         subject,
         body: bodyText,
@@ -358,6 +362,7 @@ export async function deleteEmailAction(
 export async function listCampaignsAction(): Promise<
   Array<{
     id: string;
+    name: string | null;
     subject: string;
     fromEmail: string;
     body: string;
@@ -375,6 +380,7 @@ export async function listCampaignsAction(): Promise<
   });
   return campaigns.map((c) => ({
     id: c.id,
+    name: c.name,
     subject: c.subject,
     fromEmail: c.fromEmail,
     body: c.body,
@@ -444,4 +450,29 @@ export async function getRecipientStatsAction(): Promise<RecipientStats[]> {
     r.neverOpened = r.timesOpened === 0;
   });
   return result.sort((a, b) => b.timesSent - a.timesSent);
+}
+
+/** Retoma uma campanha pausada/falhada para continuar o envio no próximo ciclo do cron */
+export async function resumeCampaignAction(
+  id: string,
+): Promise<{ success?: string; error?: string }> {
+  await requireAdmin();
+
+  try {
+    const campaign = await prisma.scheduledCampaign.findUnique({ where: { id } });
+    if (!campaign) return { error: "Campanha não encontrada." };
+
+    await prisma.scheduledCampaign.update({
+      where: { id },
+      data: {
+        status: "pending",
+        scheduledAt: new Date(),
+        errorMessage: null,
+      },
+    });
+    revalidatePath("/admin/campanhas");
+    return { success: "Campanha retomada. O cron vai continuar o envio em até 5 minutos." };
+  } catch (err: any) {
+    return { error: err.message || "Erro ao retomar campanha." };
+  }
 }

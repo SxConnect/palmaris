@@ -161,6 +161,18 @@ export default function CampaignForm({
       </div>
 
       <div>
+        <label className="label">Nome da Campanha (opcional)</label>
+        <input
+          name="campaignName"
+          placeholder="Ex.: Campanha ENGEZER+PESCO — Novembro/2026"
+          className="input"
+        />
+        <p className="mt-1 text-[11px] text-slate-500">
+          Use um nome para identificar e retomar esta campanha depois na lista abaixo.
+        </p>
+      </div>
+
+      <div>
         <label className="label">Assunto da Campanha *</label>
         <input
           name="subject"

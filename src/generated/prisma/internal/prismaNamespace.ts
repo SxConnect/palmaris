@@ -1747,6 +1747,7 @@ export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeo
 
 export const ScheduledCampaignScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   fromEmail: 'fromEmail',
   subject: 'subject',
   body: 'body',
