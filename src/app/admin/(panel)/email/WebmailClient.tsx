@@ -112,14 +112,14 @@ export default function WebmailClient({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+    <div className="flex flex-col h-auto min-h-[calc(100vh-140px)] md:h-[calc(100vh-140px)] rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
       {/* Barra de título do Webmail */}
       <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3.5 bg-slate-50/70">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/img/logo-palmaris.jpg" alt="Palmaris" className="h-8 w-auto object-contain rounded" />
           <div>
-            <h1 className="text-base font-bold text-slate-900 leading-tight">Webmail Palmaris</h1>
+            <h1 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">Webmail Palmaris</h1>
             <p className="text-xs text-slate-500 font-medium">Conta ativa: <span className="font-semibold text-brand-600">{currentUser.email}</span></p>
           </div>
         </div>
@@ -129,12 +129,12 @@ export default function WebmailClient({
           className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
         >
           <span>✏️</span>
-          <span>Nova Mensagem</span>
+          <span className="hidden sm:inline">Nova Mensagem</span>
         </button>
       </div>
 
       {/* Cards de resumo por caixa de e-mail */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 px-4 py-3 border-b border-slate-200 bg-slate-50/50">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b border-slate-200 bg-slate-50/50">
         {mailboxes.map((box) => {
           const active = box.id === currentMailboxId;
           const folderName = getFolderName(box.name, box.role);
@@ -180,7 +180,7 @@ export default function WebmailClient({
       {/* Grid de 3 colunas: Pastas | Lista | Leitura */}
       <div className="grid grid-cols-12 flex-1 overflow-hidden">
         {/* Coluna 1: Pastas */}
-        <div className="col-span-12 md:col-span-3 border-r border-slate-200 p-3 bg-slate-50/40 flex flex-col justify-between">
+        <div className="hidden md:flex md:col-span-3 border-r border-slate-200 p-3 bg-slate-50/40 flex-col justify-between">
           <div className="space-y-1">
             <p className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pastas</p>
             {mailboxes.map((box) => {
@@ -218,7 +218,7 @@ export default function WebmailClient({
         </div>
 
         {/* Coluna 2: Lista de E-mails */}
-        <div className="col-span-12 md:col-span-4 border-r border-slate-200 flex flex-col overflow-hidden bg-white">
+        <div className="col-span-12 md:col-span-4 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col max-h-[420px] md:max-h-none overflow-hidden bg-white">
           <div className="p-3 border-b border-slate-200">
             <input
               type="text"
@@ -280,13 +280,13 @@ export default function WebmailClient({
         </div>
 
         {/* Coluna 3: Leitura do E-mail */}
-        <div className="col-span-12 md:col-span-5 flex flex-col overflow-hidden bg-slate-50/20">
+        <div className="col-span-12 md:col-span-5 flex flex-col min-h-[400px] md:min-h-0 overflow-hidden bg-slate-50/20">
           {activeEmail ? (
             <div className="flex flex-col h-full overflow-hidden">
               {/* Cabeçalho da mensagem */}
               <div className="p-4 bg-white border-b border-slate-200">
-                <div className="flex items-start justify-between gap-3">
-                  <h2 className="text-base font-bold text-slate-900 leading-snug">{activeEmail.subject}</h2>
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <h2 className="text-sm sm:text-base font-bold text-slate-900 leading-snug flex-1 min-w-[150px]">{activeEmail.subject}</h2>
                   <button
                     onClick={() =>
                       handleOpenCompose(
@@ -376,7 +376,7 @@ export default function WebmailClient({
       {/* Modal Compositor de E-mails */}
       {composing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="w-full max-w-2xl rounded-xl sm:rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
             <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3.5 bg-slate-50">
               <div className="flex items-center gap-2">
                 <span className="text-brand-600">✏️</span>
@@ -390,7 +390,7 @@ export default function WebmailClient({
               </button>
             </div>
 
-            <form onSubmit={handleSendSubmit} className="flex flex-col flex-1 overflow-y-auto p-5 space-y-3.5">
+            <form onSubmit={handleSendSubmit} className="flex flex-col flex-1 overflow-y-auto p-4 sm:p-5 space-y-3.5">
               {sendResult?.error && (
                 <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-xs font-semibold text-red-700 sticky top-0 z-10">
                   ⚠️ {sendResult.error}
