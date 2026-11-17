@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { MailboxItem, EmailSummary, EmailDetail } from "@/lib/imap";
-import { sendEmailAction } from "@/lib/actions/email";
+import { sendEmailAction, deleteEmailAction } from "@/lib/actions/email";
 
 export default function WebmailClient({
   currentUser,
@@ -25,6 +25,7 @@ export default function WebmailClient({
   const [activeEmail, setActiveEmail] = useState<EmailDetail | EmailSummary | null>(selectedEmail);
   const [isPending, startTransition] = useTransition();
   const [sendResult, setSendResult] = useState<{ error?: string; success?: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const filteredEmails = emails.filter((m) => {
     if (!filterQuery) return true;
@@ -37,6 +38,24 @@ export default function WebmailClient({
     setReplyTo({ to, subject });
     setSendResult(null);
     setComposing(true);
+  };
+
+  const handleDelete = async () => {
+    if (!activeEmail) return;
+    if (!window.confirm("Excluir esta mensagem? Ela será movida para a Lixeira.")) return;
+
+    setDeleting(true);
+    try {
+      const res = await deleteEmailAction(activeEmail.id, currentMailboxId);
+      if (res.error) {
+        window.alert(res.error);
+      } else {
+        setActiveEmail(null);
+        window.location.reload();
+      }
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleSendSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -279,6 +298,15 @@ export default function WebmailClient({
                   >
                     <span>↩️</span>
                     <span>Responder</span>
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    title="Excluir mensagem"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                  >
+                    <span>🗑️</span>
+                    <span>{deleting ? "Excluindo..." : "Excluir"}</span>
                   </button>
                 </div>
 

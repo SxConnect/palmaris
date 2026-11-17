@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth/session";
 import { requireAuth } from "@/lib/auth/guard";
-import { sendImapEmail, uploadBlob } from "@/lib/imap";
+import { sendImapEmail, uploadBlob, deleteEmail } from "@/lib/imap";
 import { prisma } from "@/lib/prisma";
 
 const DEFAULT_MAIL_PASSWORD = process.env.MAIL_DEFAULT_PASSWORD || "Palmaris@2026";
@@ -298,5 +298,26 @@ export async function scheduleCampaignAction(
     return { success: `${when}. ${recipients.length} destinatários na fila.` };
   } catch (err: any) {
     return { error: err.message || "Erro ao agendar campanha." };
+  }
+}
+
+
+/** Exclui (move para a Lixeira) uma mensagem do webmail */
+export async function deleteEmailAction(
+  emailId: string,
+  mailbox: string,
+): Promise<{ success?: string; error?: string }> {
+  const user = await requireAuth();
+
+  if (!emailId) {
+    return { error: "ID da mensagem ausente." };
+  }
+
+  try {
+    await deleteEmail(user.email, DEFAULT_MAIL_PASSWORD, emailId, mailbox);
+    revalidatePath("/admin/email");
+    return { success: "Mensagem excluída." };
+  } catch (err: any) {
+    return { error: err.message || "Erro ao excluir a mensagem." };
   }
 }

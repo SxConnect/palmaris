@@ -384,3 +384,34 @@ export async function uploadBlob(
 export function getAttachmentDownloadUrl(accountId: string, blobId: string, name: string): string {
   return `/admin/email/download?blobId=${blobId}&name=${encodeURIComponent(name)}&accountId=${accountId}`;
 }
+
+/** Move uma mensagem para a pasta Lixeira (Trash) ou a exclui permanentemente */
+export async function deleteEmail(
+  user: string,
+  pass: string,
+  emailId: string,
+  mailbox?: string,
+): Promise<void> {
+  const client = createImapClient(user, pass);
+  await client.connect();
+
+  const box = mailbox || "INBOX";
+  const lock = await client.getMailboxLock(box);
+  try {
+    const uid = parseInt(emailId);
+    const boxes = await client.list();
+    const trashBox = boxes.find(
+      (b) => getRole(b.name) === "trash" || /trash|lixeira|delet/i.test(b.name),
+    );
+
+    if (trashBox && trashBox.path !== box) {
+      await client.messageMove(String(uid), trashBox.path, { uid: true });
+    } else {
+      await client.messageDelete(String(uid), { uid: true });
+      await client.noop();
+    }
+  } finally {
+    lock.release();
+    await client.logout();
+  }
+}
