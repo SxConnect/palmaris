@@ -223,11 +223,13 @@ export async function getEmailDetail(
         } else if (/text\/html/i.test(contentType)) {
           const chunks: Buffer[] = [];
           for await (const chunk of content) chunks.push(Buffer.from(chunk));
-          htmlBody = fixMojibake(Buffer.concat(chunks).toString("utf8"));
+          const rawBody = Buffer.concat(chunks).toString("utf8");
+          htmlBody = fixMojibake(decodeBody(rawBody));
         } else if (/text\/plain/i.test(contentType)) {
           const chunks: Buffer[] = [];
           for await (const chunk of content) chunks.push(Buffer.from(chunk));
-          textBody = fixMojibake(Buffer.concat(chunks).toString("utf8"));
+          const rawText = Buffer.concat(chunks).toString("utf8");
+          textBody = fixMojibake(decodeBody(rawText));
         }
       }
     } catch (err: any) {
@@ -242,8 +244,8 @@ export async function getEmailDetail(
           const source = full.source.toString();
           const htmlMatch = source.match(/Content-Type: text\/html[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
           const textMatch = source.match(/Content-Type: text\/plain[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
-          if (htmlMatch) htmlBody = fixMojibake(decodeQP(htmlMatch[1]));
-          if (textMatch) textBody = fixMojibake(decodeQP(textMatch[1]));
+          if (htmlMatch) htmlBody = fixMojibake(decodeBody(htmlMatch[1]));
+          if (textMatch) textBody = fixMojibake(decodeBody(textMatch[1]));
         }
       } catch {}
     }
@@ -281,6 +283,26 @@ function fixMojibake(input: string): string {
     } catch {}
   }
   return input;
+}
+
+function decodeBase64(input: string): string {
+  try {
+    const clean = input.replace(/\s/g, "");
+    return Buffer.from(clean, "base64").toString("utf8");
+  } catch {
+    return input;
+  }
+}
+
+function decodeBody(input: string): string {
+  if (!input) return input;
+  const trimmed = input.trim();
+  // Detecta base64 (caracteres comuns + padding, sem escapes QP)
+  if (!/=[0-9A-Fa-f]{2}/.test(trimmed) && /^[A-Za-z0-9+/=\s]+$/.test(trimmed) && trimmed.length % 4 === 0) {
+    const decoded = decodeBase64(trimmed);
+    if (/<html|<body|<p|<div|[^\x00-\x7F]/.test(decoded)) return decoded;
+  }
+  return decodeQP(input);
 }
 
 function decodeQP(input: string): string {
