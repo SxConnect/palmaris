@@ -129,6 +129,11 @@ export type ScheduledCampaign = Prisma.ScheduledCampaignModel
  */
 export type EmailSend = Prisma.EmailSendModel
 /**
+ * Model EmailBounce
+ * Registro de e-mails que bouncearam (rejeitados/undeliverable).
+ */
+export type EmailBounce = Prisma.EmailBounceModel
+/**
  * Model EmailOpen
  * Rastreamento de abertura de e-mails.
  */

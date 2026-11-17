@@ -65,6 +65,7 @@ export const ModelName = {
   Setting: 'Setting',
   ScheduledCampaign: 'ScheduledCampaign',
   EmailSend: 'EmailSend',
+  EmailBounce: 'EmailBounce',
   EmailOpen: 'EmailOpen'
 } as const
 
@@ -284,6 +285,16 @@ export const EmailSendScalarFieldEnum = {
 } as const
 
 export type EmailSendScalarFieldEnum = (typeof EmailSendScalarFieldEnum)[keyof typeof EmailSendScalarFieldEnum]
+
+
+export const EmailBounceScalarFieldEnum = {
+  id: 'id',
+  recipient: 'recipient',
+  reason: 'reason',
+  bouncedAt: 'bouncedAt'
+} as const
+
+export type EmailBounceScalarFieldEnum = (typeof EmailBounceScalarFieldEnum)[keyof typeof EmailBounceScalarFieldEnum]
 
 
 export const EmailOpenScalarFieldEnum = {

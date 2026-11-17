@@ -411,6 +411,7 @@ export const ModelName = {
   Setting: 'Setting',
   ScheduledCampaign: 'ScheduledCampaign',
   EmailSend: 'EmailSend',
+  EmailBounce: 'EmailBounce',
   EmailOpen: 'EmailOpen'
 } as const
 
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "emailOpen"
+    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "emailBounce" | "emailOpen"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1467,6 +1468,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EmailBounce: {
+      payload: Prisma.$EmailBouncePayload<ExtArgs>
+      fields: Prisma.EmailBounceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailBounceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailBounceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>
+        }
+        findFirst: {
+          args: Prisma.EmailBounceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailBounceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>
+        }
+        findMany: {
+          args: Prisma.EmailBounceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>[]
+        }
+        create: {
+          args: Prisma.EmailBounceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>
+        }
+        createMany: {
+          args: Prisma.EmailBounceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailBounceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>[]
+        }
+        delete: {
+          args: Prisma.EmailBounceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>
+        }
+        update: {
+          args: Prisma.EmailBounceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailBounceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailBounceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailBounceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailBounceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailBouncePayload>
+        }
+        aggregate: {
+          args: Prisma.EmailBounceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailBounce>
+        }
+        groupBy: {
+          args: Prisma.EmailBounceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailBounceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailBounceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailBounceCountAggregateOutputType> | number
+        }
+      }
+    }
     EmailOpen: {
       payload: Prisma.$EmailOpenPayload<ExtArgs>
       fields: Prisma.EmailOpenFieldRefs
@@ -1780,6 +1855,16 @@ export const EmailSendScalarFieldEnum = {
 } as const
 
 export type EmailSendScalarFieldEnum = (typeof EmailSendScalarFieldEnum)[keyof typeof EmailSendScalarFieldEnum]
+
+
+export const EmailBounceScalarFieldEnum = {
+  id: 'id',
+  recipient: 'recipient',
+  reason: 'reason',
+  bouncedAt: 'bouncedAt'
+} as const
+
+export type EmailBounceScalarFieldEnum = (typeof EmailBounceScalarFieldEnum)[keyof typeof EmailBounceScalarFieldEnum]
 
 
 export const EmailOpenScalarFieldEnum = {
@@ -2118,6 +2203,7 @@ export type GlobalOmitConfig = {
   setting?: Prisma.SettingOmit
   scheduledCampaign?: Prisma.ScheduledCampaignOmit
   emailSend?: Prisma.EmailSendOmit
+  emailBounce?: Prisma.EmailBounceOmit
   emailOpen?: Prisma.EmailOpenOmit
 }
 

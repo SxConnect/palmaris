@@ -398,6 +398,8 @@ export type RecipientStats = {
   recipient: string;
   timesSent: number;
   timesOpened: number;
+  bounced: boolean;
+  bounceReason: string | null;
   lastSentAt: string | null;
   lastOpenedAt: string | null;
   neverOpened: boolean;
@@ -407,7 +409,7 @@ export type RecipientStats = {
 export async function getRecipientStatsAction(): Promise<RecipientStats[]> {
   await requireAdmin();
 
-  const [sends, opens] = await Promise.all([
+  const [sends, opens, bounces] = await Promise.all([
     prisma.emailSend.findMany({
       orderBy: { sentAt: "desc" },
       select: { recipient: true, sentAt: true, trackingId: true },
@@ -415,7 +417,14 @@ export async function getRecipientStatsAction(): Promise<RecipientStats[]> {
     prisma.emailOpen.findMany({
       select: { recipient: true, trackingId: true, openedAt: true },
     }),
+    prisma.emailBounce.findMany({
+      select: { recipient: true, reason: true },
+    }),
   ]);
+
+  const bounceByRecipient = new Map(
+    bounces.map((b) => [b.recipient.toLowerCase(), b.reason]),
+  );
 
   // Mapa de trackingId -> abertura
   const openByTracking = new Map(opens.map((o) => [o.trackingId, o]));
@@ -427,6 +436,8 @@ export async function getRecipientStatsAction(): Promise<RecipientStats[]> {
       recipient: send.recipient,
       timesSent: 0,
       timesOpened: 0,
+      bounced: bounceByRecipient.has(key),
+      bounceReason: bounceByRecipient.get(key) || null,
       lastSentAt: null,
       lastOpenedAt: null,
       neverOpened: true,
@@ -443,6 +454,23 @@ export async function getRecipientStatsAction(): Promise<RecipientStats[]> {
       existing.lastSentAt = send.sentAt.toISOString();
     }
     stats.set(key, existing);
+  }
+
+  // Inclui bounces de emails que nao tiveram send registrado no banco
+  for (const [key, reason] of bounceByRecipient.entries()) {
+    if (!stats.has(key)) {
+      const original = bounces.find((b) => b.recipient.toLowerCase() === key);
+      stats.set(key, {
+        recipient: original?.recipient || key,
+        timesSent: 0,
+        timesOpened: 0,
+        bounced: true,
+        bounceReason: reason || null,
+        lastSentAt: null,
+        lastOpenedAt: null,
+        neverOpened: true,
+      });
+    }
   }
 
   const result = Array.from(stats.values());

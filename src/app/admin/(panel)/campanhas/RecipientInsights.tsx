@@ -11,7 +11,7 @@ export default function RecipientInsights({
   currentRecipients: string[];
 }) {
   const [stats, setStats] = useState<RecipientStats[]>([]);
-  const [filter, setFilter] = useState<"all" | "never" | "multi">("all");
+  const [filter, setFilter] = useState<"all" | "never" | "multi" | "bounced">("all");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export default function RecipientInsights({
   const filtered = stats.filter((s) => {
     if (filter === "never" && !s.neverOpened) return false;
     if (filter === "multi" && s.timesSent < 2) return false;
+    if (filter === "bounced" && !s.bounced) return false;
     if (search && !s.recipient.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
@@ -50,6 +51,7 @@ export default function RecipientInsights({
           ["all", "Todos"],
           ["never", "Nunca abertos"],
           ["multi", "Enviado 2+ vezes"],
+          ["bounced", "Bounces"],
         ] as const).map(([key, label]) => (
           <button
             key={key}
@@ -93,6 +95,11 @@ export default function RecipientInsights({
                     {s.timesSent >= 2 && s.neverOpened && (
                       <span className="text-[11px] rounded bg-amber-50 text-amber-700 px-2 py-0.5 font-bold">
                         ⚠️ {s.timesSent} envios sem abertura
+                      </span>
+                    )}
+                    {s.bounced && (
+                      <span className="text-[11px] rounded bg-red-100 text-red-800 px-2 py-0.5 font-bold" title={s.bounceReason || "Bounce"}>
+                        🚫 Bounce
                       </span>
                     )}
                   </div>
