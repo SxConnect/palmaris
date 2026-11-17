@@ -1,6 +1,7 @@
 import { requireAdmin } from "@/lib/auth/guard";
 import CampaignForm from "./CampaignForm";
 import CampaignList from "./CampaignList";
+import ReportList from "./ReportList";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,16 @@ export default async function CampaignsPage() {
           </p>
         </div>
         <CampaignList />
+      </section>
+
+      <section className="mt-10">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-slate-900">📊 Relatórios pós-campanha</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Gerados automaticamente 24h após a conclusão, com resumo enviado por e-mail.
+          </p>
+        </div>
+        <ReportList />
       </section>
     </div>
   );

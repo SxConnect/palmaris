@@ -411,6 +411,7 @@ export const ModelName = {
   Setting: 'Setting',
   ScheduledCampaign: 'ScheduledCampaign',
   EmailSend: 'EmailSend',
+  CampaignReport: 'CampaignReport',
   EmailBounce: 'EmailBounce',
   EmailOpen: 'EmailOpen'
 } as const
@@ -428,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "emailBounce" | "emailOpen"
+    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "campaignReport" | "emailBounce" | "emailOpen"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1468,6 +1469,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CampaignReport: {
+      payload: Prisma.$CampaignReportPayload<ExtArgs>
+      fields: Prisma.CampaignReportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CampaignReportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CampaignReportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>
+        }
+        findFirst: {
+          args: Prisma.CampaignReportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CampaignReportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>
+        }
+        findMany: {
+          args: Prisma.CampaignReportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>[]
+        }
+        create: {
+          args: Prisma.CampaignReportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>
+        }
+        createMany: {
+          args: Prisma.CampaignReportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CampaignReportCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>[]
+        }
+        delete: {
+          args: Prisma.CampaignReportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>
+        }
+        update: {
+          args: Prisma.CampaignReportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>
+        }
+        deleteMany: {
+          args: Prisma.CampaignReportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CampaignReportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CampaignReportUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>[]
+        }
+        upsert: {
+          args: Prisma.CampaignReportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CampaignReportPayload>
+        }
+        aggregate: {
+          args: Prisma.CampaignReportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCampaignReport>
+        }
+        groupBy: {
+          args: Prisma.CampaignReportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignReportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CampaignReportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CampaignReportCountAggregateOutputType> | number
+        }
+      }
+    }
     EmailBounce: {
       payload: Prisma.$EmailBouncePayload<ExtArgs>
       fields: Prisma.EmailBounceFieldRefs
@@ -1857,6 +1932,23 @@ export const EmailSendScalarFieldEnum = {
 export type EmailSendScalarFieldEnum = (typeof EmailSendScalarFieldEnum)[keyof typeof EmailSendScalarFieldEnum]
 
 
+export const CampaignReportScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  subject: 'subject',
+  totalSent: 'totalSent',
+  totalDelivered: 'totalDelivered',
+  totalOpened: 'totalOpened',
+  totalBounced: 'totalBounced',
+  notOpened: 'notOpened',
+  openRate: 'openRate',
+  summary: 'summary',
+  generatedAt: 'generatedAt'
+} as const
+
+export type CampaignReportScalarFieldEnum = (typeof CampaignReportScalarFieldEnum)[keyof typeof CampaignReportScalarFieldEnum]
+
+
 export const EmailBounceScalarFieldEnum = {
   id: 'id',
   recipient: 'recipient',
@@ -2203,6 +2295,7 @@ export type GlobalOmitConfig = {
   setting?: Prisma.SettingOmit
   scheduledCampaign?: Prisma.ScheduledCampaignOmit
   emailSend?: Prisma.EmailSendOmit
+  campaignReport?: Prisma.CampaignReportOmit
   emailBounce?: Prisma.EmailBounceOmit
   emailOpen?: Prisma.EmailOpenOmit
 }

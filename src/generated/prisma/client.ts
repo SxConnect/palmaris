@@ -129,6 +129,11 @@ export type ScheduledCampaign = Prisma.ScheduledCampaignModel
  */
 export type EmailSend = Prisma.EmailSendModel
 /**
+ * Model CampaignReport
+ * Relatório pós-campanha gerado ~24h após a conclusão.
+ */
+export type CampaignReport = Prisma.CampaignReportModel
+/**
  * Model EmailBounce
  * Registro de e-mails que bouncearam (rejeitados/undeliverable).
  */

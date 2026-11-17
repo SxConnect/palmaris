@@ -504,3 +504,37 @@ export async function resumeCampaignAction(
     return { error: err.message || "Erro ao retomar campanha." };
   }
 }
+
+export type CampaignReportItem = {
+  id: string;
+  subject: string;
+  totalSent: number;
+  totalDelivered: number;
+  totalOpened: number;
+  totalBounced: number;
+  notOpened: number;
+  openRate: number;
+  summary: string | null;
+  generatedAt: string;
+};
+
+/** Lista os relatórios gerados (mais recentes primeiro) */
+export async function listReportsAction(): Promise<CampaignReportItem[]> {
+  await requireAdmin();
+  const reports = await prisma.campaignReport.findMany({
+    orderBy: { generatedAt: "desc" },
+    take: 30,
+  });
+  return reports.map((r) => ({
+    id: r.id,
+    subject: r.subject,
+    totalSent: r.totalSent,
+    totalDelivered: r.totalDelivered,
+    totalOpened: r.totalOpened,
+    totalBounced: r.totalBounced,
+    notOpened: r.notOpened,
+    openRate: r.openRate,
+    summary: r.summary,
+    generatedAt: r.generatedAt.toISOString(),
+  }));
+}

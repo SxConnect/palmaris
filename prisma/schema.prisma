@@ -272,6 +272,24 @@ model EmailSend {
   @@map("email_sends")
 }
 
+/// Relatório pós-campanha gerado ~24h após a conclusão.
+model CampaignReport {
+  id            String   @id @default(cuid())
+  campaignId    String   @unique
+  subject       String
+  totalSent     Int      @default(0)
+  totalDelivered Int     @default(0)
+  totalOpened   Int      @default(0)
+  totalBounced  Int      @default(0)
+  notOpened     Int      @default(0)
+  openRate      Float    @default(0)
+  summary       String?
+  generatedAt   DateTime @default(now())
+
+  @@index([campaignId])
+  @@map("campaign_reports")
+}
+
 /// Registro de e-mails que bouncearam (rejeitados/undeliverable).
 model EmailBounce {
   id          String   @id @default(cuid())

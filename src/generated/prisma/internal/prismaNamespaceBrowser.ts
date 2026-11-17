@@ -65,6 +65,7 @@ export const ModelName = {
   Setting: 'Setting',
   ScheduledCampaign: 'ScheduledCampaign',
   EmailSend: 'EmailSend',
+  CampaignReport: 'CampaignReport',
   EmailBounce: 'EmailBounce',
   EmailOpen: 'EmailOpen'
 } as const
@@ -285,6 +286,23 @@ export const EmailSendScalarFieldEnum = {
 } as const
 
 export type EmailSendScalarFieldEnum = (typeof EmailSendScalarFieldEnum)[keyof typeof EmailSendScalarFieldEnum]
+
+
+export const CampaignReportScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  subject: 'subject',
+  totalSent: 'totalSent',
+  totalDelivered: 'totalDelivered',
+  totalOpened: 'totalOpened',
+  totalBounced: 'totalBounced',
+  notOpened: 'notOpened',
+  openRate: 'openRate',
+  summary: 'summary',
+  generatedAt: 'generatedAt'
+} as const
+
+export type CampaignReportScalarFieldEnum = (typeof CampaignReportScalarFieldEnum)[keyof typeof CampaignReportScalarFieldEnum]
 
 
 export const EmailBounceScalarFieldEnum = {
