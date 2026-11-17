@@ -265,7 +265,12 @@ export async function scheduleCampaignAction(
 
   let scheduledAt: Date | null = null;
   if (scheduledAtRaw) {
-    scheduledAt = new Date(scheduledAtRaw);
+    // datetime-local vem sem fuso (ex: 2026-11-17T10:00). O campo representa
+    // horário de Brasília (UTC-3), então convertemos explicitamente para UTC.
+    const hasTimezone = /Z|[+-]\d{2}:\d{2}$/.test(scheduledAtRaw);
+    scheduledAt = hasTimezone
+      ? new Date(scheduledAtRaw)
+      : new Date(scheduledAtRaw + "-03:00");
     if (isNaN(scheduledAt.getTime())) {
       return { error: "Data/hora de agendamento inválida." };
     }
