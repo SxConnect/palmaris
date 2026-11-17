@@ -223,11 +223,11 @@ export async function getEmailDetail(
         } else if (/text\/html/i.test(contentType)) {
           const chunks: Buffer[] = [];
           for await (const chunk of content) chunks.push(Buffer.from(chunk));
-          htmlBody = Buffer.concat(chunks).toString("utf8");
+          htmlBody = fixMojibake(Buffer.concat(chunks).toString("utf8"));
         } else if (/text\/plain/i.test(contentType)) {
           const chunks: Buffer[] = [];
           for await (const chunk of content) chunks.push(Buffer.from(chunk));
-          textBody = Buffer.concat(chunks).toString("utf8");
+          textBody = fixMojibake(Buffer.concat(chunks).toString("utf8"));
         }
       }
     } catch (err: any) {
@@ -242,8 +242,8 @@ export async function getEmailDetail(
           const source = full.source.toString();
           const htmlMatch = source.match(/Content-Type: text\/html[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
           const textMatch = source.match(/Content-Type: text\/plain[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
-          if (htmlMatch) htmlBody = decodeQP(htmlMatch[1]);
-          if (textMatch) textBody = decodeQP(textMatch[1]);
+          if (htmlMatch) htmlBody = fixMojibake(decodeQP(htmlMatch[1]));
+          if (textMatch) textBody = fixMojibake(decodeQP(textMatch[1]));
         }
       } catch {}
     }
@@ -267,6 +267,20 @@ export async function getEmailDetail(
     lock.release();
     await client.logout();
   }
+}
+
+function fixMojibake(input: string): string {
+  if (!input) return input;
+  // Corrige dupla codificação UTF-8 (ex: "Ã³timo" -> "ótimo", "Ã§" -> "ç")
+  if (/[ÃÂ][\u0080-\u00BF\u00A0-\u00FF]/.test(input)) {
+    try {
+      const fixed = Buffer.from(input, "latin1").toString("utf8");
+      if (!fixed.includes("\uFFFD") && !/[ÃÂ][\u0080-\u00BF]/.test(fixed)) {
+        return fixed;
+      }
+    } catch {}
+  }
+  return input;
 }
 
 function decodeQP(input: string): string {
@@ -334,7 +348,8 @@ export async function sendImapEmail({
     if (mailAttachments.length > 0) {
       mime += `Content-Type: multipart/mixed; boundary="${boundary}"\r\n\r\n`;
       mime += `--${boundary}\r\n`;
-      mime += `Content-Type: text/html; charset=UTF-8\r\n\r\n`;
+      mime += `Content-Type: text/html; charset=UTF-8\r\n`;
+      mime += `Content-Transfer-Encoding: 8bit\r\n\r\n`;
       mime += `${html}\r\n`;
       for (const att of mailAttachments) {
         if (att.content) {
@@ -347,7 +362,8 @@ export async function sendImapEmail({
       }
       mime += `--${boundary}--\r\n`;
     } else {
-      mime += `Content-Type: text/html; charset=UTF-8\r\n\r\n`;
+      mime += `Content-Type: text/html; charset=UTF-8\r\n`;
+      mime += `Content-Transfer-Encoding: 8bit\r\n\r\n`;
       mime += `${html}\r\n`;
     }
 
