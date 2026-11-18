@@ -1,6 +1,7 @@
 import { requireAuth } from "@/lib/auth/guard";
 import { listMailboxes, listEmails, getEmailDetail } from "@/lib/imap";
 import WebmailClient from "./WebmailClient";
+import PwaInstallPrompt from "@/components/PwaInstallPrompt";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,8 @@ export default async function WebmailPage({ searchParams }: Props) {
   if (!Array.isArray(emails)) emails = [];
 
   return (
+    <>
+    <PwaInstallPrompt />
     <WebmailClient
       currentUser={{
         email: user.email,
@@ -55,5 +58,6 @@ export default async function WebmailPage({ searchParams }: Props) {
       currentMailboxId={currentBoxId}
       errorMessage={errorMessage}
     />
+    </>
   );
 }
