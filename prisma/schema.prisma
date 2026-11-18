@@ -315,3 +315,83 @@ model EmailOpen {
   @@index([recipient])
   @@map("email_opens")
 }
+
+/// Cliente do CRM — visa única para todos os canais (email + WhatsApp).
+model Cliente {
+  id          String   @id @default(cuid())
+  nome        String
+  empresa     String?
+  cargo       String?
+  telefone    String?  // E.164: 5521999999999
+  email       String?
+  emailExtra  String?  // segundo email, se houver
+  indicadoPorId String?
+  indicadoPor Cliente?  @relation("Indicacoes", fields: [indicadoPorId], references: [id], onDelete: SetNull)
+  indicacoes  Cliente[] @relation("Indicacoes")
+  origem      String?   // visita, indicacao, campanha, google...
+  tags        String?   // separadas por virgula
+  notas       String?
+  responsavel String?
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  passos      ClientePasso[]
+  mensagens   WhatsappMessage[]
+
+  @@index([telefone])
+  @@index([email])
+  @@map("clientes")
+}
+
+/// Sequencia/passos do cliente (pipeline editavel).
+model ClientePasso {
+  id          String   @id @default(cuid())
+  clienteId   String
+  cliente     Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  titulo      String
+  descricao   String?
+  concluido   Boolean  @default(false)
+  posicao     Int      @default(0)
+  criadoEm    DateTime @default(now())
+  concluidoEm DateTime?
+
+  @@index([clienteId])
+  @@map("cliente_passos")
+}
+
+/// Mensagens do WhatsApp sincronizadas da PlugaWAPI.
+model WhatsappMessage {
+  id          String   @id @default(cuid())
+  clienteId   String?
+  cliente     Cliente? @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+  sessionId   String?
+  jid         String   // ID do chat remoto (ex: 5521999999999@s.whatsapp.net)
+  direction   String   // inbound | outbound
+  texto       String?
+  mediaUrl    String?
+  mediaType   String?
+  mensagemId  String?  @unique
+  enviadoEm   DateTime @default(now())
+
+  @@index([jid])
+  @@index([clienteId])
+  @@map("whatsapp_messages")
+}
+
+/// E-mails recebidos importados do IMAP para o CRM.
+model EmailRecebido {
+  id          String   @id @default(cuid())
+  clienteId   String?
+  de          String
+  deNome      String?
+  para        String?
+  subject     String?
+  preview     String?
+  receivedAt  DateTime
+  mensagemId  String   @unique
+  criadoEm    DateTime @default(now())
+
+  @@index([clienteId])
+  @@index([de])
+  @@map("emails_recebidos")
+}

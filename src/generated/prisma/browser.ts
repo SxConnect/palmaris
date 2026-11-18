@@ -119,3 +119,23 @@ export type EmailBounce = Prisma.EmailBounceModel
  * Rastreamento de abertura de e-mails.
  */
 export type EmailOpen = Prisma.EmailOpenModel
+/**
+ * Model Cliente
+ * Cliente do CRM — visa única para todos os canais (email + WhatsApp).
+ */
+export type Cliente = Prisma.ClienteModel
+/**
+ * Model ClientePasso
+ * Sequencia/passos do cliente (pipeline editavel).
+ */
+export type ClientePasso = Prisma.ClientePassoModel
+/**
+ * Model WhatsappMessage
+ * Mensagens do WhatsApp sincronizadas da PlugaWAPI.
+ */
+export type WhatsappMessage = Prisma.WhatsappMessageModel
+/**
+ * Model EmailRecebido
+ * E-mails recebidos importados do IMAP para o CRM.
+ */
+export type EmailRecebido = Prisma.EmailRecebidoModel

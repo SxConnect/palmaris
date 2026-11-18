@@ -67,7 +67,11 @@ export const ModelName = {
   EmailSend: 'EmailSend',
   CampaignReport: 'CampaignReport',
   EmailBounce: 'EmailBounce',
-  EmailOpen: 'EmailOpen'
+  EmailOpen: 'EmailOpen',
+  Cliente: 'Cliente',
+  ClientePasso: 'ClientePasso',
+  WhatsappMessage: 'WhatsappMessage',
+  EmailRecebido: 'EmailRecebido'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -326,6 +330,72 @@ export const EmailOpenScalarFieldEnum = {
 } as const
 
 export type EmailOpenScalarFieldEnum = (typeof EmailOpenScalarFieldEnum)[keyof typeof EmailOpenScalarFieldEnum]
+
+
+export const ClienteScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  empresa: 'empresa',
+  cargo: 'cargo',
+  telefone: 'telefone',
+  email: 'email',
+  emailExtra: 'emailExtra',
+  indicadoPorId: 'indicadoPorId',
+  origem: 'origem',
+  tags: 'tags',
+  notas: 'notas',
+  responsavel: 'responsavel',
+  criadoEm: 'criadoEm',
+  atualizadoEm: 'atualizadoEm'
+} as const
+
+export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
+export const ClientePassoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  concluido: 'concluido',
+  posicao: 'posicao',
+  criadoEm: 'criadoEm',
+  concluidoEm: 'concluidoEm'
+} as const
+
+export type ClientePassoScalarFieldEnum = (typeof ClientePassoScalarFieldEnum)[keyof typeof ClientePassoScalarFieldEnum]
+
+
+export const WhatsappMessageScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  sessionId: 'sessionId',
+  jid: 'jid',
+  direction: 'direction',
+  texto: 'texto',
+  mediaUrl: 'mediaUrl',
+  mediaType: 'mediaType',
+  mensagemId: 'mensagemId',
+  enviadoEm: 'enviadoEm'
+} as const
+
+export type WhatsappMessageScalarFieldEnum = (typeof WhatsappMessageScalarFieldEnum)[keyof typeof WhatsappMessageScalarFieldEnum]
+
+
+export const EmailRecebidoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  de: 'de',
+  deNome: 'deNome',
+  para: 'para',
+  subject: 'subject',
+  preview: 'preview',
+  receivedAt: 'receivedAt',
+  mensagemId: 'mensagemId',
+  criadoEm: 'criadoEm'
+} as const
+
+export type EmailRecebidoScalarFieldEnum = (typeof EmailRecebidoScalarFieldEnum)[keyof typeof EmailRecebidoScalarFieldEnum]
 
 
 export const SortOrder = {

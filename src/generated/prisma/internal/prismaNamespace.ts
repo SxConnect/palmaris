@@ -413,7 +413,11 @@ export const ModelName = {
   EmailSend: 'EmailSend',
   CampaignReport: 'CampaignReport',
   EmailBounce: 'EmailBounce',
-  EmailOpen: 'EmailOpen'
+  EmailOpen: 'EmailOpen',
+  Cliente: 'Cliente',
+  ClientePasso: 'ClientePasso',
+  WhatsappMessage: 'WhatsappMessage',
+  EmailRecebido: 'EmailRecebido'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -429,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "campaignReport" | "emailBounce" | "emailOpen"
+    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "campaignReport" | "emailBounce" | "emailOpen" | "cliente" | "clientePasso" | "whatsappMessage" | "emailRecebido"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1691,6 +1695,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Cliente: {
+      payload: Prisma.$ClientePayload<ExtArgs>
+      fields: Prisma.ClienteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClienteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClienteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>
+        }
+        findFirst: {
+          args: Prisma.ClienteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClienteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>
+        }
+        findMany: {
+          args: Prisma.ClienteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>[]
+        }
+        create: {
+          args: Prisma.ClienteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>
+        }
+        createMany: {
+          args: Prisma.ClienteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClienteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>[]
+        }
+        delete: {
+          args: Prisma.ClienteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>
+        }
+        update: {
+          args: Prisma.ClienteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>
+        }
+        deleteMany: {
+          args: Prisma.ClienteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClienteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClienteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>[]
+        }
+        upsert: {
+          args: Prisma.ClienteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePayload>
+        }
+        aggregate: {
+          args: Prisma.ClienteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCliente>
+        }
+        groupBy: {
+          args: Prisma.ClienteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClienteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClienteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClienteCountAggregateOutputType> | number
+        }
+      }
+    }
+    ClientePasso: {
+      payload: Prisma.$ClientePassoPayload<ExtArgs>
+      fields: Prisma.ClientePassoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClientePassoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClientePassoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>
+        }
+        findFirst: {
+          args: Prisma.ClientePassoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClientePassoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>
+        }
+        findMany: {
+          args: Prisma.ClientePassoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>[]
+        }
+        create: {
+          args: Prisma.ClientePassoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>
+        }
+        createMany: {
+          args: Prisma.ClientePassoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClientePassoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>[]
+        }
+        delete: {
+          args: Prisma.ClientePassoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>
+        }
+        update: {
+          args: Prisma.ClientePassoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClientePassoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClientePassoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClientePassoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClientePassoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientePassoPayload>
+        }
+        aggregate: {
+          args: Prisma.ClientePassoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClientePasso>
+        }
+        groupBy: {
+          args: Prisma.ClientePassoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientePassoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClientePassoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientePassoCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappMessage: {
+      payload: Prisma.$WhatsappMessagePayload<ExtArgs>
+      fields: Prisma.WhatsappMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>
+        }
+        update: {
+          args: Prisma.WhatsappMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappMessage>
+        }
+        groupBy: {
+          args: Prisma.WhatsappMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappMessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmailRecebido: {
+      payload: Prisma.$EmailRecebidoPayload<ExtArgs>
+      fields: Prisma.EmailRecebidoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailRecebidoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailRecebidoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>
+        }
+        findFirst: {
+          args: Prisma.EmailRecebidoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailRecebidoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>
+        }
+        findMany: {
+          args: Prisma.EmailRecebidoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>[]
+        }
+        create: {
+          args: Prisma.EmailRecebidoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>
+        }
+        createMany: {
+          args: Prisma.EmailRecebidoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailRecebidoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>[]
+        }
+        delete: {
+          args: Prisma.EmailRecebidoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>
+        }
+        update: {
+          args: Prisma.EmailRecebidoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailRecebidoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailRecebidoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailRecebidoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailRecebidoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailRecebidoPayload>
+        }
+        aggregate: {
+          args: Prisma.EmailRecebidoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailRecebido>
+        }
+        groupBy: {
+          args: Prisma.EmailRecebidoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailRecebidoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailRecebidoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailRecebidoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1970,6 +2270,72 @@ export const EmailOpenScalarFieldEnum = {
 } as const
 
 export type EmailOpenScalarFieldEnum = (typeof EmailOpenScalarFieldEnum)[keyof typeof EmailOpenScalarFieldEnum]
+
+
+export const ClienteScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  empresa: 'empresa',
+  cargo: 'cargo',
+  telefone: 'telefone',
+  email: 'email',
+  emailExtra: 'emailExtra',
+  indicadoPorId: 'indicadoPorId',
+  origem: 'origem',
+  tags: 'tags',
+  notas: 'notas',
+  responsavel: 'responsavel',
+  criadoEm: 'criadoEm',
+  atualizadoEm: 'atualizadoEm'
+} as const
+
+export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeof ClienteScalarFieldEnum]
+
+
+export const ClientePassoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  concluido: 'concluido',
+  posicao: 'posicao',
+  criadoEm: 'criadoEm',
+  concluidoEm: 'concluidoEm'
+} as const
+
+export type ClientePassoScalarFieldEnum = (typeof ClientePassoScalarFieldEnum)[keyof typeof ClientePassoScalarFieldEnum]
+
+
+export const WhatsappMessageScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  sessionId: 'sessionId',
+  jid: 'jid',
+  direction: 'direction',
+  texto: 'texto',
+  mediaUrl: 'mediaUrl',
+  mediaType: 'mediaType',
+  mensagemId: 'mensagemId',
+  enviadoEm: 'enviadoEm'
+} as const
+
+export type WhatsappMessageScalarFieldEnum = (typeof WhatsappMessageScalarFieldEnum)[keyof typeof WhatsappMessageScalarFieldEnum]
+
+
+export const EmailRecebidoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  de: 'de',
+  deNome: 'deNome',
+  para: 'para',
+  subject: 'subject',
+  preview: 'preview',
+  receivedAt: 'receivedAt',
+  mensagemId: 'mensagemId',
+  criadoEm: 'criadoEm'
+} as const
+
+export type EmailRecebidoScalarFieldEnum = (typeof EmailRecebidoScalarFieldEnum)[keyof typeof EmailRecebidoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2298,6 +2664,10 @@ export type GlobalOmitConfig = {
   campaignReport?: Prisma.CampaignReportOmit
   emailBounce?: Prisma.EmailBounceOmit
   emailOpen?: Prisma.EmailOpenOmit
+  cliente?: Prisma.ClienteOmit
+  clientePasso?: Prisma.ClientePassoOmit
+  whatsappMessage?: Prisma.WhatsappMessageOmit
+  emailRecebido?: Prisma.EmailRecebidoOmit
 }
 
 /* Types for Logging */
