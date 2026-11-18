@@ -229,7 +229,12 @@ export async function getEmailDetail(
           const chunks: Buffer[] = [];
           for await (const chunk of content) chunks.push(Buffer.from(chunk));
           const rawText = Buffer.concat(chunks).toString("utf8");
-          textBody = fixMojibake(decodeBody(rawText));
+          const decodedText = fixMojibake(decodeBody(rawText));
+          if (looksLikeHtml(decodedText) && !htmlBody) {
+            htmlBody = decodedText;
+          } else {
+            textBody = decodedText;
+          }
         }
       }
     } catch (err: any) {
@@ -245,7 +250,11 @@ export async function getEmailDetail(
           const htmlMatch = source.match(/Content-Type: text\/html[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
           const textMatch = source.match(/Content-Type: text\/plain[\s\S]*?\r\n\r\n([\s\S]*?)(?=\r\n--|$)/i);
           if (htmlMatch) htmlBody = fixMojibake(decodeBody(htmlMatch[1]));
-          if (textMatch) textBody = fixMojibake(decodeBody(textMatch[1]));
+          if (textMatch) {
+            const d = fixMojibake(decodeBody(textMatch[1]));
+            if (looksLikeHtml(d) && !htmlBody) htmlBody = d;
+            else textBody = d;
+          }
         }
       } catch {}
     }
@@ -292,6 +301,11 @@ function decodeBase64(input: string): string {
   } catch {
     return input;
   }
+}
+
+function looksLikeHtml(input: string): boolean {
+  if (!input) return false;
+  return /<\s*(html|body|div|p|table|span|a|br|meta|style)\b/i.test(input);
 }
 
 function decodeBody(input: string): string {
