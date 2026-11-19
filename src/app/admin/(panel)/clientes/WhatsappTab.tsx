@@ -136,6 +136,28 @@ export default function WhatsappTab({
     else setRemotas(r.messages);
   };
 
+  // Atualizacao automatica: chats a cada 5s, mensagens da conversa aberta a cada 3s
+  useEffect(() => {
+    if (!sid) return;
+    const atualizarChats = async () => {
+      const r = await listChats(sid);
+      if (!r.error) setChats(r.chats);
+    };
+    atualizarChats();
+    const intChats = setInterval(atualizarChats, 5000);
+    return () => clearInterval(intChats);
+  }, [sid, listChats]);
+
+  useEffect(() => {
+    if (!sid || !jid) return;
+    const atualizarMsgs = async () => {
+      const r = await listMessages(sid, jid);
+      if (!r.error) setRemotas(r.messages);
+    };
+    const intMsgs = setInterval(atualizarMsgs, 3000);
+    return () => clearInterval(intMsgs);
+  }, [sid, jid, listMessages]);
+
   const enviar = async () => {
     if (!sid || !jid || !texto.trim()) return;
     await onMessage(sid, jid, texto.trim());
@@ -207,7 +229,7 @@ export default function WhatsappTab({
           {/* Lista de conversas */}
           <div className="sm:col-span-4 rounded-lg border border-slate-200 overflow-hidden">
             <div className="p-2 border-b border-slate-200 flex gap-2">
-              <button onClick={carregarChats} className="text-[11px] rounded bg-slate-100 px-2 py-1">↻ Chats</button>
+              <button onClick={carregarChats} className="text-[11px] rounded bg-slate-100 px-2 py-1">↻ Atualizar</button>
               {jidSugerido && (
                 <button onClick={() => setJid(jidSugerido)} className="text-[11px] rounded bg-green-50 text-green-700 px-2 py-1">
                   📱 Usar tel do cliente
@@ -224,7 +246,7 @@ export default function WhatsappTab({
                   </button>
                 );
               })}
-              {chats.length === 0 && <p className="p-3 text-[11px] text-slate-400">Clique em ↻ Chats para carregar.</p>}
+              {chats.length === 0 && <p className="p-3 text-[11px] text-slate-400">Clique em ↻ Atualizar para carregar.</p>}
             </div>
           </div>
 
