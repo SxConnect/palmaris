@@ -5,6 +5,7 @@ import { logoutAction } from "@/lib/auth/actions";
 
 const ADMIN_NAV_ITEMS = [
   { href: "/admin/clientes", label: "Clientes" },
+  { href: "/admin/whatsapp", label: "WhatsApp" },
   { href: "/admin/email", label: "Webmail" },
   { href: "/admin/cartao", label: "Cartão de Visita" },
   { href: "/admin/campanhas", label: "Campanhas" },
@@ -20,6 +21,7 @@ const ADMIN_NAV_ITEMS = [
 
 const USER_NAV_ITEMS = [
   { href: "/admin/clientes", label: "Clientes" },
+  { href: "/admin/whatsapp", label: "WhatsApp" },
   { href: "/admin/email", label: "Webmail" },
   { href: "/admin/cartao", label: "Cartão de Visita" },
 ];

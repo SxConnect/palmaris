@@ -150,3 +150,63 @@ export async function getSessionQrAction(sid: string): Promise<{ qr?: string; pa
     return { error: e.message };
   }
 }
+
+/** Vincula uma conversa (jid) a um cliente e importa as mensagens para o banco */
+export async function vincularConversaAction(
+  sid: string,
+  jid: string,
+  clienteId: string,
+): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  try {
+    const r = await pw(`/api/sessions/${sid}/chats/${encodeURIComponent(jid)}/messages`);
+    const msgs = r.messages || [];
+    let salvos = 0;
+    for (const m of msgs) {
+      const texto = m.content || m.text || m.message || "";
+      const fromMe = m.fromMe === true;
+      const msgId = m.id || `${sid}_${jid}_${m.timestamp || Date.now()}_${salvos}`;
+      await prisma.whatsappMessage.upsert({
+        where: { mensagemId: msgId },
+        update: {},
+        create: {
+          mensagemId: msgId,
+          clienteId,
+          sessionId: sid,
+          jid,
+          direction: fromMe ? "outbound" : "inbound",
+          texto: String(texto),
+          mediaUrl: m.mediaUrl || null,
+          mediaType: m.mediaType || null,
+          enviadoEm: m.timestamp ? new Date(m.timestamp) : new Date(),
+        },
+      });
+      salvos++;
+    }
+    revalidatePath("/admin/clientes");
+    return { success: `${salvos} mensagens vinculadas ao cliente.` };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}
+
+/** Retorna o cliente vinculado a um jid (se houver) */
+export async function getClientePorJidAction(jid: string) {
+  await requireAuth();
+  const msg = await prisma.whatsappMessage.findFirst({
+    where: { jid },
+    orderBy: { enviadoEm: "desc" },
+    select: { clienteId: true, cliente: { select: { id: true, nome: true, empresa: true } } },
+  });
+  return msg?.cliente || null;
+}
+
+/** Lista todos os clientes (para o select de vinculacao) */
+export async function listClientesSimplesAction() {
+  await requireAuth();
+  const clientes = await prisma.cliente.findMany({
+    orderBy: { nome: "asc" },
+    select: { id: true, nome: true, empresa: true, telefone: true },
+  });
+  return clientes;
+}
