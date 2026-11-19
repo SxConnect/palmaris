@@ -18,6 +18,35 @@ type Settings = {
   cardChamada: string;
 };
 
+function IconLinkedIn({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77Z" />
+    </svg>
+  );
+}
+function IconFacebook({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M13.5 9H16l-.5 3h-2v7h-3v-7H9l.5-3h1.5V6.5A3.5 3.5 0 0 1 14.5 3H16v3h-1.5A1.5 1.5 0 0 0 13.5 7.5V9Z" />
+    </svg>
+  );
+}
+function IconInstagram({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M12 4.5c2.4 0 2.7 0 3.65.06.88.04 1.35.19 1.67.31.42.17.72.36 1.03.67.31.31.5.61.67 1.03.12.32.27.79.31 1.67.05.95.06 1.24.06 3.65s0 2.7-.06 3.65c-.04.88-.19 1.35-.31 1.67-.17.42-.36.72-.67 1.03-.31.31-.61.5-1.03.67-.32.12-.79.27-1.67.31-.95.05-1.24.06-3.65.06s-2.7 0-3.65-.06c-.88-.04-1.35-.19-1.67-.31a2.8 2.8 0 0 1-1.03-.67 2.8 2.8 0 0 1-.67-1.03c-.12-.32-.27-.79-.31-1.67C4.5 14.7 4.5 14.4 4.5 12s0-2.7.06-3.65c.04-.88.19-1.35.31-1.67.17-.42.36-.72.67-1.03.31-.31.61-.5 1.03-.67.32-.12.79-.27 1.67-.31C9.3 4.5 9.6 4.5 12 4.5Zm0 1.8c-2.37 0-2.66 0-3.6.06-.87.04-1.34.18-1.66.3-.42.17-.68.35-.98.65-.3.3-.48.56-.65.98-.12.32-.26.79-.3 1.66-.05.94-.06 1.23-.06 3.6s.01 2.66.06 3.6c.04.87.18 1.34.3 1.66.17.42.35.68.65.98.3.3.56.48.98.65.32.12.79.26 1.66.3.94.05 1.23.06 3.6.06s2.66-.01 3.6-.06c.87-.04 1.34-.18 1.66-.3.42-.17.68-.35.98-.65.3-.3.48-.56.65-.98.12-.32.26-.79.3-1.66.05-.94.06-1.23.06-3.6s-.01-2.66-.06-3.6c-.04-.87-.18-1.34-.3-1.66-.17-.42-.35-.68-.65-.98-.3-.3-.56-.48-.98-.65-.32-.12-.79-.26-1.66-.3C14.66 6.3 14.37 6.3 12 6.3Zm0 3.1a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2Zm0 1.8a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6Zm5.6-2.1a1.07 1.07 0 1 1-2.14 0 1.07 1.07 0 0 1 2.14 0Z" />
+    </svg>
+  );
+}
+function IconWhatsApp({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.31 4.95L2 22l5.25-1.38a9.94 9.94 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.14a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.27-4.37c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.42 5.84c0 4.55-3.7 8.25-8.25 8.25Zm4.52-6.17c-.25-.13-1.47-.72-1.7-.81-.23-.08-.4-.13-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.53.06-.25-.13-1.05-.39-2-1.23a7.5 7.5 0 0 1-1.38-1.72c-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.13-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.03 2.61c.13.17 1.78 2.72 4.31 3.81 2.53 1.09 2.53.73 2.98.68.46-.05 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.11-.23-.17-.48-.3Z" />
+    </svg>
+  );
+}
+
 export default function CartaoVisita({ settingsInicial }: { settingsInicial?: Settings }) {
   const [s, setS] = useState<Settings | null>(settingsInicial || null);
   const [qr, setQr] = useState("");
@@ -153,9 +182,10 @@ export default function CartaoVisita({ settingsInicial }: { settingsInicial?: Se
 
               {/* Redes sociais */}
               <div className="mt-5 flex gap-3">
-                {s.linkedinUrl && <a href={s.linkedinUrl} target="_blank" rel="noreferrer" className="rounded-full bg-white/15 border border-white/25 w-9 h-9 flex items-center justify-center text-sm">in</a>}
-                {s.instagramUrl && <a href={s.instagramUrl} target="_blank" rel="noreferrer" className="rounded-full bg-white/15 border border-white/25 w-9 h-9 flex items-center justify-center text-sm">📷</a>}
-                <a href={waLink} target="_blank" rel="noreferrer" className="rounded-full bg-white/15 border border-white/25 w-9 h-9 flex items-center justify-center text-sm">💬</a>
+                {s.facebookUrl && <a href={s.facebookUrl} target="_blank" rel="noreferrer" title="Facebook" className="rounded-full bg-white/15 border border-white/25 w-9 h-9 flex items-center justify-center"><IconFacebook className="h-4 w-4" /></a>}
+                {s.instagramUrl && <a href={s.instagramUrl} target="_blank" rel="noreferrer" title="Instagram" className="rounded-full bg-white/15 border border-white/25 w-9 h-9 flex items-center justify-center"><IconInstagram className="h-4 w-4" /></a>}
+                {s.linkedinUrl && <a href={s.linkedinUrl} target="_blank" rel="noreferrer" title="LinkedIn" className="rounded-full bg-white/15 border border-white/25 w-9 h-9 flex items-center justify-center"><IconLinkedIn className="h-4 w-4" /></a>}
+                <a href={waLink} target="_blank" rel="noreferrer" title="WhatsApp" className="rounded-full bg-green-500/30 border border-green-300/40 w-9 h-9 flex items-center justify-center"><IconWhatsApp className="h-4 w-4" /></a>
               </div>
 
               <p className="mt-auto pt-6 text-[10px] text-blue-200">Soluções inteligentes para um mercado em constante evolução.</p>
