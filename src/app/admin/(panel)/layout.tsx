@@ -6,6 +6,7 @@ import { logoutAction } from "@/lib/auth/actions";
 const ADMIN_NAV_ITEMS = [
   { href: "/admin/clientes", label: "Clientes" },
   { href: "/admin/email", label: "Webmail" },
+  { href: "/admin/cartao", label: "Cartão de Visita" },
   { href: "/admin/campanhas", label: "Campanhas" },
   { href: "/admin/paginas", label: "Páginas" },
   { href: "/admin/noticias", label: "Notícias" },
@@ -20,6 +21,7 @@ const ADMIN_NAV_ITEMS = [
 const USER_NAV_ITEMS = [
   { href: "/admin/clientes", label: "Clientes" },
   { href: "/admin/email", label: "Webmail" },
+  { href: "/admin/cartao", label: "Cartão de Visita" },
 ];
 
 /** Layout do painel administrativo (CMS) e Webmail. */
