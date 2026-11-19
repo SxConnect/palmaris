@@ -104,6 +104,24 @@ export default function WhatsappTab({
     }
   };
 
+  const conectarOuGerarQr = async () => {
+    let sessionId = sid;
+    if (!sessionId) {
+      const r = await createSession(novaSessao.trim() || "Palmaris");
+      if (r.error) { setErro(r.error); return; }
+      if (!r.id) { setErro("Não foi possível criar a sessão."); return; }
+      sessionId = r.id;
+      setSid(sessionId);
+      setNovaSessao("");
+      await carregarSessions();
+    }
+    const p = await pairSession(sessionId);
+    if (p.error) { setErro(p.error); return; }
+    setPareando(true);
+    setQr("");
+    setInfo("Escaneie o QR abaixo com o WhatsApp.");
+  };
+
   const carregarChats = async () => {
     if (!sid) return;
     const r = await listChats(sid);
@@ -157,20 +175,17 @@ export default function WhatsappTab({
             ))}
           </select>
           <input value={novaSessao} onChange={(e) => setNovaSessao(e.target.value)} placeholder="Nome da nova sessão" className="input text-xs w-40" />
-          <button onClick={conectar} className="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white">+ Conectar</button>
+          <button onClick={conectarOuGerarQr} className="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white">
+            📱 Conectar WhatsApp / Gerar QR
+          </button>
           {sid && (
-            <>
-              <button onClick={async () => { const r = await reconnectSession(sid); if (r.error) setErro(r.error); else setInfo("Reconectado."); }} className="rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-600">
-                Reconectar
-              </button>
-              <button onClick={async () => { const p = await pairSession(sid); if (p.error) setErro(p.error); else { setPareando(true); setInfo("Escaneie o QR abaixo."); } }} className="rounded-lg border border-brand-300 bg-brand-50 px-3 py-2 text-xs font-semibold text-brand-700">
-                Gerar QR
-              </button>
-            </>
+            <button onClick={async () => { const r = await reconnectSession(sid); if (r.error) setErro(r.error); else setInfo("Reconectado."); }} className="rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-600">
+              Reconectar
+            </button>
           )}
         </div>
         <p className="text-[11px] text-slate-500">
-          Para parear, execute a conexão no painel da PlugaWAPI e escaneie o QR com o WhatsApp. O chat aparece aqui depois.
+          Clique em "Conectar WhatsApp / Gerar QR", escaneie o QR com o WhatsApp (Menu ⋮ → Aparelhos conectados). As conversas aparecem aqui depois.
         </p>
       </div>
 
