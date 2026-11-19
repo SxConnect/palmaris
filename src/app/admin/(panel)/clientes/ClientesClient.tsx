@@ -26,6 +26,7 @@ import {
 import WhatsappTab from "./WhatsappTab";
 import EmailsTab from "./EmailsTab";
 import ImportarCsv from "./ImportarCsv";
+import WhatsappConnectModal from "./WhatsappConnectModal";
 
 type ClienteDetalhe = Awaited<ReturnType<typeof getClienteAction>>;
 
@@ -39,6 +40,7 @@ export default function ClientesClient() {
   const [busca, setBusca] = useState("");
   const [novo, setNovo] = useState(false);
   const [importarCsv, setImportarCsv] = useState(false);
+  const [whatsappModal, setWhatsappModal] = useState(false);
   const [erro, setErro] = useState("");
   const [msg, setMsg] = useState("");
 
@@ -80,6 +82,12 @@ export default function ClientesClient() {
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => setWhatsappModal(true)}
+            className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700"
+          >
+            💬 Conectar WhatsApp
+          </button>
           <a
             href="/admin/clientes/modelo-csv"
             className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
@@ -262,6 +270,8 @@ export default function ClientesClient() {
           )}
         </div>
       </div>
+
+      {whatsappModal && <WhatsappConnectModal onClose={() => setWhatsappModal(false)} />}
 
       {importarCsv && (
         <ImportarCsv
