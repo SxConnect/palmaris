@@ -136,3 +136,17 @@ export async function syncChatAction(sid: string, jid: string, clienteId: string
     return { error: e.message };
   }
 }
+
+
+/** Retorna o QR code atual de uma sessao (para pareamento) */
+export async function getSessionQrAction(sid: string): Promise<{ qr?: string; paired?: boolean; error?: string }> {
+  await requireAuth();
+  try {
+    const r = await pw("/api/sessions");
+    const session = (r.sessions || []).find((s: any) => s.id === sid);
+    if (!session) return { error: "Sessão não encontrada." };
+    return { qr: session.qr || "", paired: !!session.paired };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}

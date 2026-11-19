@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import QrCode from "./QrCode";
+import { getSessionQrAction } from "@/lib/actions/whatsapp";
 
 type Mensagem = {
   id: string;
@@ -50,6 +52,8 @@ export default function WhatsappTab({
   const [erro, setErro] = useState("");
   const [info, setInfo] = useState("");
   const [novaSessao, setNovaSessao] = useState("");
+  const [qr, setQr] = useState("");
+  const [pareando, setPareando] = useState(false);
 
   const carregarSessions = async () => {
     const r = await listSessions();
@@ -63,6 +67,26 @@ export default function WhatsappTab({
 
   useEffect(() => { carregarSessions(); }, []);
 
+  // Faz polling do QR enquanto pareando
+  useEffect(() => {
+    if (!pareando || !sid) return;
+    const buscar = async () => {
+      const r = await getSessionQrAction(sid);
+      if (r.error) return;
+      if (r.paired) {
+        setPareando(false);
+        setQr("");
+        setInfo("WhatsApp conectado com sucesso!");
+        await carregarSessions();
+        return;
+      }
+      if (r.qr) setQr(r.qr);
+    };
+    buscar();
+    const interval = setInterval(buscar, 2500);
+    return () => clearInterval(interval);
+  }, [pareando, sid]);
+
   const conectar = async () => {
     if (!novaSessao.trim()) return;
     const r = await createSession(novaSessao.trim());
@@ -73,7 +97,7 @@ export default function WhatsappTab({
         setSid(r.id);
         const p = await pairSession(r.id);
         if (p.error) setErro(p.error);
-        else setInfo("Escaneie o QR no painel da PlugaWAPI para parear.");
+        else { setPareando(true); setInfo("Escaneie o QR abaixo com o WhatsApp."); }
       }
       setNovaSessao("");
       await carregarSessions();
@@ -135,15 +159,32 @@ export default function WhatsappTab({
           <input value={novaSessao} onChange={(e) => setNovaSessao(e.target.value)} placeholder="Nome da nova sessão" className="input text-xs w-40" />
           <button onClick={conectar} className="rounded-lg bg-brand-600 px-3 py-2 text-xs font-semibold text-white">+ Conectar</button>
           {sid && (
-            <button onClick={async () => { const r = await reconnectSession(sid); if (r.error) setErro(r.error); else setInfo("Reconectado."); }} className="rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-600">
-              Reconectar
-            </button>
+            <>
+              <button onClick={async () => { const r = await reconnectSession(sid); if (r.error) setErro(r.error); else setInfo("Reconectado."); }} className="rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-600">
+                Reconectar
+              </button>
+              <button onClick={async () => { const p = await pairSession(sid); if (p.error) setErro(p.error); else { setPareando(true); setInfo("Escaneie o QR abaixo."); } }} className="rounded-lg border border-brand-300 bg-brand-50 px-3 py-2 text-xs font-semibold text-brand-700">
+                Gerar QR
+              </button>
+            </>
           )}
         </div>
         <p className="text-[11px] text-slate-500">
           Para parear, execute a conexão no painel da PlugaWAPI e escaneie o QR com o WhatsApp. O chat aparece aqui depois.
         </p>
       </div>
+
+      {/* QR Code de pareamento */}
+      {(pareando || qr) && (
+        <div className="rounded-lg border border-brand-200 bg-brand-50/40 p-4 flex flex-col items-center gap-2">
+          <p className="text-xs font-bold text-brand-800">📱 Escaneie este QR com o WhatsApp</p>
+          {qr ? <QrCode valor={qr} /> : <p className="text-xs text-slate-500">Gerando QR...</p>}
+          <p className="text-[11px] text-slate-500 text-center">
+            WhatsApp → Menu ⋮ → Aparelhos conectados → Conectar aparelho
+          </p>
+          {pareando && <button onClick={() => { setPareando(false); setQr(""); }} className="text-[11px] text-slate-500 hover:underline">Cancelar</button>}
+        </div>
+      )}
 
       {/* Chat */}
       {sid ? (
