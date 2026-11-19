@@ -340,6 +340,8 @@ export const ClienteScalarFieldEnum = {
   telefone: 'telefone',
   email: 'email',
   emailExtra: 'emailExtra',
+  cnpj: 'cnpj',
+  indicadoPorNome: 'indicadoPorNome',
   indicadoPorId: 'indicadoPorId',
   origem: 'origem',
   tags: 'tags',

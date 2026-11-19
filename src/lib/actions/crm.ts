@@ -348,6 +348,7 @@ export async function garantirClientePorWhatsappAction(
   mensagensWhatsapp: number;
   indicadoPorId: string | null;
   indicadoPorNome: string | null;
+  cnpj: string | null;
   passos: PassoItem[];
 } | null> {
   await requireAuth();
@@ -355,10 +356,9 @@ export async function garantirClientePorWhatsappAction(
   const telefone = jid.replace(/@.*/, "").replace(/\D/g, "");
   if (!telefone) return null;
 
-  // Normaliza telefone: remove DDI 55 se tiver 13 digitos
+  // O JID do WhatsApp ja vem com DDI (ex: 5521972742954). Usa-lo direto.
   let tel = telefone;
-  if (tel.length === 13 && tel.startsWith("55")) tel = tel.slice(2);
-  const telE164 = `55${tel}`;
+  const telE164 = tel.startsWith("55") && tel.length >= 12 ? `+${tel}` : `+55${tel}`;
 
   // Busca cliente pelo telefone (com DDI ou sem)
   let cliente = await prisma.cliente.findFirst({
@@ -420,7 +420,8 @@ export async function garantirClientePorWhatsappAction(
     })),
     mensagensWhatsapp: msgsCount,
     indicadoPorId: cliente.indicadoPorId,
-    indicadoPorNome: clienteCompleto?.indicadoPor?.nome || null,
+    indicadoPorNome: cliente.indicadoPorNome || clienteCompleto?.indicadoPor?.nome || null,
+    cnpj: cliente.cnpj,
     passos: (clienteCompleto?.passos || []).map((p) => ({
       id: p.id, titulo: p.titulo, descricao: p.descricao,
       concluido: p.concluido, posicao: p.posicao,
@@ -491,4 +492,40 @@ export async function setIndicadoPorAction(clienteId: string, indicadoPorId: str
   await prisma.cliente.update({ where: { id: clienteId }, data: { indicadoPorId } });
   revalidatePath("/admin/clientes");
   return { success: "Indicação atualizada." };
+}
+
+/** Salva dados editaveis do cliente a partir do painel do WhatsApp */
+export async function salvarDadosClienteAction(
+  clienteId: string,
+  dados: {
+    nome?: string;
+    empresa?: string;
+    cargo?: string;
+    telefone?: string;
+    email?: string;
+    cnpj?: string;
+    indicadoPorNome?: string;
+    notas?: string;
+  },
+): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  try {
+    await prisma.cliente.update({
+      where: { id: clienteId },
+      data: {
+        nome: dados.nome?.trim() || undefined,
+        empresa: dados.empresa?.trim() || null,
+        cargo: dados.cargo?.trim() || null,
+        telefone: dados.telefone?.trim() || null,
+        email: dados.email?.trim().toLowerCase() || null,
+        cnpj: dados.cnpj?.trim() || null,
+        indicadoPorNome: dados.indicadoPorNome?.trim() || null,
+        notas: dados.notas?.trim() || null,
+      },
+    });
+    revalidatePath("/admin/clientes");
+    return { success: "Dados salvos." };
+  } catch (e: any) {
+    return { error: e.message || "Erro ao salvar." };
+  }
 }

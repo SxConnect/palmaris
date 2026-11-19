@@ -325,6 +325,8 @@ model Cliente {
   telefone    String?  // E.164: 5521999999999
   email       String?
   emailExtra  String?  // segundo email, se houver
+  cnpj        String?
+  indicadoPorNome String?  // nome livre de quem indicou
   indicadoPorId String?
   indicadoPor Cliente?  @relation("Indicacoes", fields: [indicadoPorId], references: [id], onDelete: SetNull)
   indicacoes  Cliente[] @relation("Indicacoes")

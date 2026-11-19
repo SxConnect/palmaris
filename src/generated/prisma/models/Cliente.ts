@@ -32,6 +32,8 @@ export type ClienteMinAggregateOutputType = {
   telefone: string | null
   email: string | null
   emailExtra: string | null
+  cnpj: string | null
+  indicadoPorNome: string | null
   indicadoPorId: string | null
   origem: string | null
   tags: string | null
@@ -49,6 +51,8 @@ export type ClienteMaxAggregateOutputType = {
   telefone: string | null
   email: string | null
   emailExtra: string | null
+  cnpj: string | null
+  indicadoPorNome: string | null
   indicadoPorId: string | null
   origem: string | null
   tags: string | null
@@ -66,6 +70,8 @@ export type ClienteCountAggregateOutputType = {
   telefone: number
   email: number
   emailExtra: number
+  cnpj: number
+  indicadoPorNome: number
   indicadoPorId: number
   origem: number
   tags: number
@@ -85,6 +91,8 @@ export type ClienteMinAggregateInputType = {
   telefone?: true
   email?: true
   emailExtra?: true
+  cnpj?: true
+  indicadoPorNome?: true
   indicadoPorId?: true
   origem?: true
   tags?: true
@@ -102,6 +110,8 @@ export type ClienteMaxAggregateInputType = {
   telefone?: true
   email?: true
   emailExtra?: true
+  cnpj?: true
+  indicadoPorNome?: true
   indicadoPorId?: true
   origem?: true
   tags?: true
@@ -119,6 +129,8 @@ export type ClienteCountAggregateInputType = {
   telefone?: true
   email?: true
   emailExtra?: true
+  cnpj?: true
+  indicadoPorNome?: true
   indicadoPorId?: true
   origem?: true
   tags?: true
@@ -209,6 +221,8 @@ export type ClienteGroupByOutputType = {
   telefone: string | null
   email: string | null
   emailExtra: string | null
+  cnpj: string | null
+  indicadoPorNome: string | null
   indicadoPorId: string | null
   origem: string | null
   tags: string | null
@@ -247,6 +261,8 @@ export type ClienteWhereInput = {
   telefone?: Prisma.StringNullableFilter<"Cliente"> | string | null
   email?: Prisma.StringNullableFilter<"Cliente"> | string | null
   emailExtra?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  cnpj?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  indicadoPorNome?: Prisma.StringNullableFilter<"Cliente"> | string | null
   indicadoPorId?: Prisma.StringNullableFilter<"Cliente"> | string | null
   origem?: Prisma.StringNullableFilter<"Cliente"> | string | null
   tags?: Prisma.StringNullableFilter<"Cliente"> | string | null
@@ -268,6 +284,8 @@ export type ClienteOrderByWithRelationInput = {
   telefone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   emailExtra?: Prisma.SortOrderInput | Prisma.SortOrder
+  cnpj?: Prisma.SortOrderInput | Prisma.SortOrder
+  indicadoPorNome?: Prisma.SortOrderInput | Prisma.SortOrder
   indicadoPorId?: Prisma.SortOrderInput | Prisma.SortOrder
   origem?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,6 +310,8 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   telefone?: Prisma.StringNullableFilter<"Cliente"> | string | null
   email?: Prisma.StringNullableFilter<"Cliente"> | string | null
   emailExtra?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  cnpj?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  indicadoPorNome?: Prisma.StringNullableFilter<"Cliente"> | string | null
   indicadoPorId?: Prisma.StringNullableFilter<"Cliente"> | string | null
   origem?: Prisma.StringNullableFilter<"Cliente"> | string | null
   tags?: Prisma.StringNullableFilter<"Cliente"> | string | null
@@ -313,6 +333,8 @@ export type ClienteOrderByWithAggregationInput = {
   telefone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   emailExtra?: Prisma.SortOrderInput | Prisma.SortOrder
+  cnpj?: Prisma.SortOrderInput | Prisma.SortOrder
+  indicadoPorNome?: Prisma.SortOrderInput | Prisma.SortOrder
   indicadoPorId?: Prisma.SortOrderInput | Prisma.SortOrder
   origem?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -336,6 +358,8 @@ export type ClienteScalarWhereWithAggregatesInput = {
   telefone?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   emailExtra?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
+  cnpj?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
+  indicadoPorNome?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   indicadoPorId?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   origem?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   tags?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
@@ -353,6 +377,8 @@ export type ClienteCreateInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -373,6 +399,8 @@ export type ClienteUncheckedCreateInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   indicadoPorId?: string | null
   origem?: string | null
   tags?: string | null
@@ -393,6 +421,8 @@ export type ClienteUpdateInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -413,6 +443,8 @@ export type ClienteUncheckedUpdateInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   indicadoPorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -433,6 +465,8 @@ export type ClienteCreateManyInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   indicadoPorId?: string | null
   origem?: string | null
   tags?: string | null
@@ -450,6 +484,8 @@ export type ClienteUpdateManyMutationInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -466,6 +502,8 @@ export type ClienteUncheckedUpdateManyInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   indicadoPorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -498,6 +536,8 @@ export type ClienteCountOrderByAggregateInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailExtra?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
+  indicadoPorNome?: Prisma.SortOrder
   indicadoPorId?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -515,6 +555,8 @@ export type ClienteMaxOrderByAggregateInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailExtra?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
+  indicadoPorNome?: Prisma.SortOrder
   indicadoPorId?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -532,6 +574,8 @@ export type ClienteMinOrderByAggregateInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailExtra?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrder
+  indicadoPorNome?: Prisma.SortOrder
   indicadoPorId?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -642,6 +686,8 @@ export type ClienteCreateWithoutIndicacoesInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -661,6 +707,8 @@ export type ClienteUncheckedCreateWithoutIndicacoesInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   indicadoPorId?: string | null
   origem?: string | null
   tags?: string | null
@@ -685,6 +733,8 @@ export type ClienteCreateWithoutIndicadoPorInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -704,6 +754,8 @@ export type ClienteUncheckedCreateWithoutIndicadoPorInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -744,6 +796,8 @@ export type ClienteUpdateWithoutIndicacoesInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -763,6 +817,8 @@ export type ClienteUncheckedUpdateWithoutIndicacoesInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   indicadoPorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -801,6 +857,8 @@ export type ClienteScalarWhereInput = {
   telefone?: Prisma.StringNullableFilter<"Cliente"> | string | null
   email?: Prisma.StringNullableFilter<"Cliente"> | string | null
   emailExtra?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  cnpj?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  indicadoPorNome?: Prisma.StringNullableFilter<"Cliente"> | string | null
   indicadoPorId?: Prisma.StringNullableFilter<"Cliente"> | string | null
   origem?: Prisma.StringNullableFilter<"Cliente"> | string | null
   tags?: Prisma.StringNullableFilter<"Cliente"> | string | null
@@ -818,6 +876,8 @@ export type ClienteCreateWithoutPassosInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -837,6 +897,8 @@ export type ClienteUncheckedCreateWithoutPassosInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   indicadoPorId?: string | null
   origem?: string | null
   tags?: string | null
@@ -872,6 +934,8 @@ export type ClienteUpdateWithoutPassosInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -891,6 +955,8 @@ export type ClienteUncheckedUpdateWithoutPassosInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   indicadoPorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -910,6 +976,8 @@ export type ClienteCreateWithoutMensagensInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -929,6 +997,8 @@ export type ClienteUncheckedCreateWithoutMensagensInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   indicadoPorId?: string | null
   origem?: string | null
   tags?: string | null
@@ -964,6 +1034,8 @@ export type ClienteUpdateWithoutMensagensInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -983,6 +1055,8 @@ export type ClienteUncheckedUpdateWithoutMensagensInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   indicadoPorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1002,6 +1076,8 @@ export type ClienteCreateManyIndicadoPorInput = {
   telefone?: string | null
   email?: string | null
   emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
   origem?: string | null
   tags?: string | null
   notas?: string | null
@@ -1018,6 +1094,8 @@ export type ClienteUpdateWithoutIndicadoPorInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1037,6 +1115,8 @@ export type ClienteUncheckedUpdateWithoutIndicadoPorInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1056,6 +1136,8 @@ export type ClienteUncheckedUpdateManyWithoutIndicadoPorInput = {
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1121,6 +1203,8 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   telefone?: boolean
   email?: boolean
   emailExtra?: boolean
+  cnpj?: boolean
+  indicadoPorNome?: boolean
   indicadoPorId?: boolean
   origem?: boolean
   tags?: boolean
@@ -1143,6 +1227,8 @@ export type ClienteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   telefone?: boolean
   email?: boolean
   emailExtra?: boolean
+  cnpj?: boolean
+  indicadoPorNome?: boolean
   indicadoPorId?: boolean
   origem?: boolean
   tags?: boolean
@@ -1161,6 +1247,8 @@ export type ClienteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   telefone?: boolean
   email?: boolean
   emailExtra?: boolean
+  cnpj?: boolean
+  indicadoPorNome?: boolean
   indicadoPorId?: boolean
   origem?: boolean
   tags?: boolean
@@ -1179,6 +1267,8 @@ export type ClienteSelectScalar = {
   telefone?: boolean
   email?: boolean
   emailExtra?: boolean
+  cnpj?: boolean
+  indicadoPorNome?: boolean
   indicadoPorId?: boolean
   origem?: boolean
   tags?: boolean
@@ -1188,7 +1278,7 @@ export type ClienteSelectScalar = {
   atualizadoEm?: boolean
 }
 
-export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "empresa" | "cargo" | "telefone" | "email" | "emailExtra" | "indicadoPorId" | "origem" | "tags" | "notas" | "responsavel" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["cliente"]>
+export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "empresa" | "cargo" | "telefone" | "email" | "emailExtra" | "cnpj" | "indicadoPorNome" | "indicadoPorId" | "origem" | "tags" | "notas" | "responsavel" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["cliente"]>
 export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   indicadoPor?: boolean | Prisma.Cliente$indicadoPorArgs<ExtArgs>
   indicacoes?: boolean | Prisma.Cliente$indicacoesArgs<ExtArgs>
@@ -1219,6 +1309,8 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     telefone: string | null
     email: string | null
     emailExtra: string | null
+    cnpj: string | null
+    indicadoPorNome: string | null
     indicadoPorId: string | null
     origem: string | null
     tags: string | null
@@ -1660,6 +1752,8 @@ export interface ClienteFieldRefs {
   readonly telefone: Prisma.FieldRef<"Cliente", 'String'>
   readonly email: Prisma.FieldRef<"Cliente", 'String'>
   readonly emailExtra: Prisma.FieldRef<"Cliente", 'String'>
+  readonly cnpj: Prisma.FieldRef<"Cliente", 'String'>
+  readonly indicadoPorNome: Prisma.FieldRef<"Cliente", 'String'>
   readonly indicadoPorId: Prisma.FieldRef<"Cliente", 'String'>
   readonly origem: Prisma.FieldRef<"Cliente", 'String'>
   readonly tags: Prisma.FieldRef<"Cliente", 'String'>

@@ -13,8 +13,9 @@ import {
 import QrCode from "@/app/admin/(panel)/clientes/QrCode";
 import MessageBubble from "./MessageBubble";
 import { listContactsAction, getAvatarAction } from "@/lib/actions/whatsapp";
-import { garantirClientePorWhatsappAction, setIndicadoPorAction, listClientesAction } from "@/lib/actions/crm";
+import { garantirClientePorWhatsappAction } from "@/lib/actions/crm";
 import FunilCard from "./FunilCard";
+import DadosClienteCard from "./DadosClienteCard";
 
 type Chat = { jid: string; lastMessage?: string; lastTime?: string; name?: string };
 
@@ -32,8 +33,6 @@ export default function WhatsappInbox() {
   const [pareando, setPareando] = useState(false);
   const [clienteAtual, setClienteAtual] = useState<any>(null);
   const [carregandoCliente, setCarregandoCliente] = useState(false);
-  const [todosClientes, setTodosClientes] = useState<any[]>([]);
-  const [indicadoPor, setIndicadoPor] = useState("");
   const [contatos, setContatos] = useState<Record<string, string>>({});
   const [avatars, setAvatars] = useState<Record<string, string>>({});
 
@@ -49,7 +48,6 @@ export default function WhatsappInbox() {
 
   useEffect(() => {
     carregarSessions();
-    listClientesAction().then(setTodosClientes);
   }, [carregarSessions]);
 
   useEffect(() => {
@@ -114,15 +112,7 @@ export default function WhatsappInbox() {
     ]);
     if (!msgs.error) setMensagens(msgs.messages || []);
     setClienteAtual(cli);
-    setIndicadoPor(cli?.indicadoPorId || "");
     setCarregandoCliente(false);
-  };
-
-  const salvarIndicacao = async (valor: string) => {
-    if (!clienteAtual) return;
-    setIndicadoPor(valor);
-    await setIndicadoPorAction(clienteAtual.id, valor || null);
-    setInfo("Indicação salva.");
   };
 
   const enviar = async () => {
@@ -239,29 +229,10 @@ export default function WhatsappInbox() {
                 ) : clienteAtual ? (
                   <>
                   <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
-                    <div className="rounded-lg bg-white border border-slate-200 p-2">
-                      <p className="font-bold text-slate-700">📇 Dados</p>
-                      <p className="text-slate-600">{clienteAtual.nome}</p>
-                      <p className="text-slate-500">{clienteAtual.telefone || "—"}</p>
-                      {clienteAtual.email && <p className="text-slate-500 truncate">{clienteAtual.email}</p>}
-                      {clienteAtual.empresa && <p className="text-slate-500">{clienteAtual.empresa}</p>}
-                      <div className="mt-2 border-t border-slate-100 pt-2">
-                        <p className="text-[10px] font-bold text-slate-500">👤 Quem indicou</p>
-                        <select
-                          value={indicadoPor}
-                          onChange={(e) => salvarIndicacao(e.target.value)}
-                          className="w-full mt-1 rounded border border-slate-200 px-1.5 py-1 text-[10px]"
-                        >
-                          <option value="">— ninguém —</option>
-                          {todosClientes.filter((c) => c.id !== clienteAtual.id).map((c) => (
-                            <option key={c.id} value={c.id}>{c.nome}</option>
-                          ))}
-                        </select>
-                        {clienteAtual.indicadoPorNome && !indicadoPor && (
-                          <p className="text-[10px] text-brand-700 mt-1">{clienteAtual.indicadoPorNome}</p>
-                        )}
-                      </div>
-                    </div>
+                    <DadosClienteCard
+                      cliente={clienteAtual}
+                      onSalvo={async () => setClienteAtual(await garantirClientePorWhatsappAction(jid, contatos[jid]))}
+                    />
                     <div className="rounded-lg bg-white border border-slate-200 p-2">
                       <p className="font-bold text-slate-700">📧 E-mails ({clienteAtual.emailsEnviados.length + clienteAtual.emailsRecebidos.length})</p>
                       {clienteAtual.emailsEnviados.length + clienteAtual.emailsRecebidos.length === 0 ? (
