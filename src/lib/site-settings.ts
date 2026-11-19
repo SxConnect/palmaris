@@ -33,6 +33,12 @@ export type SiteSettings = {
   linkedinUrl: string;
   /** Texto extra do rodapé (opcional). */
   footerNote: string;
+  /** Nome do responsável no cartão de visita. */
+  cardOwner: string;
+  /** Segmentos do cartão (separados por "|"). */
+  cardSegmentos: string;
+  /** Chamada do WhatsApp no cartão. */
+  cardChamada: string;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -47,6 +53,9 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   instagramUrl: "https://instagram.com/",
   linkedinUrl: "https://linkedin.com/",
   footerNote: "Representação e integração de soluções industriais de alta performance.",
+  cardOwner: "Silvano Xavier",
+  cardSegmentos: "⚙️|Automação Industrial|🔧|Projetos e Instrumentação|🤝|Soluções em Engenharia",
+  cardChamada: "Fale conosco pelo WhatsApp",
 };
 
 const SETTINGS_KEY = "site";

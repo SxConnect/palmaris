@@ -26,6 +26,9 @@ export async function saveSettings(
     instagramUrl: String(formData.get("instagramUrl") ?? "").trim(),
     linkedinUrl: String(formData.get("linkedinUrl") ?? "").trim(),
     footerNote: String(formData.get("footerNote") ?? "").trim(),
+    cardOwner: String(formData.get("cardOwner") ?? "").trim(),
+    cardSegmentos: String(formData.get("cardSegmentos") ?? "").trim(),
+    cardChamada: String(formData.get("cardChamada") ?? "").trim(),
   };
 
   if (!settings.siteName) {

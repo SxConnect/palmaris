@@ -102,6 +102,11 @@ export default async function SiteFooter() {
                   <span className="text-brand-400 text-xs">→</span> Contato
                 </Link>
               </li>
+              <li>
+                <Link href="/cartao" className="hover:text-white transition flex items-center gap-1.5">
+                  <span className="text-brand-400 text-xs">→</span> Cartão de Visita Digital
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

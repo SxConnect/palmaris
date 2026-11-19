@@ -13,19 +13,24 @@ type Settings = {
   facebookUrl: string;
   instagramUrl: string;
   linkedinUrl: string;
+  cardOwner: string;
+  cardSegmentos: string;
+  cardChamada: string;
 };
 
-export default function CartaoVisita() {
-  const [s, setS] = useState<Settings | null>(null);
+export default function CartaoVisita({ settingsInicial }: { settingsInicial?: Settings }) {
+  const [s, setS] = useState<Settings | null>(settingsInicial || null);
   const [qr, setQr] = useState("");
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    fetch("/api/site-settings")
-      .then((r) => r.json())
-      .then((d) => setS(d.settings || d))
-      .catch(() => {});
-    QRCode.toDataURL("https://palmaris.com.br/admin/cartao", { width: 300, margin: 1, color: { dark: "#0a2a6b", light: "#ffffff" } })
+    if (!settingsInicial) {
+      fetch("/api/site-settings")
+        .then((r) => r.json())
+        .then((d) => setS(d.settings || d))
+        .catch(() => {});
+    }
+    QRCode.toDataURL("https://palmaris.com.br/cartao", { width: 300, margin: 1, color: { dark: "#0a2a6b", light: "#ffffff" } })
       .then(setQr)
       .catch(() => {});
   }, []);
@@ -38,17 +43,22 @@ export default function CartaoVisita() {
   const waLink = `https://wa.me/55${tel}`;
   const mailLink = `mailto:${s.email}`;
   const telLink = `tel:+55${tel}`;
+  const partesSegmentos = (s.cardSegmentos || "").split("|").map((p) => p.trim()).filter(Boolean);
+  const segmentos: Array<{ icon: string; label: string }> = [];
+  for (let i = 0; i < partesSegmentos.length; i += 2) {
+    segmentos.push({ icon: partesSegmentos[i] || "•", label: partesSegmentos[i + 1] || "" });
+  }
 
   const compartilhar = async () => {
     const dados = {
       title: "Palmaris Representações",
       text: "Conectando soluções, construindo resultados. Fale com a Palmaris!",
-      url: "https://palmaris.com.br/admin/cartao",
+      url: "https://palmaris.com.br/cartao",
     };
     if (navigator.share) {
       try { await navigator.share(dados); } catch {}
     } else {
-      await navigator.clipboard.writeText("https://palmaris.com.br/admin/cartao");
+      await navigator.clipboard.writeText("https://palmaris.com.br/cartao");
       setMsg("Link copiado!");
       setTimeout(() => setMsg(""), 2500);
     }
@@ -90,17 +100,18 @@ export default function CartaoVisita() {
               <h2 className="mt-4 text-xl font-black tracking-tight">PALMARIS</h2>
               <p className="text-center text-sm font-semibold italic text-blue-100">{s.tagline}</p>
               <p className="mt-1 text-center text-[11px] text-blue-200">Representações</p>
+              {s.cardOwner && <p className="mt-1 text-center text-xs font-semibold text-white">{s.cardOwner}</p>}
 
               {/* Segmentos */}
               <div className="mt-5 grid grid-cols-3 w-full gap-2">
-                {[
-                  { icon: "⚙️", label: "Automação\nIndustrial" },
-                  { icon: "🔧", label: "Projetos e\nInstrumentação" },
-                  { icon: "🤝", label: "Soluções em\nEngenharia" },
-                ].map((seg) => (
+                {(segmentos.length > 0 ? segmentos : [
+                  { icon: "⚙️", label: "Automação|Industrial" },
+                  { icon: "🔧", label: "Projetos e|Instrumentação" },
+                  { icon: "🤝", label: "Soluções em|Engenharia" },
+                ]).map((seg) => (
                   <div key={seg.label} className="rounded-xl bg-white/10 border border-white/20 p-2 text-center backdrop-blur-sm">
                     <span className="text-xl">{seg.icon}</span>
-                    <p className="mt-1 text-[9px] font-bold leading-tight whitespace-pre-line">{seg.label}</p>
+                    <p className="mt-1 text-[9px] font-bold leading-tight whitespace-pre-line">{seg.label.replace("|", "\n")}</p>
                   </div>
                 ))}
               </div>
@@ -134,7 +145,7 @@ export default function CartaoVisita() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={qr} alt="QR do cartão" className="rounded-lg bg-white p-2 w-32" />
                 )}
-                <p className="mt-2 text-[10px] text-blue-200 text-center">Escaneie ou compartilhe pelo QR.</p>
+                <p className="mt-2 text-[10px] text-blue-200 text-center">{s.cardChamada || "Fale conosco pelo WhatsApp"}</p>
                 <button onClick={compartilhar} className="mt-2 rounded-full bg-white/15 border border-white/30 px-4 py-1.5 text-[11px] font-semibold hover:bg-white/25">
                   Compartilhar
                 </button>

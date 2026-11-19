@@ -57,7 +57,16 @@ export default async function SiteHeader() {
           </Link>
         </div>
 
-        <SiteNav items={items} />
+        <div className="flex items-center gap-3">
+          <Link
+            href="/cartao"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3 py-2 text-xs font-bold text-brand-700 hover:bg-brand-100 transition"
+            title="Cartão de Visita Digital"
+          >
+            💳 Cartão de Visita
+          </Link>
+          <SiteNav items={items} />
+        </div>
       </div>
     </header>
   );
