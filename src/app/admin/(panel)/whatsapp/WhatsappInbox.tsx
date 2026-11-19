@@ -13,11 +13,19 @@ import {
 import QrCode from "@/app/admin/(panel)/clientes/QrCode";
 import MessageBubble from "./MessageBubble";
 import { listContactsAction, getAvatarAction } from "@/lib/actions/whatsapp";
-import { garantirClientePorWhatsappAction } from "@/lib/actions/crm";
+import { garantirClientePorWhatsappAction, listClientesComTelefoneAction } from "@/lib/actions/crm";
 import FunilCard from "./FunilCard";
 import DadosClienteCard from "./DadosClienteCard";
 
-type Chat = { jid: string; lastMessage?: string; lastTime?: string; name?: string };
+type Chat = {
+  jid: string;
+  lastMessage?: string;
+  lastTime?: string;
+  name?: string;
+  novoCliente?: boolean;
+  clienteId?: string;
+  empresa?: string;
+};
 
 export default function WhatsappInbox() {
   const [sessions, setSessions] = useState<any[]>([]);
@@ -33,6 +41,7 @@ export default function WhatsappInbox() {
   const [pareando, setPareando] = useState(false);
   const [clienteAtual, setClienteAtual] = useState<any>(null);
   const [carregandoCliente, setCarregandoCliente] = useState(false);
+  const [clientesCrm, setClientesCrm] = useState<any[]>([]);
   const [contatos, setContatos] = useState<Record<string, string>>({});
   const [avatars, setAvatars] = useState<Record<string, string>>({});
 
@@ -57,13 +66,17 @@ export default function WhatsappInbox() {
 
   // Carregar avatares das conversas visiveis (limitado a 30)
   useEffect(() => {
-    if (!sid || chats.length === 0) return;
-    chats.slice(0, 30).forEach(async (c) => {
-      if (avatars[c.jid] !== undefined) return;
-      const url = await getAvatarAction(sid, c.jid);
-      setAvatars((old) => ({ ...old, [c.jid]: url }));
+    if (!sid) return;
+    const jids = [
+      ...chats.slice(0, 30).map((c) => c.jid),
+      ...clientesCrm.slice(0, 30).map((c) => `${c.telefone.replace(/\D/g, "")}@s.whatsapp.net`),
+    ];
+    [...new Set(jids)].forEach(async (jid) => {
+      if (avatars[jid] !== undefined) return;
+      const url = await getAvatarAction(sid, jid);
+      setAvatars((old) => ({ ...old, [jid]: url }));
     });
-  }, [sid, chats]);
+  }, [sid, chats, clientesCrm]);
 
   // Atualizar chats
   useEffect(() => {
@@ -139,10 +152,42 @@ export default function WhatsappInbox() {
     setPareando(true); setQr(""); setInfo("Escaneie o QR com o WhatsApp.");
   };
 
-  const chatsFiltrados = chats.filter((c) => {
+  // Clientes do CRM com telefone que ainda nao tem conversa -> "novo cliente"
+  const clientesSemConversa = clientesCrm
+    .map((c) => {
+      const digits = c.telefone.replace(/\D/g, "");
+      const jid = `${digits.startsWith("55") ? digits : `55${digits}`}@s.whatsapp.net`;
+      return {
+        jid,
+        name: c.nome,
+        lastMessage: "🆕 Novo cliente — clique para enviar mensagem",
+        lastTime: "",
+        novoCliente: true,
+        clienteId: c.id,
+        empresa: c.empresa,
+      } as Chat;
+    })
+    .filter((c) => !chats.some((ch) => ch.jid === c.jid || ch.jid.replace(/:.*/, "") === c.jid.replace(/:.*/, "")));
+
+  const listaUnificada = [
+    ...clientesSemConversa,
+    ...chats.map((c) => {
+      const cli = clientesCrm.find((x) => {
+        const d = x.telefone.replace(/\D/g, "");
+        const j = `${d.startsWith("55") ? d : `55${d}`}@s.whatsapp.net`;
+        return j === c.jid || j.replace(/:.*/, "") === c.jid.replace(/:.*/, "");
+      });
+      return cli ? { ...c, name: c.name || cli.nome, clienteId: cli.id, empresa: cli.empresa } : c;
+    }),
+  ];
+
+  const chatsFiltrados = listaUnificada.filter((c) => {
     if (!busca) return true;
     const q = busca.toLowerCase();
-    return (c.jid || "").toLowerCase().includes(q) || (c.lastMessage || "").toLowerCase().includes(q);
+    return (c.jid || "").toLowerCase().includes(q)
+      || (c.lastMessage || "").toLowerCase().includes(q)
+      || (c.name || "").toLowerCase().includes(q)
+      || (c.empresa || "").toLowerCase().includes(q);
   });
 
   const sessaoAtiva = sessions.find((s) => s.id === sid);
@@ -153,7 +198,7 @@ export default function WhatsappInbox() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">💬 WhatsApp — Caixa de Entrada</h1>
           <p className="mt-1 text-sm text-slate-500">
-            {chats.length} conversas {sessaoAtiva ? `· conectado como ${sessaoAtiva.jid || "WhatsApp"}` : "· selecione uma sessão"}
+            {chats.length} conversas · {clientesSemConversa.length} novos clientes {sessaoAtiva ? `· conectado como ${sessaoAtiva.jid || "WhatsApp"}` : "· selecione uma sessão"}
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -190,14 +235,17 @@ export default function WhatsappInbox() {
                   <img src={avatars[c.jid]} alt="" className="h-9 w-9 rounded-full object-cover shrink-0" />
                 ) : (
                   <span className="h-9 w-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold shrink-0">
-                    {(contatos[c.jid] || c.name || c.jid).charAt(0).toUpperCase()}
+                    {(c.name || contatos[c.jid] || c.jid).charAt(0).toUpperCase()}
                   </span>
                 )}
                 <span className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-slate-800 truncate">
-                  {contatos[c.jid] || c.name || c.jid.replace(/@.*/, "")}
+                  {c.name || contatos[c.jid] || c.jid.replace(/@.*/, "")}
                 </p>
-                <p className="text-[11px] text-slate-500 truncate">{c.lastMessage || "—"}</p>
+                {c.empresa && <p className="text-[10px] text-slate-400 truncate">{c.empresa}</p>}
+                <p className={`text-[11px] truncate ${c.novoCliente ? "text-green-700 font-semibold" : "text-slate-500"}`}>
+                  {c.lastMessage || "—"}
+                </p>
                 <p className="text-[10px] text-slate-400">{c.lastTime ? new Date(c.lastTime).toLocaleString("pt-BR") : ""}</p>
                 </span>
               </button>

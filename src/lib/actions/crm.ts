@@ -529,3 +529,18 @@ export async function salvarDadosClienteAction(
     return { error: e.message || "Erro ao salvar." };
   }
 }
+
+/** Clientes do CRM com telefone (para mesclar na caixa do WhatsApp) */
+export async function listClientesComTelefoneAction(): Promise<
+  Array<{ id: string; nome: string; empresa: string | null; telefone: string; email: string | null }>
+> {
+  await requireAuth();
+  const clientes = await prisma.cliente.findMany({
+    where: { telefone: { not: null } },
+    orderBy: { nome: "asc" },
+    select: { id: true, nome: true, empresa: true, telefone: true, email: true },
+  });
+  return clientes
+    .filter((c) => c.telefone && c.telefone.replace(/\D/g, "").length >= 10)
+    .map((c) => ({ ...c, telefone: c.telefone! }));
+}
