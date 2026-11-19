@@ -310,11 +310,15 @@ function looksLikeHtml(input: string): boolean {
 
 function decodeBody(input: string): string {
   if (!input) return input;
-  const trimmed = input.trim();
-  // Detecta base64 (caracteres comuns + padding, sem escapes QP)
-  if (!/=[0-9A-Fa-f]{2}/.test(trimmed) && /^[A-Za-z0-9+/=\s]+$/.test(trimmed) && trimmed.length % 4 === 0) {
-    const decoded = decodeBase64(trimmed);
-    if (/<html|<body|<p|<div|[^\x00-\x7F]/.test(decoded)) return decoded;
+  const semEspacos = input.trim().replace(/\s/g, "");
+  // Detecta base64 (remove quebras de linha antes de medir o tamanho)
+  if (
+    semEspacos.length > 20 &&
+    !/=[0-9A-Fa-f]{2}/.test(semEspacos) &&
+    /^[A-Za-z0-9+/=]+$/.test(semEspacos)
+  ) {
+    const decoded = decodeBase64(semEspacos);
+    if (/<html|<body|<p|<div|<meta|[^\x00-\x7F]/.test(decoded)) return decoded;
   }
   return decodeQP(input);
 }
