@@ -210,3 +210,39 @@ export async function listClientesSimplesAction() {
   });
   return clientes;
 }
+
+/** Lista contatos do WhatsApp (jid -> nome) */
+export async function listContactsAction(sid: string): Promise<Record<string, string>> {
+  await requireAuth();
+  try {
+    const r = await pw(`/api/sessions/${sid}/contacts`);
+    const lista = r.contacts || [];
+    const mapa: Record<string, string> = {};
+    for (const c of lista) if (c.jid && c.name) mapa[c.jid] = c.name;
+    return mapa;
+  } catch {
+    return {};
+  }
+}
+
+/** Retorna a URL do avatar de um jid */
+export async function getAvatarAction(sid: string, jid: string): Promise<string> {
+  await requireAuth();
+  try {
+    const r = await pw(`/api/sessions/${sid}/avatar?jid=${encodeURIComponent(jid)}`);
+    return r.url || "";
+  } catch {
+    return "";
+  }
+}
+
+/** Faz proxy de uma midia do WhatsApp (evita expor a URL direta) */
+export async function proxyMediaAction(url: string): Promise<string> {
+  await requireAuth();
+  try {
+    const r = await pw("/api/media/proxy", { method: "POST", body: JSON.stringify({ url }) });
+    return r.dataUrl || "";
+  } catch {
+    return "";
+  }
+}

@@ -9,11 +9,11 @@ import {
   getSessionQrAction,
   pairSessionAction,
   createSessionAction as createSession,
-  vincularConversaAction,
-  getClientePorJidAction,
-  listClientesSimplesAction,
 } from "@/lib/actions/whatsapp";
 import QrCode from "@/app/admin/(panel)/clientes/QrCode";
+import MessageBubble from "./MessageBubble";
+import { listContactsAction, getAvatarAction } from "@/lib/actions/whatsapp";
+import { garantirClientePorWhatsappAction } from "@/lib/actions/crm";
 
 type Chat = { jid: string; lastMessage?: string; lastTime?: string; name?: string };
 
@@ -30,8 +30,9 @@ export default function WhatsappInbox() {
   const [qr, setQr] = useState("");
   const [pareando, setPareando] = useState(false);
   const [clienteAtual, setClienteAtual] = useState<any>(null);
-  const [clientes, setClientes] = useState<any[]>([]);
-  const [vincularId, setVincularId] = useState("");
+  const [carregandoCliente, setCarregandoCliente] = useState(false);
+  const [contatos, setContatos] = useState<Record<string, string>>({});
+  const [avatars, setAvatars] = useState<Record<string, string>>({});
 
   const carregarSessions = useCallback(async () => {
     const r = await listSessionsAction();
@@ -43,7 +44,22 @@ export default function WhatsappInbox() {
     }
   }, []);
 
-  useEffect(() => { carregarSessions(); listClientesSimplesAction().then(setClientes); }, [carregarSessions]);
+  useEffect(() => { carregarSessions(); }, [carregarSessions]);
+
+  useEffect(() => {
+    if (!sid) return;
+    listContactsAction(sid).then(setContatos);
+  }, [sid]);
+
+  // Carregar avatares das conversas visiveis (limitado a 30)
+  useEffect(() => {
+    if (!sid || chats.length === 0) return;
+    chats.slice(0, 30).forEach(async (c) => {
+      if (avatars[c.jid] !== undefined) return;
+      const url = await getAvatarAction(sid, c.jid);
+      setAvatars((old) => ({ ...old, [c.jid]: url }));
+    });
+  }, [sid, chats]);
 
   // Atualizar chats
   useEffect(() => {
@@ -85,13 +101,14 @@ export default function WhatsappInbox() {
 
   const abrirChat = async (chatJid: string) => {
     setJid(chatJid);
+    setCarregandoCliente(true);
     const [msgs, cli] = await Promise.all([
       listMessagesAction(sid, chatJid),
-      getClientePorJidAction(chatJid),
+      garantirClientePorWhatsappAction(chatJid, contatos[chatJid]),
     ]);
     if (!msgs.error) setMensagens(msgs.messages || []);
     setClienteAtual(cli);
-    setVincularId(cli?.id || "");
+    setCarregandoCliente(false);
   };
 
   const enviar = async () => {
@@ -116,13 +133,6 @@ export default function WhatsappInbox() {
     const p = await pairSessionAction(id);
     if (p.error) { setErro(p.error); return; }
     setPareando(true); setQr(""); setInfo("Escaneie o QR com o WhatsApp.");
-  };
-
-  const vincular = async () => {
-    if (!vincularId || !jid) return;
-    const r = await vincularConversaAction(sid, jid, vincularId);
-    if (r.error) setErro(r.error);
-    else { setInfo(r.success || "Vinculado."); setClienteAtual(clientes.find((c) => c.id === vincularId)); }
   };
 
   const chatsFiltrados = chats.filter((c) => {
@@ -170,10 +180,22 @@ export default function WhatsappInbox() {
           <div className="max-h-[70vh] overflow-y-auto divide-y divide-slate-100">
             {chatsFiltrados.length === 0 && <p className="p-4 text-center text-xs text-slate-400">Nenhuma conversa encontrada.</p>}
             {chatsFiltrados.map((c) => (
-              <button key={c.jid} onClick={() => abrirChat(c.jid)} className={`w-full text-left p-3 hover:bg-slate-50 ${jid === c.jid ? "bg-brand-50 border-l-4 border-brand-600" : ""}`}>
-                <p className="text-sm font-semibold text-slate-800 truncate">{c.name || c.jid}</p>
+              <button key={c.jid} onClick={() => abrirChat(c.jid)} className={`w-full text-left p-3 hover:bg-slate-50 flex gap-2 items-start ${jid === c.jid ? "bg-brand-50 border-l-4 border-brand-600" : ""}`}>
+                {avatars[c.jid] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={avatars[c.jid]} alt="" className="h-9 w-9 rounded-full object-cover shrink-0" />
+                ) : (
+                  <span className="h-9 w-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold shrink-0">
+                    {(contatos[c.jid] || c.name || c.jid).charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <span className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-slate-800 truncate">
+                  {contatos[c.jid] || c.name || c.jid.replace(/@.*/, "")}
+                </p>
                 <p className="text-[11px] text-slate-500 truncate">{c.lastMessage || "—"}</p>
                 <p className="text-[10px] text-slate-400">{c.lastTime ? new Date(c.lastTime).toLocaleString("pt-BR") : ""}</p>
+                </span>
               </button>
             ))}
           </div>
@@ -188,35 +210,57 @@ export default function WhatsappInbox() {
             </div>
           ) : (
             <>
-              <div className="p-3 border-b border-slate-200 bg-slate-50/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <div>
-                  <p className="text-sm font-bold text-slate-900 truncate">{jid}</p>
-                  {clienteAtual && <p className="text-[11px] text-green-700">👤 {clienteAtual.nome}{clienteAtual.empresa ? ` · ${clienteAtual.empresa}` : ""}</p>}
+              {/* Painel do cliente (dados + historico de e-mails) */}
+              <div className="border-b border-slate-200 bg-slate-50/60 p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-bold text-slate-900 truncate">
+                    {contatos[jid] || jid.replace(/@.*/, "")}
+                  </p>
+                  <a href={clienteAtual ? `/admin/clientes` : "#"} className="text-[11px] text-brand-700 hover:underline">
+                    {clienteAtual ? "👤 Cliente no CRM" : ""}
+                  </a>
                 </div>
-                <div className="flex gap-2">
-                  <select value={vincularId} onChange={(e) => setVincularId(e.target.value)} className="input text-[11px] max-w-[180px]">
-                    <option value="">— vincular a cliente —</option>
-                    {clientes.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
-                  </select>
-                  <button onClick={vincular} disabled={!vincularId} className="rounded-lg border border-brand-300 bg-brand-50 px-2 py-1.5 text-[11px] font-semibold text-brand-700 disabled:opacity-50">Vincular</button>
-                </div>
+                {carregandoCliente ? (
+                  <p className="text-[11px] text-slate-400 mt-1">Carregando dados do cliente...</p>
+                ) : clienteAtual ? (
+                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                    <div className="rounded-lg bg-white border border-slate-200 p-2">
+                      <p className="font-bold text-slate-700">📇 Dados</p>
+                      <p className="text-slate-600">{clienteAtual.nome}</p>
+                      <p className="text-slate-500">{clienteAtual.telefone || "—"}</p>
+                      {clienteAtual.email && <p className="text-slate-500 truncate">{clienteAtual.email}</p>}
+                      {clienteAtual.empresa && <p className="text-slate-500">{clienteAtual.empresa}</p>}
+                    </div>
+                    <div className="rounded-lg bg-white border border-slate-200 p-2">
+                      <p className="font-bold text-slate-700">📧 E-mails ({clienteAtual.emailsEnviados.length + clienteAtual.emailsRecebidos.length})</p>
+                      {clienteAtual.emailsEnviados.length + clienteAtual.emailsRecebidos.length === 0 ? (
+                        <p className="text-slate-400">Nenhum e-mail ainda</p>
+                      ) : (
+                        <div className="mt-1 space-y-1 max-h-24 overflow-y-auto">
+                          {clienteAtual.emailsEnviados.map((e: any) => (
+                            <p key={e.id} className="text-slate-600 truncate">📤 {e.subject || "(sem assunto)"} {e.opened ? "👁️" : ""}</p>
+                          ))}
+                          {clienteAtual.emailsRecebidos.map((e: any) => (
+                            <p key={e.id} className="text-slate-600 truncate">📥 {e.subject || "(sem assunto)"}</p>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="rounded-lg bg-white border border-slate-200 p-2">
+                      <p className="font-bold text-slate-700">💬 WhatsApp</p>
+                      <p className="text-slate-600">{clienteAtual.mensagensWhatsapp} mensagem(ns) salva(s)</p>
+                      <p className="text-slate-500">Nesta conversa: {mensagens.length}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-slate-400 mt-1">Não foi possível carregar o cliente.</p>
+                )}
               </div>
               <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-slate-50/40 max-h-[55vh]">
                 {mensagens.length === 0 && <p className="text-center text-xs text-slate-400 py-8">Carregando mensagens...</p>}
-                {mensagens.map((m, i) => {
-                  const fromMe = m.fromMe === true;
-                  const txt = m.content || m.text || m.message || (m.mediaUrl ? "📎 mídia" : "");
-                  return (
-                    <div key={m.id || i} className={`flex ${fromMe ? "justify-end" : "justify-start"}`}>
-                      <div className={`max-w-[75%] rounded-xl px-3 py-2 text-xs ${fromMe ? "bg-brand-600 text-white" : "bg-white border border-slate-200 text-slate-700"}`}>
-                        <p className="whitespace-pre-wrap">{txt}</p>
-                        <p className={`text-[9px] mt-1 ${fromMe ? "text-blue-200" : "text-slate-400"}`}>
-                          {m.timestamp ? new Date(m.timestamp).toLocaleString("pt-BR") : ""}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                {mensagens.map((m, i) => (
+                  <MessageBubble key={m.id || i} msg={m} fromMe={m.fromMe === true} />
+                ))}
               </div>
               <form onSubmit={(e) => { e.preventDefault(); enviar(); }} className="p-2 border-t border-slate-200 flex gap-2">
                 <input value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Escreva a mensagem..." className="input text-xs flex-1" />

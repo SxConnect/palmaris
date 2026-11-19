@@ -331,3 +331,83 @@ export async function importClientesAction(
     return { error: e.message || "Erro ao importar." };
   }
 }
+
+/** Retorna (ou cria automaticamente) o cliente correspondente a um JID do WhatsApp,
+ *  já com o histórico de e-mails enviados/recebidos vinculados. */
+export async function garantirClientePorWhatsappAction(
+  jid: string,
+  nomeContato?: string,
+): Promise<{
+  id: string;
+  nome: string;
+  telefone: string | null;
+  email: string | null;
+  empresa: string | null;
+  emailsEnviados: Array<{ id: string; subject: string | null; sentAt: string; opened: boolean; bounced: boolean }>;
+  emailsRecebidos: Array<{ id: string; de: string; subject: string | null; receivedAt: string }>;
+  mensagensWhatsapp: number;
+} | null> {
+  await requireAuth();
+
+  const telefone = jid.replace(/@.*/, "").replace(/\D/g, "");
+  if (!telefone) return null;
+
+  // Normaliza telefone: remove DDI 55 se tiver 13 digitos
+  let tel = telefone;
+  if (tel.length === 13 && tel.startsWith("55")) tel = tel.slice(2);
+  const telE164 = `55${tel}`;
+
+  // Busca cliente pelo telefone (com DDI ou sem)
+  let cliente = await prisma.cliente.findFirst({
+    where: {
+      OR: [
+        { telefone: telE164 },
+        { telefone: tel },
+        { telefone: { contains: tel } },
+      ],
+    },
+  });
+
+  if (!cliente) {
+    cliente = await prisma.cliente.create({
+      data: {
+        nome: nomeContato?.trim() || `WhatsApp ${tel}`,
+        telefone: telE164,
+        origem: "whatsapp",
+        responsavel: (await requireAuth()).email,
+      },
+    });
+    revalidatePath("/admin/clientes");
+  }
+
+  // Buscar e-mails enviados/recebidos para qualquer e-mail do cliente
+  const emails = [cliente.email, cliente.emailExtra].filter(Boolean).map((e) => e!.toLowerCase());
+  const [sends, recebidos, bounces, msgsCount] = await Promise.all([
+    emails.length ? prisma.emailSend.findMany({ where: { recipient: { in: emails } }, orderBy: { sentAt: "desc" }, take: 50 }) : Promise.resolve([]),
+    emails.length ? prisma.emailRecebido.findMany({ where: { de: { in: emails } }, orderBy: { receivedAt: "desc" }, take: 50 }) : Promise.resolve([]),
+    emails.length ? prisma.emailBounce.findMany({ where: { recipient: { in: emails } } }) : Promise.resolve([]),
+    prisma.whatsappMessage.count({ where: { clienteId: cliente.id } }),
+  ]);
+
+  const opens = sends.length
+    ? await prisma.emailOpen.findMany({ where: { trackingId: { in: sends.map((s) => s.trackingId) } }, select: { trackingId: true } })
+    : [];
+  const openIds = new Set(opens.map((o) => o.trackingId));
+  const bounceEmails = new Set(bounces.map((b) => b.recipient.toLowerCase()));
+
+  return {
+    id: cliente.id,
+    nome: cliente.nome,
+    telefone: cliente.telefone,
+    email: cliente.email,
+    empresa: cliente.empresa,
+    emailsEnviados: sends.map((s) => ({
+      id: s.id, subject: s.subject, sentAt: s.sentAt.toISOString(),
+      opened: openIds.has(s.trackingId), bounced: bounceEmails.has(s.recipient.toLowerCase()),
+    })),
+    emailsRecebidos: recebidos.map((r) => ({
+      id: r.id, de: r.de, subject: r.subject, receivedAt: r.receivedAt.toISOString(),
+    })),
+    mensagensWhatsapp: msgsCount,
+  };
+}
