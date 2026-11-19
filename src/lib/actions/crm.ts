@@ -346,6 +346,9 @@ export async function garantirClientePorWhatsappAction(
   emailsEnviados: Array<{ id: string; subject: string | null; sentAt: string; opened: boolean; bounced: boolean }>;
   emailsRecebidos: Array<{ id: string; de: string; subject: string | null; receivedAt: string }>;
   mensagensWhatsapp: number;
+  indicadoPorId: string | null;
+  indicadoPorNome: string | null;
+  passos: PassoItem[];
 } | null> {
   await requireAuth();
 
@@ -382,11 +385,18 @@ export async function garantirClientePorWhatsappAction(
 
   // Buscar e-mails enviados/recebidos para qualquer e-mail do cliente
   const emails = [cliente.email, cliente.emailExtra].filter(Boolean).map((e) => e!.toLowerCase());
-  const [sends, recebidos, bounces, msgsCount] = await Promise.all([
+  const [sends, recebidos, bounces, msgsCount, clienteCompleto] = await Promise.all([
     emails.length ? prisma.emailSend.findMany({ where: { recipient: { in: emails } }, orderBy: { sentAt: "desc" }, take: 50 }) : Promise.resolve([]),
     emails.length ? prisma.emailRecebido.findMany({ where: { de: { in: emails } }, orderBy: { receivedAt: "desc" }, take: 50 }) : Promise.resolve([]),
     emails.length ? prisma.emailBounce.findMany({ where: { recipient: { in: emails } } }) : Promise.resolve([]),
     prisma.whatsappMessage.count({ where: { clienteId: cliente.id } }),
+    prisma.cliente.findUnique({
+      where: { id: cliente.id },
+      include: {
+        indicadoPor: { select: { nome: true } },
+        passos: { orderBy: { posicao: "asc" } },
+      },
+    }),
   ]);
 
   const opens = sends.length
@@ -409,5 +419,76 @@ export async function garantirClientePorWhatsappAction(
       id: r.id, de: r.de, subject: r.subject, receivedAt: r.receivedAt.toISOString(),
     })),
     mensagensWhatsapp: msgsCount,
+    indicadoPorId: cliente.indicadoPorId,
+    indicadoPorNome: clienteCompleto?.indicadoPor?.nome || null,
+    passos: (clienteCompleto?.passos || []).map((p) => ({
+      id: p.id, titulo: p.titulo, descricao: p.descricao,
+      concluido: p.concluido, posicao: p.posicao,
+      concluidoEm: p.concluidoEm ? p.concluidoEm.toISOString() : null,
+    })),
   };
+}
+
+export type PassoItem = {
+  id: string;
+  titulo: string;
+  descricao: string | null;
+  concluido: boolean;
+  posicao: number;
+  concluidoEm: string | null;
+};
+
+/** Passos do funil de um cliente */
+export async function listPassosAction(clienteId: string): Promise<PassoItem[]> {
+  await requireAuth();
+  const passos = await prisma.clientePasso.findMany({
+    where: { clienteId },
+    orderBy: { posicao: "asc" },
+  });
+  return passos.map((p) => ({
+    id: p.id, titulo: p.titulo, descricao: p.descricao,
+    concluido: p.concluido, posicao: p.posicao,
+    concluidoEm: p.concluidoEm ? p.concluidoEm.toISOString() : null,
+  }));
+}
+
+/** Adiciona passo ao funil */
+export async function addPassoRapidoAction(clienteId: string, titulo: string): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  if (!titulo?.trim()) return { error: "Informe o titulo." };
+  const count = await prisma.clientePasso.count({ where: { clienteId } });
+  await prisma.clientePasso.create({
+    data: { clienteId, titulo: titulo.trim(), posicao: count },
+  });
+  revalidatePath("/admin/clientes");
+  return { success: "Passo adicionado." };
+}
+
+/** Marca/desmarca passo */
+export async function togglePassoRapidoAction(passoId: string): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  const p = await prisma.clientePasso.findUnique({ where: { id: passoId } });
+  if (!p) return { error: "Passo nao encontrado." };
+  await prisma.clientePasso.update({
+    where: { id: passoId },
+    data: { concluido: !p.concluido, concluidoEm: !p.concluido ? new Date() : null },
+  });
+  revalidatePath("/admin/clientes");
+  return { success: "Passo atualizado." };
+}
+
+/** Remove passo */
+export async function deletePassoRapidoAction(passoId: string): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  await prisma.clientePasso.delete({ where: { id: passoId } });
+  revalidatePath("/admin/clientes");
+  return { success: "Passo removido." };
+}
+
+/** Atualiza quem indicou o cliente */
+export async function setIndicadoPorAction(clienteId: string, indicadoPorId: string | null): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  await prisma.cliente.update({ where: { id: clienteId }, data: { indicadoPorId } });
+  revalidatePath("/admin/clientes");
+  return { success: "Indicação atualizada." };
 }

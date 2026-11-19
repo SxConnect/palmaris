@@ -13,7 +13,8 @@ import {
 import QrCode from "@/app/admin/(panel)/clientes/QrCode";
 import MessageBubble from "./MessageBubble";
 import { listContactsAction, getAvatarAction } from "@/lib/actions/whatsapp";
-import { garantirClientePorWhatsappAction } from "@/lib/actions/crm";
+import { garantirClientePorWhatsappAction, setIndicadoPorAction, listClientesAction } from "@/lib/actions/crm";
+import FunilCard from "./FunilCard";
 
 type Chat = { jid: string; lastMessage?: string; lastTime?: string; name?: string };
 
@@ -31,6 +32,8 @@ export default function WhatsappInbox() {
   const [pareando, setPareando] = useState(false);
   const [clienteAtual, setClienteAtual] = useState<any>(null);
   const [carregandoCliente, setCarregandoCliente] = useState(false);
+  const [todosClientes, setTodosClientes] = useState<any[]>([]);
+  const [indicadoPor, setIndicadoPor] = useState("");
   const [contatos, setContatos] = useState<Record<string, string>>({});
   const [avatars, setAvatars] = useState<Record<string, string>>({});
 
@@ -44,7 +47,10 @@ export default function WhatsappInbox() {
     }
   }, []);
 
-  useEffect(() => { carregarSessions(); }, [carregarSessions]);
+  useEffect(() => {
+    carregarSessions();
+    listClientesAction().then(setTodosClientes);
+  }, [carregarSessions]);
 
   useEffect(() => {
     if (!sid) return;
@@ -108,7 +114,15 @@ export default function WhatsappInbox() {
     ]);
     if (!msgs.error) setMensagens(msgs.messages || []);
     setClienteAtual(cli);
+    setIndicadoPor(cli?.indicadoPorId || "");
     setCarregandoCliente(false);
+  };
+
+  const salvarIndicacao = async (valor: string) => {
+    if (!clienteAtual) return;
+    setIndicadoPor(valor);
+    await setIndicadoPorAction(clienteAtual.id, valor || null);
+    setInfo("Indicação salva.");
   };
 
   const enviar = async () => {
@@ -223,6 +237,7 @@ export default function WhatsappInbox() {
                 {carregandoCliente ? (
                   <p className="text-[11px] text-slate-400 mt-1">Carregando dados do cliente...</p>
                 ) : clienteAtual ? (
+                  <>
                   <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
                     <div className="rounded-lg bg-white border border-slate-200 p-2">
                       <p className="font-bold text-slate-700">📇 Dados</p>
@@ -230,6 +245,22 @@ export default function WhatsappInbox() {
                       <p className="text-slate-500">{clienteAtual.telefone || "—"}</p>
                       {clienteAtual.email && <p className="text-slate-500 truncate">{clienteAtual.email}</p>}
                       {clienteAtual.empresa && <p className="text-slate-500">{clienteAtual.empresa}</p>}
+                      <div className="mt-2 border-t border-slate-100 pt-2">
+                        <p className="text-[10px] font-bold text-slate-500">👤 Quem indicou</p>
+                        <select
+                          value={indicadoPor}
+                          onChange={(e) => salvarIndicacao(e.target.value)}
+                          className="w-full mt-1 rounded border border-slate-200 px-1.5 py-1 text-[10px]"
+                        >
+                          <option value="">— ninguém —</option>
+                          {todosClientes.filter((c) => c.id !== clienteAtual.id).map((c) => (
+                            <option key={c.id} value={c.id}>{c.nome}</option>
+                          ))}
+                        </select>
+                        {clienteAtual.indicadoPorNome && !indicadoPor && (
+                          <p className="text-[10px] text-brand-700 mt-1">{clienteAtual.indicadoPorNome}</p>
+                        )}
+                      </div>
                     </div>
                     <div className="rounded-lg bg-white border border-slate-200 p-2">
                       <p className="font-bold text-slate-700">📧 E-mails ({clienteAtual.emailsEnviados.length + clienteAtual.emailsRecebidos.length})</p>
@@ -252,6 +283,10 @@ export default function WhatsappInbox() {
                       <p className="text-slate-500">Nesta conversa: {mensagens.length}</p>
                     </div>
                   </div>
+                  <div className="mt-2">
+                    <FunilCard clienteId={clienteAtual.id} passosIniciais={clienteAtual.passos || []} />
+                  </div>
+                  </>
                 ) : (
                   <p className="text-[11px] text-slate-400 mt-1">Não foi possível carregar o cliente.</p>
                 )}
