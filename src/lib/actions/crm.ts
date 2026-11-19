@@ -296,3 +296,38 @@ export async function importEmailsRecebidosAction(
     return { error: e.message };
   }
 }
+
+/** Importa vários clientes de uma vez (linhas já parseadas) */
+export async function importClientesAction(
+  linhas: Array<Record<string, string>>,
+): Promise<{ success?: string; error?: string; criados?: number }> {
+  await requireAuth();
+  if (!Array.isArray(linhas) || linhas.length === 0) {
+    return { error: "Nenhum cliente para importar." };
+  }
+  let criados = 0;
+  try {
+    for (const linha of linhas) {
+      const nome = (linha.nome || "").trim();
+      if (!nome) continue;
+      await prisma.cliente.create({
+        data: {
+          nome,
+          empresa: linha.empresa?.trim() || null,
+          cargo: linha.cargo?.trim() || null,
+          telefone: linha.telefone?.trim() || null,
+          email: linha.email?.trim().toLowerCase() || null,
+          emailExtra: linha.emailExtra?.trim().toLowerCase() || null,
+          origem: linha.origem?.trim() || "importacao",
+          tags: linha.tags?.trim() || null,
+          notas: linha.notas?.trim() || null,
+        },
+      });
+      criados++;
+    }
+    revalidatePath("/admin/clientes");
+    return { success: `${criados} clientes importados.`, criados };
+  } catch (e: any) {
+    return { error: e.message || "Erro ao importar." };
+  }
+}

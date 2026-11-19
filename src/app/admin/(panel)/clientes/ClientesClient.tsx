@@ -25,6 +25,7 @@ import {
 } from "@/lib/actions/whatsapp";
 import WhatsappTab from "./WhatsappTab";
 import EmailsTab from "./EmailsTab";
+import ImportarCsv from "./ImportarCsv";
 
 type ClienteDetalhe = Awaited<ReturnType<typeof getClienteAction>>;
 
@@ -37,6 +38,7 @@ export default function ClientesClient() {
   const [aba, setAba] = useState<Aba>("dados");
   const [busca, setBusca] = useState("");
   const [novo, setNovo] = useState(false);
+  const [importarCsv, setImportarCsv] = useState(false);
   const [erro, setErro] = useState("");
   const [msg, setMsg] = useState("");
 
@@ -77,12 +79,26 @@ export default function ClientesClient() {
             Um único lugar para cada cliente: dados, passos, WhatsApp e e-mails.
           </p>
         </div>
-        <button
-          onClick={() => setNovo(true)}
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700"
-        >
-          + Novo cliente
-        </button>
+        <div className="flex gap-2 flex-wrap">
+          <a
+            href="/admin/clientes/modelo-csv"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+          >
+            ⬇️ Modelo CSV
+          </a>
+          <button
+            onClick={() => setImportarCsv(true)}
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+          >
+            📥 Importar CSV
+          </button>
+          <button
+            onClick={() => setNovo(true)}
+            className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700"
+          >
+            + Novo cliente
+          </button>
+        </div>
       </div>
 
       {(erro || msg) && (
@@ -246,6 +262,16 @@ export default function ClientesClient() {
           )}
         </div>
       </div>
+
+      {importarCsv && (
+        <ImportarCsv
+          onClose={() => setImportarCsv(false)}
+          onImportado={async (msg) => {
+            setMsg(msg);
+            await carregar();
+          }}
+        />
+      )}
 
       {novo && (
         <NovoClienteModal
