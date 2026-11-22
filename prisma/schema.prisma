@@ -339,6 +339,7 @@ model Cliente {
 
   passos      ClientePasso[]
   mensagens   WhatsappMessage[]
+  representacoes ClienteRepresentacao[]
 
   @@index([telefone])
   @@index([email])
@@ -350,6 +351,8 @@ model ClientePasso {
   id          String   @id @default(cuid())
   clienteId   String
   cliente     Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  representacaoId String?
+  representacao Representacao? @relation(fields: [representacaoId], references: [id], onDelete: Cascade)
   titulo      String
   descricao   String?
   concluido   Boolean  @default(false)
@@ -358,6 +361,7 @@ model ClientePasso {
   concluidoEm DateTime?
 
   @@index([clienteId])
+  @@index([representacaoId])
   @@map("cliente_passos")
 }
 
@@ -396,4 +400,63 @@ model EmailRecebido {
   @@index([clienteId])
   @@index([de])
   @@map("emails_recebidos")
+}
+
+/// Representacao (marca/empresa representada): ENGEZER, PESCO, futuras.
+model Representacao {
+  id            String   @id @default(cuid())
+  nome          String   @unique
+  slug          String   @unique
+  logoUrl       String?
+  descricao     String?
+  segmento      String?
+  site          String?
+  emailContato  String?
+  telefone      String?
+  responsavel   String?
+  status        String   @default("ativa")
+  observacoes   String?
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+
+  produtos      Produto[]
+  clientes      ClienteRepresentacao[]
+  funis         ClientePasso[]
+
+  @@map("representacoes")
+}
+
+/// Produto ou servico de uma representacao (com ate 6 fotos opcionais).
+model Produto {
+  id              String   @id @default(cuid())
+  representacaoId String
+  representacao   Representacao @relation(fields: [representacaoId], references: [id], onDelete: Cascade)
+  nome            String
+  descricao       String?
+  categoria       String?
+  imagens         String?  // JSON array de URLs (max 6)
+  destaque        Boolean  @default(false)
+  ordem           Int      @default(0)
+  criadoEm        DateTime @default(now())
+
+  @@index([representacaoId])
+  @@map("produtos")
+}
+
+/// Vinculo N:N entre Cliente e Representacao, com contexto do trabalho.
+model ClienteRepresentacao {
+  id              String   @id @default(cuid())
+  clienteId       String
+  cliente         Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  representacaoId String
+  representacao   Representacao @relation(fields: [representacaoId], references: [id], onDelete: Cascade)
+  status          String   @default("ativo")
+  responsavel     String?
+  observacoes     String?
+  criadoEm        DateTime @default(now())
+
+  @@unique([clienteId, representacaoId])
+  @@index([clienteId])
+  @@index([representacaoId])
+  @@map("cliente_representacoes")
 }

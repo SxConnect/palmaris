@@ -4,6 +4,7 @@ import { requireAuth } from "@/lib/auth/guard";
 import { logoutAction } from "@/lib/auth/actions";
 
 const ADMIN_NAV_ITEMS = [
+  { href: "/admin/representacoes", label: "Representações" },
   { href: "/admin/clientes", label: "Clientes" },
   { href: "/admin/whatsapp", label: "WhatsApp" },
   { href: "/admin/email", label: "Webmail" },

@@ -37,6 +37,7 @@ export type ClientePassoSumAggregateOutputType = {
 export type ClientePassoMinAggregateOutputType = {
   id: string | null
   clienteId: string | null
+  representacaoId: string | null
   titulo: string | null
   descricao: string | null
   concluido: boolean | null
@@ -48,6 +49,7 @@ export type ClientePassoMinAggregateOutputType = {
 export type ClientePassoMaxAggregateOutputType = {
   id: string | null
   clienteId: string | null
+  representacaoId: string | null
   titulo: string | null
   descricao: string | null
   concluido: boolean | null
@@ -59,6 +61,7 @@ export type ClientePassoMaxAggregateOutputType = {
 export type ClientePassoCountAggregateOutputType = {
   id: number
   clienteId: number
+  representacaoId: number
   titulo: number
   descricao: number
   concluido: number
@@ -80,6 +83,7 @@ export type ClientePassoSumAggregateInputType = {
 export type ClientePassoMinAggregateInputType = {
   id?: true
   clienteId?: true
+  representacaoId?: true
   titulo?: true
   descricao?: true
   concluido?: true
@@ -91,6 +95,7 @@ export type ClientePassoMinAggregateInputType = {
 export type ClientePassoMaxAggregateInputType = {
   id?: true
   clienteId?: true
+  representacaoId?: true
   titulo?: true
   descricao?: true
   concluido?: true
@@ -102,6 +107,7 @@ export type ClientePassoMaxAggregateInputType = {
 export type ClientePassoCountAggregateInputType = {
   id?: true
   clienteId?: true
+  representacaoId?: true
   titulo?: true
   descricao?: true
   concluido?: true
@@ -200,6 +206,7 @@ export type ClientePassoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type ClientePassoGroupByOutputType = {
   id: string
   clienteId: string
+  representacaoId: string | null
   titulo: string
   descricao: string | null
   concluido: boolean
@@ -234,6 +241,7 @@ export type ClientePassoWhereInput = {
   NOT?: Prisma.ClientePassoWhereInput | Prisma.ClientePassoWhereInput[]
   id?: Prisma.StringFilter<"ClientePasso"> | string
   clienteId?: Prisma.StringFilter<"ClientePasso"> | string
+  representacaoId?: Prisma.StringNullableFilter<"ClientePasso"> | string | null
   titulo?: Prisma.StringFilter<"ClientePasso"> | string
   descricao?: Prisma.StringNullableFilter<"ClientePasso"> | string | null
   concluido?: Prisma.BoolFilter<"ClientePasso"> | boolean
@@ -241,11 +249,13 @@ export type ClientePassoWhereInput = {
   criadoEm?: Prisma.DateTimeFilter<"ClientePasso"> | Date | string
   concluidoEm?: Prisma.DateTimeNullableFilter<"ClientePasso"> | Date | string | null
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
+  representacao?: Prisma.XOR<Prisma.RepresentacaoNullableScalarRelationFilter, Prisma.RepresentacaoWhereInput> | null
 }
 
 export type ClientePassoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  representacaoId?: Prisma.SortOrderInput | Prisma.SortOrder
   titulo?: Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
   concluido?: Prisma.SortOrder
@@ -253,6 +263,7 @@ export type ClientePassoOrderByWithRelationInput = {
   criadoEm?: Prisma.SortOrder
   concluidoEm?: Prisma.SortOrderInput | Prisma.SortOrder
   cliente?: Prisma.ClienteOrderByWithRelationInput
+  representacao?: Prisma.RepresentacaoOrderByWithRelationInput
 }
 
 export type ClientePassoWhereUniqueInput = Prisma.AtLeast<{
@@ -261,6 +272,7 @@ export type ClientePassoWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ClientePassoWhereInput[]
   NOT?: Prisma.ClientePassoWhereInput | Prisma.ClientePassoWhereInput[]
   clienteId?: Prisma.StringFilter<"ClientePasso"> | string
+  representacaoId?: Prisma.StringNullableFilter<"ClientePasso"> | string | null
   titulo?: Prisma.StringFilter<"ClientePasso"> | string
   descricao?: Prisma.StringNullableFilter<"ClientePasso"> | string | null
   concluido?: Prisma.BoolFilter<"ClientePasso"> | boolean
@@ -268,11 +280,13 @@ export type ClientePassoWhereUniqueInput = Prisma.AtLeast<{
   criadoEm?: Prisma.DateTimeFilter<"ClientePasso"> | Date | string
   concluidoEm?: Prisma.DateTimeNullableFilter<"ClientePasso"> | Date | string | null
   cliente?: Prisma.XOR<Prisma.ClienteScalarRelationFilter, Prisma.ClienteWhereInput>
+  representacao?: Prisma.XOR<Prisma.RepresentacaoNullableScalarRelationFilter, Prisma.RepresentacaoWhereInput> | null
 }, "id">
 
 export type ClientePassoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  representacaoId?: Prisma.SortOrderInput | Prisma.SortOrder
   titulo?: Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
   concluido?: Prisma.SortOrder
@@ -292,6 +306,7 @@ export type ClientePassoScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ClientePassoScalarWhereWithAggregatesInput | Prisma.ClientePassoScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"ClientePasso"> | string
   clienteId?: Prisma.StringWithAggregatesFilter<"ClientePasso"> | string
+  representacaoId?: Prisma.StringNullableWithAggregatesFilter<"ClientePasso"> | string | null
   titulo?: Prisma.StringWithAggregatesFilter<"ClientePasso"> | string
   descricao?: Prisma.StringNullableWithAggregatesFilter<"ClientePasso"> | string | null
   concluido?: Prisma.BoolWithAggregatesFilter<"ClientePasso"> | boolean
@@ -309,11 +324,13 @@ export type ClientePassoCreateInput = {
   criadoEm?: Date | string
   concluidoEm?: Date | string | null
   cliente: Prisma.ClienteCreateNestedOneWithoutPassosInput
+  representacao?: Prisma.RepresentacaoCreateNestedOneWithoutFunisInput
 }
 
 export type ClientePassoUncheckedCreateInput = {
   id?: string
   clienteId: string
+  representacaoId?: string | null
   titulo: string
   descricao?: string | null
   concluido?: boolean
@@ -331,11 +348,13 @@ export type ClientePassoUpdateInput = {
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   concluidoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cliente?: Prisma.ClienteUpdateOneRequiredWithoutPassosNestedInput
+  representacao?: Prisma.RepresentacaoUpdateOneWithoutFunisNestedInput
 }
 
 export type ClientePassoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  representacaoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titulo?: Prisma.StringFieldUpdateOperationsInput | string
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -347,6 +366,7 @@ export type ClientePassoUncheckedUpdateInput = {
 export type ClientePassoCreateManyInput = {
   id?: string
   clienteId: string
+  representacaoId?: string | null
   titulo: string
   descricao?: string | null
   concluido?: boolean
@@ -368,6 +388,7 @@ export type ClientePassoUpdateManyMutationInput = {
 export type ClientePassoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  representacaoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titulo?: Prisma.StringFieldUpdateOperationsInput | string
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -389,6 +410,7 @@ export type ClientePassoOrderByRelationAggregateInput = {
 export type ClientePassoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  representacaoId?: Prisma.SortOrder
   titulo?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
   concluido?: Prisma.SortOrder
@@ -404,6 +426,7 @@ export type ClientePassoAvgOrderByAggregateInput = {
 export type ClientePassoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  representacaoId?: Prisma.SortOrder
   titulo?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
   concluido?: Prisma.SortOrder
@@ -415,6 +438,7 @@ export type ClientePassoMaxOrderByAggregateInput = {
 export type ClientePassoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   clienteId?: Prisma.SortOrder
+  representacaoId?: Prisma.SortOrder
   titulo?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
   concluido?: Prisma.SortOrder
@@ -469,6 +493,48 @@ export type ClientePassoUncheckedUpdateManyWithoutClienteNestedInput = {
   deleteMany?: Prisma.ClientePassoScalarWhereInput | Prisma.ClientePassoScalarWhereInput[]
 }
 
+export type ClientePassoCreateNestedManyWithoutRepresentacaoInput = {
+  create?: Prisma.XOR<Prisma.ClientePassoCreateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput> | Prisma.ClientePassoCreateWithoutRepresentacaoInput[] | Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput[]
+  connectOrCreate?: Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput | Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput[]
+  createMany?: Prisma.ClientePassoCreateManyRepresentacaoInputEnvelope
+  connect?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+}
+
+export type ClientePassoUncheckedCreateNestedManyWithoutRepresentacaoInput = {
+  create?: Prisma.XOR<Prisma.ClientePassoCreateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput> | Prisma.ClientePassoCreateWithoutRepresentacaoInput[] | Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput[]
+  connectOrCreate?: Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput | Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput[]
+  createMany?: Prisma.ClientePassoCreateManyRepresentacaoInputEnvelope
+  connect?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+}
+
+export type ClientePassoUpdateManyWithoutRepresentacaoNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientePassoCreateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput> | Prisma.ClientePassoCreateWithoutRepresentacaoInput[] | Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput[]
+  connectOrCreate?: Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput | Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput[]
+  upsert?: Prisma.ClientePassoUpsertWithWhereUniqueWithoutRepresentacaoInput | Prisma.ClientePassoUpsertWithWhereUniqueWithoutRepresentacaoInput[]
+  createMany?: Prisma.ClientePassoCreateManyRepresentacaoInputEnvelope
+  set?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  disconnect?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  delete?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  connect?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  update?: Prisma.ClientePassoUpdateWithWhereUniqueWithoutRepresentacaoInput | Prisma.ClientePassoUpdateWithWhereUniqueWithoutRepresentacaoInput[]
+  updateMany?: Prisma.ClientePassoUpdateManyWithWhereWithoutRepresentacaoInput | Prisma.ClientePassoUpdateManyWithWhereWithoutRepresentacaoInput[]
+  deleteMany?: Prisma.ClientePassoScalarWhereInput | Prisma.ClientePassoScalarWhereInput[]
+}
+
+export type ClientePassoUncheckedUpdateManyWithoutRepresentacaoNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientePassoCreateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput> | Prisma.ClientePassoCreateWithoutRepresentacaoInput[] | Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput[]
+  connectOrCreate?: Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput | Prisma.ClientePassoCreateOrConnectWithoutRepresentacaoInput[]
+  upsert?: Prisma.ClientePassoUpsertWithWhereUniqueWithoutRepresentacaoInput | Prisma.ClientePassoUpsertWithWhereUniqueWithoutRepresentacaoInput[]
+  createMany?: Prisma.ClientePassoCreateManyRepresentacaoInputEnvelope
+  set?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  disconnect?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  delete?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  connect?: Prisma.ClientePassoWhereUniqueInput | Prisma.ClientePassoWhereUniqueInput[]
+  update?: Prisma.ClientePassoUpdateWithWhereUniqueWithoutRepresentacaoInput | Prisma.ClientePassoUpdateWithWhereUniqueWithoutRepresentacaoInput[]
+  updateMany?: Prisma.ClientePassoUpdateManyWithWhereWithoutRepresentacaoInput | Prisma.ClientePassoUpdateManyWithWhereWithoutRepresentacaoInput[]
+  deleteMany?: Prisma.ClientePassoScalarWhereInput | Prisma.ClientePassoScalarWhereInput[]
+}
+
 export type ClientePassoCreateWithoutClienteInput = {
   id?: string
   titulo: string
@@ -477,10 +543,12 @@ export type ClientePassoCreateWithoutClienteInput = {
   posicao?: number
   criadoEm?: Date | string
   concluidoEm?: Date | string | null
+  representacao?: Prisma.RepresentacaoCreateNestedOneWithoutFunisInput
 }
 
 export type ClientePassoUncheckedCreateWithoutClienteInput = {
   id?: string
+  representacaoId?: string | null
   titulo: string
   descricao?: string | null
   concluido?: boolean
@@ -521,6 +589,7 @@ export type ClientePassoScalarWhereInput = {
   NOT?: Prisma.ClientePassoScalarWhereInput | Prisma.ClientePassoScalarWhereInput[]
   id?: Prisma.StringFilter<"ClientePasso"> | string
   clienteId?: Prisma.StringFilter<"ClientePasso"> | string
+  representacaoId?: Prisma.StringNullableFilter<"ClientePasso"> | string | null
   titulo?: Prisma.StringFilter<"ClientePasso"> | string
   descricao?: Prisma.StringNullableFilter<"ClientePasso"> | string | null
   concluido?: Prisma.BoolFilter<"ClientePasso"> | boolean
@@ -529,8 +598,57 @@ export type ClientePassoScalarWhereInput = {
   concluidoEm?: Prisma.DateTimeNullableFilter<"ClientePasso"> | Date | string | null
 }
 
+export type ClientePassoCreateWithoutRepresentacaoInput = {
+  id?: string
+  titulo: string
+  descricao?: string | null
+  concluido?: boolean
+  posicao?: number
+  criadoEm?: Date | string
+  concluidoEm?: Date | string | null
+  cliente: Prisma.ClienteCreateNestedOneWithoutPassosInput
+}
+
+export type ClientePassoUncheckedCreateWithoutRepresentacaoInput = {
+  id?: string
+  clienteId: string
+  titulo: string
+  descricao?: string | null
+  concluido?: boolean
+  posicao?: number
+  criadoEm?: Date | string
+  concluidoEm?: Date | string | null
+}
+
+export type ClientePassoCreateOrConnectWithoutRepresentacaoInput = {
+  where: Prisma.ClientePassoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientePassoCreateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput>
+}
+
+export type ClientePassoCreateManyRepresentacaoInputEnvelope = {
+  data: Prisma.ClientePassoCreateManyRepresentacaoInput | Prisma.ClientePassoCreateManyRepresentacaoInput[]
+  skipDuplicates?: boolean
+}
+
+export type ClientePassoUpsertWithWhereUniqueWithoutRepresentacaoInput = {
+  where: Prisma.ClientePassoWhereUniqueInput
+  update: Prisma.XOR<Prisma.ClientePassoUpdateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedUpdateWithoutRepresentacaoInput>
+  create: Prisma.XOR<Prisma.ClientePassoCreateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedCreateWithoutRepresentacaoInput>
+}
+
+export type ClientePassoUpdateWithWhereUniqueWithoutRepresentacaoInput = {
+  where: Prisma.ClientePassoWhereUniqueInput
+  data: Prisma.XOR<Prisma.ClientePassoUpdateWithoutRepresentacaoInput, Prisma.ClientePassoUncheckedUpdateWithoutRepresentacaoInput>
+}
+
+export type ClientePassoUpdateManyWithWhereWithoutRepresentacaoInput = {
+  where: Prisma.ClientePassoScalarWhereInput
+  data: Prisma.XOR<Prisma.ClientePassoUpdateManyMutationInput, Prisma.ClientePassoUncheckedUpdateManyWithoutRepresentacaoInput>
+}
+
 export type ClientePassoCreateManyClienteInput = {
   id?: string
+  representacaoId?: string | null
   titulo: string
   descricao?: string | null
   concluido?: boolean
@@ -547,10 +665,12 @@ export type ClientePassoUpdateWithoutClienteInput = {
   posicao?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   concluidoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  representacao?: Prisma.RepresentacaoUpdateOneWithoutFunisNestedInput
 }
 
 export type ClientePassoUncheckedUpdateWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  representacaoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titulo?: Prisma.StringFieldUpdateOperationsInput | string
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -561,6 +681,51 @@ export type ClientePassoUncheckedUpdateWithoutClienteInput = {
 
 export type ClientePassoUncheckedUpdateManyWithoutClienteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  representacaoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  posicao?: Prisma.IntFieldUpdateOperationsInput | number
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  concluidoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type ClientePassoCreateManyRepresentacaoInput = {
+  id?: string
+  clienteId: string
+  titulo: string
+  descricao?: string | null
+  concluido?: boolean
+  posicao?: number
+  criadoEm?: Date | string
+  concluidoEm?: Date | string | null
+}
+
+export type ClientePassoUpdateWithoutRepresentacaoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  posicao?: Prisma.IntFieldUpdateOperationsInput | number
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  concluidoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cliente?: Prisma.ClienteUpdateOneRequiredWithoutPassosNestedInput
+}
+
+export type ClientePassoUncheckedUpdateWithoutRepresentacaoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  posicao?: Prisma.IntFieldUpdateOperationsInput | number
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  concluidoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type ClientePassoUncheckedUpdateManyWithoutRepresentacaoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clienteId?: Prisma.StringFieldUpdateOperationsInput | string
   titulo?: Prisma.StringFieldUpdateOperationsInput | string
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   concluido?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -574,6 +739,7 @@ export type ClientePassoUncheckedUpdateManyWithoutClienteInput = {
 export type ClientePassoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   clienteId?: boolean
+  representacaoId?: boolean
   titulo?: boolean
   descricao?: boolean
   concluido?: boolean
@@ -581,11 +747,13 @@ export type ClientePassoSelect<ExtArgs extends runtime.Types.Extensions.Internal
   criadoEm?: boolean
   concluidoEm?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  representacao?: boolean | Prisma.ClientePasso$representacaoArgs<ExtArgs>
 }, ExtArgs["result"]["clientePasso"]>
 
 export type ClientePassoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   clienteId?: boolean
+  representacaoId?: boolean
   titulo?: boolean
   descricao?: boolean
   concluido?: boolean
@@ -593,11 +761,13 @@ export type ClientePassoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   criadoEm?: boolean
   concluidoEm?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  representacao?: boolean | Prisma.ClientePasso$representacaoArgs<ExtArgs>
 }, ExtArgs["result"]["clientePasso"]>
 
 export type ClientePassoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   clienteId?: boolean
+  representacaoId?: boolean
   titulo?: boolean
   descricao?: boolean
   concluido?: boolean
@@ -605,11 +775,13 @@ export type ClientePassoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   criadoEm?: boolean
   concluidoEm?: boolean
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  representacao?: boolean | Prisma.ClientePasso$representacaoArgs<ExtArgs>
 }, ExtArgs["result"]["clientePasso"]>
 
 export type ClientePassoSelectScalar = {
   id?: boolean
   clienteId?: boolean
+  representacaoId?: boolean
   titulo?: boolean
   descricao?: boolean
   concluido?: boolean
@@ -618,25 +790,30 @@ export type ClientePassoSelectScalar = {
   concluidoEm?: boolean
 }
 
-export type ClientePassoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clienteId" | "titulo" | "descricao" | "concluido" | "posicao" | "criadoEm" | "concluidoEm", ExtArgs["result"]["clientePasso"]>
+export type ClientePassoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clienteId" | "representacaoId" | "titulo" | "descricao" | "concluido" | "posicao" | "criadoEm" | "concluidoEm", ExtArgs["result"]["clientePasso"]>
 export type ClientePassoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  representacao?: boolean | Prisma.ClientePasso$representacaoArgs<ExtArgs>
 }
 export type ClientePassoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  representacao?: boolean | Prisma.ClientePasso$representacaoArgs<ExtArgs>
 }
 export type ClientePassoIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cliente?: boolean | Prisma.ClienteDefaultArgs<ExtArgs>
+  representacao?: boolean | Prisma.ClientePasso$representacaoArgs<ExtArgs>
 }
 
 export type $ClientePassoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ClientePasso"
   objects: {
     cliente: Prisma.$ClientePayload<ExtArgs>
+    representacao: Prisma.$RepresentacaoPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     clienteId: string
+    representacaoId: string | null
     titulo: string
     descricao: string | null
     concluido: boolean
@@ -1038,6 +1215,7 @@ readonly fields: ClientePassoFieldRefs;
 export interface Prisma__ClientePassoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cliente<T extends Prisma.ClienteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClienteDefaultArgs<ExtArgs>>): Prisma.Prisma__ClienteClient<runtime.Types.Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  representacao<T extends Prisma.ClientePasso$representacaoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientePasso$representacaoArgs<ExtArgs>>): Prisma.Prisma__RepresentacaoClient<runtime.Types.Result.GetResult<Prisma.$RepresentacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1069,6 +1247,7 @@ export interface Prisma__ClientePassoClient<T, Null = never, ExtArgs extends run
 export interface ClientePassoFieldRefs {
   readonly id: Prisma.FieldRef<"ClientePasso", 'String'>
   readonly clienteId: Prisma.FieldRef<"ClientePasso", 'String'>
+  readonly representacaoId: Prisma.FieldRef<"ClientePasso", 'String'>
   readonly titulo: Prisma.FieldRef<"ClientePasso", 'String'>
   readonly descricao: Prisma.FieldRef<"ClientePasso", 'String'>
   readonly concluido: Prisma.FieldRef<"ClientePasso", 'Boolean'>
@@ -1473,6 +1652,25 @@ export type ClientePassoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many ClientePassos to delete.
    */
   limit?: number
+}
+
+/**
+ * ClientePasso.representacao
+ */
+export type ClientePasso$representacaoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Representacao
+   */
+  select?: Prisma.RepresentacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Representacao
+   */
+  omit?: Prisma.RepresentacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepresentacaoInclude<ExtArgs> | null
+  where?: Prisma.RepresentacaoWhereInput
 }
 
 /**

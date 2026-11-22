@@ -27,6 +27,7 @@ import WhatsappTab from "./WhatsappTab";
 import EmailsTab from "./EmailsTab";
 import ImportarCsv from "./ImportarCsv";
 import WhatsappConnectModal from "./WhatsappConnectModal";
+import RepresentacoesDoCliente from "@/components/RepresentacoesDoCliente";
 
 type ClienteDetalhe = Awaited<ReturnType<typeof getClienteAction>>;
 
@@ -396,6 +397,8 @@ function DadosTab({
         Salvar dados
       </button>
       </form>
+
+      <RepresentacoesDoCliente clienteId={detalhe.id} />
     </div>
   );
 }

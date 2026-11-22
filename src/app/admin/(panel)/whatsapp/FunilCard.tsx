@@ -8,6 +8,7 @@ import {
   deletePassoRapidoAction,
   type PassoItem,
 } from "@/lib/actions/crm";
+import { listRepresentacoesAction } from "@/lib/actions/representacoes";
 
 const SUGESTOES = [
   "Primeiro contato WhatsApp", "Ligação", "Email enviado",
@@ -21,18 +22,24 @@ export default function FunilCard({
   clienteId: string;
   passosIniciais: PassoItem[];
 }) {
+  const [reps, setReps] = useState<any[]>([]);
+  const [repId, setRepId] = useState<string>("");
   const [passos, setPassos] = useState<PassoItem[]>(passosIniciais);
   const [novo, setNovo] = useState("");
   const [mostrarInput, setMostrarInput] = useState(false);
   const [erro, setErro] = useState("");
 
-  useEffect(() => { setPassos(passosIniciais); }, [passosIniciais]);
+  useEffect(() => { listRepresentacoesAction().then(setReps); }, []);
+  useEffect(() => {
+    if (!repId) setPassos(passosIniciais);
+    else setPassos(passosIniciais.filter((p: any) => p.representacaoId === repId));
+  }, [passosIniciais, repId]);
 
-  const recarregar = async () => setPassos(await listPassosAction(clienteId));
+  const recarregar = async () => setPassos(await listPassosAction(clienteId, repId || null));
 
   const adicionar = async (titulo: string) => {
     if (!titulo.trim()) return;
-    const r = await addPassoRapidoAction(clienteId, titulo);
+    const r = await addPassoRapidoAction(clienteId, titulo, repId || null);
     if (r.error) setErro(r.error);
     else { setNovo(""); setMostrarInput(false); await recarregar(); }
   };
@@ -54,8 +61,12 @@ export default function FunilCard({
 
   return (
     <div className="rounded-lg bg-white border border-slate-200 p-3">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <p className="font-bold text-slate-700">🔻 Funil de vendas</p>
+        <select value={repId} onChange={(e) => setRepId(e.target.value)} className="rounded border border-slate-200 px-1.5 py-0.5 text-[10px] max-w-[120px]">
+          <option value="">Todas</option>
+          {reps.map((r) => <option key={r.id} value={r.id}>{r.nome}</option>)}
+        </select>
         <span className="text-[10px] rounded-full bg-brand-50 text-brand-700 px-2 py-0.5 font-bold">
           {feitos}/{passos.length} · {progresso}%
         </span>

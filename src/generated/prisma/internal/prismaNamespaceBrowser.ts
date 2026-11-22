@@ -71,7 +71,10 @@ export const ModelName = {
   Cliente: 'Cliente',
   ClientePasso: 'ClientePasso',
   WhatsappMessage: 'WhatsappMessage',
-  EmailRecebido: 'EmailRecebido'
+  EmailRecebido: 'EmailRecebido',
+  Representacao: 'Representacao',
+  Produto: 'Produto',
+  ClienteRepresentacao: 'ClienteRepresentacao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -357,6 +360,7 @@ export type ClienteScalarFieldEnum = (typeof ClienteScalarFieldEnum)[keyof typeo
 export const ClientePassoScalarFieldEnum = {
   id: 'id',
   clienteId: 'clienteId',
+  representacaoId: 'representacaoId',
   titulo: 'titulo',
   descricao: 'descricao',
   concluido: 'concluido',
@@ -398,6 +402,54 @@ export const EmailRecebidoScalarFieldEnum = {
 } as const
 
 export type EmailRecebidoScalarFieldEnum = (typeof EmailRecebidoScalarFieldEnum)[keyof typeof EmailRecebidoScalarFieldEnum]
+
+
+export const RepresentacaoScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  descricao: 'descricao',
+  segmento: 'segmento',
+  site: 'site',
+  emailContato: 'emailContato',
+  telefone: 'telefone',
+  responsavel: 'responsavel',
+  status: 'status',
+  observacoes: 'observacoes',
+  criadoEm: 'criadoEm',
+  atualizadoEm: 'atualizadoEm'
+} as const
+
+export type RepresentacaoScalarFieldEnum = (typeof RepresentacaoScalarFieldEnum)[keyof typeof RepresentacaoScalarFieldEnum]
+
+
+export const ProdutoScalarFieldEnum = {
+  id: 'id',
+  representacaoId: 'representacaoId',
+  nome: 'nome',
+  descricao: 'descricao',
+  categoria: 'categoria',
+  imagens: 'imagens',
+  destaque: 'destaque',
+  ordem: 'ordem',
+  criadoEm: 'criadoEm'
+} as const
+
+export type ProdutoScalarFieldEnum = (typeof ProdutoScalarFieldEnum)[keyof typeof ProdutoScalarFieldEnum]
+
+
+export const ClienteRepresentacaoScalarFieldEnum = {
+  id: 'id',
+  clienteId: 'clienteId',
+  representacaoId: 'representacaoId',
+  status: 'status',
+  responsavel: 'responsavel',
+  observacoes: 'observacoes',
+  criadoEm: 'criadoEm'
+} as const
+
+export type ClienteRepresentacaoScalarFieldEnum = (typeof ClienteRepresentacaoScalarFieldEnum)[keyof typeof ClienteRepresentacaoScalarFieldEnum]
 
 
 export const SortOrder = {

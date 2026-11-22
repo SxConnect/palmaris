@@ -139,3 +139,18 @@ export type WhatsappMessage = Prisma.WhatsappMessageModel
  * E-mails recebidos importados do IMAP para o CRM.
  */
 export type EmailRecebido = Prisma.EmailRecebidoModel
+/**
+ * Model Representacao
+ * Representacao (marca/empresa representada): ENGEZER, PESCO, futuras.
+ */
+export type Representacao = Prisma.RepresentacaoModel
+/**
+ * Model Produto
+ * Produto ou servico de uma representacao (com ate 6 fotos opcionais).
+ */
+export type Produto = Prisma.ProdutoModel
+/**
+ * Model ClienteRepresentacao
+ * Vinculo N:N entre Cliente e Representacao, com contexto do trabalho.
+ */
+export type ClienteRepresentacao = Prisma.ClienteRepresentacaoModel

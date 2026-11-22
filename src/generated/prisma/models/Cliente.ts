@@ -274,6 +274,7 @@ export type ClienteWhereInput = {
   indicacoes?: Prisma.ClienteListRelationFilter
   passos?: Prisma.ClientePassoListRelationFilter
   mensagens?: Prisma.WhatsappMessageListRelationFilter
+  representacoes?: Prisma.ClienteRepresentacaoListRelationFilter
 }
 
 export type ClienteOrderByWithRelationInput = {
@@ -297,6 +298,7 @@ export type ClienteOrderByWithRelationInput = {
   indicacoes?: Prisma.ClienteOrderByRelationAggregateInput
   passos?: Prisma.ClientePassoOrderByRelationAggregateInput
   mensagens?: Prisma.WhatsappMessageOrderByRelationAggregateInput
+  representacoes?: Prisma.ClienteRepresentacaoOrderByRelationAggregateInput
 }
 
 export type ClienteWhereUniqueInput = Prisma.AtLeast<{
@@ -323,6 +325,7 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   indicacoes?: Prisma.ClienteListRelationFilter
   passos?: Prisma.ClientePassoListRelationFilter
   mensagens?: Prisma.WhatsappMessageListRelationFilter
+  representacoes?: Prisma.ClienteRepresentacaoListRelationFilter
 }, "id">
 
 export type ClienteOrderByWithAggregationInput = {
@@ -389,6 +392,7 @@ export type ClienteCreateInput = {
   indicacoes?: Prisma.ClienteCreateNestedManyWithoutIndicadoPorInput
   passos?: Prisma.ClientePassoCreateNestedManyWithoutClienteInput
   mensagens?: Prisma.WhatsappMessageCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateInput = {
@@ -411,6 +415,7 @@ export type ClienteUncheckedCreateInput = {
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
   passos?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutClienteInput
   mensagens?: Prisma.WhatsappMessageUncheckedCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUpdateInput = {
@@ -433,6 +438,7 @@ export type ClienteUpdateInput = {
   indicacoes?: Prisma.ClienteUpdateManyWithoutIndicadoPorNestedInput
   passos?: Prisma.ClientePassoUpdateManyWithoutClienteNestedInput
   mensagens?: Prisma.WhatsappMessageUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateInput = {
@@ -455,6 +461,7 @@ export type ClienteUncheckedUpdateInput = {
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
   passos?: Prisma.ClientePassoUncheckedUpdateManyWithoutClienteNestedInput
   mensagens?: Prisma.WhatsappMessageUncheckedUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateManyInput = {
@@ -678,6 +685,20 @@ export type ClienteUpdateOneWithoutMensagensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClienteUpdateToOneWithWhereWithoutMensagensInput, Prisma.ClienteUpdateWithoutMensagensInput>, Prisma.ClienteUncheckedUpdateWithoutMensagensInput>
 }
 
+export type ClienteCreateNestedOneWithoutRepresentacoesInput = {
+  create?: Prisma.XOR<Prisma.ClienteCreateWithoutRepresentacoesInput, Prisma.ClienteUncheckedCreateWithoutRepresentacoesInput>
+  connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutRepresentacoesInput
+  connect?: Prisma.ClienteWhereUniqueInput
+}
+
+export type ClienteUpdateOneRequiredWithoutRepresentacoesNestedInput = {
+  create?: Prisma.XOR<Prisma.ClienteCreateWithoutRepresentacoesInput, Prisma.ClienteUncheckedCreateWithoutRepresentacoesInput>
+  connectOrCreate?: Prisma.ClienteCreateOrConnectWithoutRepresentacoesInput
+  upsert?: Prisma.ClienteUpsertWithoutRepresentacoesInput
+  connect?: Prisma.ClienteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClienteUpdateToOneWithWhereWithoutRepresentacoesInput, Prisma.ClienteUpdateWithoutRepresentacoesInput>, Prisma.ClienteUncheckedUpdateWithoutRepresentacoesInput>
+}
+
 export type ClienteCreateWithoutIndicacoesInput = {
   id?: string
   nome: string
@@ -697,6 +718,7 @@ export type ClienteCreateWithoutIndicacoesInput = {
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
   passos?: Prisma.ClientePassoCreateNestedManyWithoutClienteInput
   mensagens?: Prisma.WhatsappMessageCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutIndicacoesInput = {
@@ -718,6 +740,7 @@ export type ClienteUncheckedCreateWithoutIndicacoesInput = {
   atualizadoEm?: Date | string
   passos?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutClienteInput
   mensagens?: Prisma.WhatsappMessageUncheckedCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutIndicacoesInput = {
@@ -744,6 +767,7 @@ export type ClienteCreateWithoutIndicadoPorInput = {
   indicacoes?: Prisma.ClienteCreateNestedManyWithoutIndicadoPorInput
   passos?: Prisma.ClientePassoCreateNestedManyWithoutClienteInput
   mensagens?: Prisma.WhatsappMessageCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutIndicadoPorInput = {
@@ -765,6 +789,7 @@ export type ClienteUncheckedCreateWithoutIndicadoPorInput = {
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
   passos?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutClienteInput
   mensagens?: Prisma.WhatsappMessageUncheckedCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutIndicadoPorInput = {
@@ -807,6 +832,7 @@ export type ClienteUpdateWithoutIndicacoesInput = {
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
   passos?: Prisma.ClientePassoUpdateManyWithoutClienteNestedInput
   mensagens?: Prisma.WhatsappMessageUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutIndicacoesInput = {
@@ -828,6 +854,7 @@ export type ClienteUncheckedUpdateWithoutIndicacoesInput = {
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passos?: Prisma.ClientePassoUncheckedUpdateManyWithoutClienteNestedInput
   mensagens?: Prisma.WhatsappMessageUncheckedUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUpsertWithWhereUniqueWithoutIndicadoPorInput = {
@@ -887,6 +914,7 @@ export type ClienteCreateWithoutPassosInput = {
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
   indicacoes?: Prisma.ClienteCreateNestedManyWithoutIndicadoPorInput
   mensagens?: Prisma.WhatsappMessageCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutPassosInput = {
@@ -908,6 +936,7 @@ export type ClienteUncheckedCreateWithoutPassosInput = {
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
   mensagens?: Prisma.WhatsappMessageUncheckedCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutPassosInput = {
@@ -945,6 +974,7 @@ export type ClienteUpdateWithoutPassosInput = {
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
   indicacoes?: Prisma.ClienteUpdateManyWithoutIndicadoPorNestedInput
   mensagens?: Prisma.WhatsappMessageUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutPassosInput = {
@@ -966,6 +996,7 @@ export type ClienteUncheckedUpdateWithoutPassosInput = {
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
   mensagens?: Prisma.WhatsappMessageUncheckedUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateWithoutMensagensInput = {
@@ -987,6 +1018,7 @@ export type ClienteCreateWithoutMensagensInput = {
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
   indicacoes?: Prisma.ClienteCreateNestedManyWithoutIndicadoPorInput
   passos?: Prisma.ClientePassoCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteUncheckedCreateWithoutMensagensInput = {
@@ -1008,6 +1040,7 @@ export type ClienteUncheckedCreateWithoutMensagensInput = {
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
   passos?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutClienteInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutClienteInput
 }
 
 export type ClienteCreateOrConnectWithoutMensagensInput = {
@@ -1045,6 +1078,7 @@ export type ClienteUpdateWithoutMensagensInput = {
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
   indicacoes?: Prisma.ClienteUpdateManyWithoutIndicadoPorNestedInput
   passos?: Prisma.ClientePassoUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutMensagensInput = {
@@ -1066,6 +1100,111 @@ export type ClienteUncheckedUpdateWithoutMensagensInput = {
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
   passos?: Prisma.ClientePassoUncheckedUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutClienteNestedInput
+}
+
+export type ClienteCreateWithoutRepresentacoesInput = {
+  id?: string
+  nome: string
+  empresa?: string | null
+  cargo?: string | null
+  telefone?: string | null
+  email?: string | null
+  emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
+  origem?: string | null
+  tags?: string | null
+  notas?: string | null
+  responsavel?: string | null
+  criadoEm?: Date | string
+  atualizadoEm?: Date | string
+  indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
+  indicacoes?: Prisma.ClienteCreateNestedManyWithoutIndicadoPorInput
+  passos?: Prisma.ClientePassoCreateNestedManyWithoutClienteInput
+  mensagens?: Prisma.WhatsappMessageCreateNestedManyWithoutClienteInput
+}
+
+export type ClienteUncheckedCreateWithoutRepresentacoesInput = {
+  id?: string
+  nome: string
+  empresa?: string | null
+  cargo?: string | null
+  telefone?: string | null
+  email?: string | null
+  emailExtra?: string | null
+  cnpj?: string | null
+  indicadoPorNome?: string | null
+  indicadoPorId?: string | null
+  origem?: string | null
+  tags?: string | null
+  notas?: string | null
+  responsavel?: string | null
+  criadoEm?: Date | string
+  atualizadoEm?: Date | string
+  indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
+  passos?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutClienteInput
+  mensagens?: Prisma.WhatsappMessageUncheckedCreateNestedManyWithoutClienteInput
+}
+
+export type ClienteCreateOrConnectWithoutRepresentacoesInput = {
+  where: Prisma.ClienteWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClienteCreateWithoutRepresentacoesInput, Prisma.ClienteUncheckedCreateWithoutRepresentacoesInput>
+}
+
+export type ClienteUpsertWithoutRepresentacoesInput = {
+  update: Prisma.XOR<Prisma.ClienteUpdateWithoutRepresentacoesInput, Prisma.ClienteUncheckedUpdateWithoutRepresentacoesInput>
+  create: Prisma.XOR<Prisma.ClienteCreateWithoutRepresentacoesInput, Prisma.ClienteUncheckedCreateWithoutRepresentacoesInput>
+  where?: Prisma.ClienteWhereInput
+}
+
+export type ClienteUpdateToOneWithWhereWithoutRepresentacoesInput = {
+  where?: Prisma.ClienteWhereInput
+  data: Prisma.XOR<Prisma.ClienteUpdateWithoutRepresentacoesInput, Prisma.ClienteUncheckedUpdateWithoutRepresentacoesInput>
+}
+
+export type ClienteUpdateWithoutRepresentacoesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  empresa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
+  indicacoes?: Prisma.ClienteUpdateManyWithoutIndicadoPorNestedInput
+  passos?: Prisma.ClientePassoUpdateManyWithoutClienteNestedInput
+  mensagens?: Prisma.WhatsappMessageUpdateManyWithoutClienteNestedInput
+}
+
+export type ClienteUncheckedUpdateWithoutRepresentacoesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  empresa?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cargo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailExtra?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorNome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  indicadoPorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origem?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
+  passos?: Prisma.ClientePassoUncheckedUpdateManyWithoutClienteNestedInput
+  mensagens?: Prisma.WhatsappMessageUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteCreateManyIndicadoPorInput = {
@@ -1105,6 +1244,7 @@ export type ClienteUpdateWithoutIndicadoPorInput = {
   indicacoes?: Prisma.ClienteUpdateManyWithoutIndicadoPorNestedInput
   passos?: Prisma.ClientePassoUpdateManyWithoutClienteNestedInput
   mensagens?: Prisma.WhatsappMessageUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateWithoutIndicadoPorInput = {
@@ -1126,6 +1266,7 @@ export type ClienteUncheckedUpdateWithoutIndicadoPorInput = {
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
   passos?: Prisma.ClientePassoUncheckedUpdateManyWithoutClienteNestedInput
   mensagens?: Prisma.WhatsappMessageUncheckedUpdateManyWithoutClienteNestedInput
+  representacoes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutClienteNestedInput
 }
 
 export type ClienteUncheckedUpdateManyWithoutIndicadoPorInput = {
@@ -1155,12 +1296,14 @@ export type ClienteCountOutputType = {
   indicacoes: number
   passos: number
   mensagens: number
+  representacoes: number
 }
 
 export type ClienteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   indicacoes?: boolean | ClienteCountOutputTypeCountIndicacoesArgs
   passos?: boolean | ClienteCountOutputTypeCountPassosArgs
   mensagens?: boolean | ClienteCountOutputTypeCountMensagensArgs
+  representacoes?: boolean | ClienteCountOutputTypeCountRepresentacoesArgs
 }
 
 /**
@@ -1194,6 +1337,13 @@ export type ClienteCountOutputTypeCountMensagensArgs<ExtArgs extends runtime.Typ
   where?: Prisma.WhatsappMessageWhereInput
 }
 
+/**
+ * ClienteCountOutputType without action
+ */
+export type ClienteCountOutputTypeCountRepresentacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClienteRepresentacaoWhereInput
+}
+
 
 export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1216,6 +1366,7 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   indicacoes?: boolean | Prisma.Cliente$indicacoesArgs<ExtArgs>
   passos?: boolean | Prisma.Cliente$passosArgs<ExtArgs>
   mensagens?: boolean | Prisma.Cliente$mensagensArgs<ExtArgs>
+  representacoes?: boolean | Prisma.Cliente$representacoesArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cliente"]>
 
@@ -1284,6 +1435,7 @@ export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   indicacoes?: boolean | Prisma.Cliente$indicacoesArgs<ExtArgs>
   passos?: boolean | Prisma.Cliente$passosArgs<ExtArgs>
   mensagens?: boolean | Prisma.Cliente$mensagensArgs<ExtArgs>
+  representacoes?: boolean | Prisma.Cliente$representacoesArgs<ExtArgs>
   _count?: boolean | Prisma.ClienteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClienteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1300,6 +1452,7 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     indicacoes: Prisma.$ClientePayload<ExtArgs>[]
     passos: Prisma.$ClientePassoPayload<ExtArgs>[]
     mensagens: Prisma.$WhatsappMessagePayload<ExtArgs>[]
+    representacoes: Prisma.$ClienteRepresentacaoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1716,6 +1869,7 @@ export interface Prisma__ClienteClient<T, Null = never, ExtArgs extends runtime.
   indicacoes<T extends Prisma.Cliente$indicacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$indicacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passos<T extends Prisma.Cliente$passosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$passosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientePassoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mensagens<T extends Prisma.Cliente$mensagensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$mensagensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsappMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  representacoes<T extends Prisma.Cliente$representacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cliente$representacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClienteRepresentacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2250,6 +2404,30 @@ export type Cliente$mensagensArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.WhatsappMessageScalarFieldEnum | Prisma.WhatsappMessageScalarFieldEnum[]
+}
+
+/**
+ * Cliente.representacoes
+ */
+export type Cliente$representacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClienteRepresentacao
+   */
+  select?: Prisma.ClienteRepresentacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClienteRepresentacao
+   */
+  omit?: Prisma.ClienteRepresentacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClienteRepresentacaoInclude<ExtArgs> | null
+  where?: Prisma.ClienteRepresentacaoWhereInput
+  orderBy?: Prisma.ClienteRepresentacaoOrderByWithRelationInput | Prisma.ClienteRepresentacaoOrderByWithRelationInput[]
+  cursor?: Prisma.ClienteRepresentacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClienteRepresentacaoScalarFieldEnum | Prisma.ClienteRepresentacaoScalarFieldEnum[]
 }
 
 /**

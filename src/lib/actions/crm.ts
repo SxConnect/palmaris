@@ -440,10 +440,13 @@ export type PassoItem = {
 };
 
 /** Passos do funil de um cliente */
-export async function listPassosAction(clienteId: string): Promise<PassoItem[]> {
+export async function listPassosAction(clienteId: string, representacaoId?: string | null): Promise<PassoItem[]> {
   await requireAuth();
   const passos = await prisma.clientePasso.findMany({
-    where: { clienteId },
+    where: {
+      clienteId,
+      ...(representacaoId ? { representacaoId } : {}),
+    },
     orderBy: { posicao: "asc" },
   });
   return passos.map((p) => ({
@@ -454,12 +457,14 @@ export async function listPassosAction(clienteId: string): Promise<PassoItem[]> 
 }
 
 /** Adiciona passo ao funil */
-export async function addPassoRapidoAction(clienteId: string, titulo: string): Promise<{ success?: string; error?: string }> {
+export async function addPassoRapidoAction(clienteId: string, titulo: string, representacaoId?: string | null): Promise<{ success?: string; error?: string }> {
   await requireAuth();
   if (!titulo?.trim()) return { error: "Informe o titulo." };
-  const count = await prisma.clientePasso.count({ where: { clienteId } });
+  const count = await prisma.clientePasso.count({
+    where: { clienteId, ...(representacaoId ? { representacaoId } : {}) },
+  });
   await prisma.clientePasso.create({
-    data: { clienteId, titulo: titulo.trim(), posicao: count },
+    data: { clienteId, titulo: titulo.trim(), posicao: count, representacaoId: representacaoId || null },
   });
   revalidatePath("/admin/clientes");
   return { success: "Passo adicionado." };

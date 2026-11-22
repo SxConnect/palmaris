@@ -16,6 +16,7 @@ import { listContactsAction, getAvatarAction } from "@/lib/actions/whatsapp";
 import { garantirClientePorWhatsappAction, listClientesComTelefoneAction } from "@/lib/actions/crm";
 import FunilCard from "./FunilCard";
 import DadosClienteCard from "./DadosClienteCard";
+import RepresentacoesDoCliente from "@/components/RepresentacoesDoCliente";
 
 type Chat = {
   jid: string;
@@ -304,6 +305,9 @@ export default function WhatsappInbox() {
                   </div>
                   <div className="mt-2">
                     <FunilCard clienteId={clienteAtual.id} passosIniciais={clienteAtual.passos || []} />
+                  </div>
+                  <div className="mt-2">
+                    <RepresentacoesDoCliente clienteId={clienteAtual.id} />
                   </div>
                   </>
                 ) : (
