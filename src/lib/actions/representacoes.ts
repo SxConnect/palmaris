@@ -243,7 +243,7 @@ export async function importProdutosAction(
 export async function saveContatoRepAction(
   representacaoId: string,
   id: string | null,
-  dados: { nome: string; cargo?: string; email?: string; telefone?: string; observacoes?: string },
+  dados: { nome: string; cargo?: string; email?: string; telefone?: string; observacoes?: string; status?: string; motivoInativo?: string },
 ): Promise<{ success?: string; error?: string }> {
   await requireAuth();
   if (!dados.nome?.trim()) return { error: "Informe o nome do contato." };
@@ -253,6 +253,8 @@ export async function saveContatoRepAction(
     email: dados.email?.trim() || null,
     telefone: dados.telefone?.trim() || null,
     observacoes: dados.observacoes?.trim() || null,
+    status: dados.status?.trim() || "ativo",
+    motivoInativo: dados.status === "inativo" ? (dados.motivoInativo?.trim() || null) : null,
   };
   if (id) {
     await prisma.contatoRepresentacao.update({ where: { id }, data: payload });

@@ -560,6 +560,8 @@ export async function salvarDadosClienteAction(
     cnpj?: string;
     indicadoPorNome?: string;
     notas?: string;
+    status?: string;
+    motivoInativo?: string;
   },
 ): Promise<{ success?: string; error?: string }> {
   await requireAuth();
@@ -575,6 +577,8 @@ export async function salvarDadosClienteAction(
         cnpj: dados.cnpj?.trim() || null,
         indicadoPorNome: dados.indicadoPorNome?.trim() || null,
         notas: dados.notas?.trim() || null,
+        status: dados.status?.trim() || "ativo",
+        motivoInativo: dados.status === "inativo" ? (dados.motivoInativo?.trim() || null) : null,
       },
     });
     revalidatePath("/admin/clientes");

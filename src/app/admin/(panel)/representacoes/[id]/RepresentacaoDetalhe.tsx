@@ -25,6 +25,7 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
   const [editandoRep, setEditandoRep] = useState(false);
   const [modalContato, setModalContato] = useState(false);
   const [editContato, setEditContato] = useState<any>(null);
+  const [logoData, setLogoData] = useState<string>("");
 
   const carregar = async () => setData(await getRepresentacaoAction(id));
   useEffect(() => { carregar(); }, [id]);
@@ -62,7 +63,7 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
       <section className="rounded-xl border border-slate-200 bg-white p-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-bold text-slate-900">📋 Dados da representação</h2>
-          <button onClick={() => setEditandoRep(!editandoRep)} className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50">
+          <button onClick={() => { setLogoData(""); setEditandoRep(!editandoRep); }} className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50">
             {editandoRep ? "Cancelar" : "✏️ Editar dados"}
           </button>
         </div>
@@ -85,9 +86,30 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
             <label className="text-xs font-semibold text-slate-700 sm:col-span-2">Endereço
               <input name="endereco" defaultValue={(data as any).endereco || ""} className="input mt-1" />
             </label>
-            <label className="text-xs font-semibold text-slate-700 sm:col-span-2">Logo (URL)
-              <input name="logoUrl" defaultValue={data.logoUrl || ""} className="input mt-1" />
-            </label>
+            <div className="sm:col-span-2">
+              <label className="text-xs font-semibold text-slate-700">Logo da representação</label>
+              <div className="flex items-center gap-3 mt-1">
+                {(logoData || data.logoUrl) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logoData || data.logoUrl || ""} alt="Logo" className="h-16 w-auto object-contain rounded border border-slate-200" />
+                ) : (
+                  <div className="h-16 w-24 rounded border border-dashed border-slate-300 flex items-center justify-center text-slate-400 text-xs">Sem logo</div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (!f) return;
+                    const reader = new FileReader();
+                    reader.onload = () => setLogoData(String(reader.result));
+                    reader.readAsDataURL(f);
+                  }}
+                  className="text-xs flex-1"
+                />
+              </div>
+              <input type="hidden" name="logoUrl" value={logoData || data.logoUrl || ""} />
+            </div>
             <label className="text-xs font-semibold text-slate-700">Segmento
               <input name="segmento" defaultValue={data.segmento || ""} className="input mt-1" />
             </label>
@@ -152,7 +174,10 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
               <div key={ct.id} className="rounded-xl border border-slate-200 bg-white p-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-bold text-sm text-slate-900">{ct.nome}</p>
+                    <p className="font-bold text-sm text-slate-900">
+                      {ct.nome}
+                      {ct.status === "inativo" && <span className="ml-1 rounded bg-red-50 text-red-700 px-1.5 py-0.5 text-[9px]">INATIVO</span>}
+                    </p>
                     {ct.cargo && <p className="text-[11px] text-brand-700">{ct.cargo}</p>}
                   </div>
                   <div className="flex gap-1">
@@ -166,6 +191,7 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
                 </div>
                 {ct.email && <p className="text-[11px] text-slate-600 mt-2">✉️ <a href={`mailto:${ct.email}`} className="hover:underline">{ct.email}</a></p>}
                 {ct.telefone && <p className="text-[11px] text-slate-600">📞 {ct.telefone}</p>}
+                {ct.status === "inativo" && ct.motivoInativo && <p className="text-[10px] text-red-600 mt-1">Motivo: {ct.motivoInativo}</p>}
                 {ct.observacoes && <p className="text-[10px] text-slate-400 mt-1">{ct.observacoes}</p>}
               </div>
             ))}
@@ -299,6 +325,8 @@ function ModalContato({
     nome: contato?.nome || "", cargo: contato?.cargo || "",
     email: contato?.email || "", telefone: contato?.telefone || "",
     observacoes: contato?.observacoes || "",
+    status: contato?.status || "ativo",
+    motivoInativo: contato?.motivoInativo || "",
   });
   const campo = (k: keyof typeof form) => ({
     value: form[k],
@@ -323,6 +351,15 @@ function ModalContato({
         <label className="block text-xs font-semibold text-slate-700">Telefone
           <input {...campo("telefone")} className="input mt-1" />
         </label>
+        <label className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-xs">
+          <span className="font-semibold text-slate-700">Contato ativo</span>
+          <input type="checkbox" checked={form.status !== "inativo"} onChange={(e) => setForm({ ...form, status: e.target.checked ? "ativo" : "inativo" })} className="accent-green-600 h-4 w-4" />
+        </label>
+        {form.status === "inativo" && (
+          <label className="block text-xs font-semibold text-slate-700">Motivo da inatividade
+            <input {...campo("motivoInativo")} placeholder="Ex.: não responde, saiu da empresa..." className="input mt-1" />
+          </label>
+        )}
         <label className="block text-xs font-semibold text-slate-700">Observações
           <textarea rows={2} {...campo("observacoes")} className="input mt-1" />
         </label>

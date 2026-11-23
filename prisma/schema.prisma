@@ -334,6 +334,8 @@ model Cliente {
   tags        String?   // separadas por virgula
   notas       String?
   responsavel String?
+  status      String   @default("ativo")
+  motivoInativo String?
   criadoEm    DateTime @default(now())
   atualizadoEm DateTime @updatedAt
 
@@ -439,6 +441,8 @@ model ContatoRepresentacao {
   email           String?
   telefone        String?
   observacoes     String?
+  status          String   @default("ativo")
+  motivoInativo   String?
   ordem           Int      @default(0)
   criadoEm        DateTime @default(now())
 

@@ -351,6 +351,8 @@ export const ClienteScalarFieldEnum = {
   tags: 'tags',
   notas: 'notas',
   responsavel: 'responsavel',
+  status: 'status',
+  motivoInativo: 'motivoInativo',
   criadoEm: 'criadoEm',
   atualizadoEm: 'atualizadoEm'
 } as const
@@ -435,6 +437,8 @@ export const ContatoRepresentacaoScalarFieldEnum = {
   email: 'email',
   telefone: 'telefone',
   observacoes: 'observacoes',
+  status: 'status',
+  motivoInativo: 'motivoInativo',
   ordem: 'ordem',
   criadoEm: 'criadoEm'
 } as const

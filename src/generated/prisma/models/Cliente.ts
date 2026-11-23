@@ -39,6 +39,8 @@ export type ClienteMinAggregateOutputType = {
   tags: string | null
   notas: string | null
   responsavel: string | null
+  status: string | null
+  motivoInativo: string | null
   criadoEm: Date | null
   atualizadoEm: Date | null
 }
@@ -58,6 +60,8 @@ export type ClienteMaxAggregateOutputType = {
   tags: string | null
   notas: string | null
   responsavel: string | null
+  status: string | null
+  motivoInativo: string | null
   criadoEm: Date | null
   atualizadoEm: Date | null
 }
@@ -77,6 +81,8 @@ export type ClienteCountAggregateOutputType = {
   tags: number
   notas: number
   responsavel: number
+  status: number
+  motivoInativo: number
   criadoEm: number
   atualizadoEm: number
   _all: number
@@ -98,6 +104,8 @@ export type ClienteMinAggregateInputType = {
   tags?: true
   notas?: true
   responsavel?: true
+  status?: true
+  motivoInativo?: true
   criadoEm?: true
   atualizadoEm?: true
 }
@@ -117,6 +125,8 @@ export type ClienteMaxAggregateInputType = {
   tags?: true
   notas?: true
   responsavel?: true
+  status?: true
+  motivoInativo?: true
   criadoEm?: true
   atualizadoEm?: true
 }
@@ -136,6 +146,8 @@ export type ClienteCountAggregateInputType = {
   tags?: true
   notas?: true
   responsavel?: true
+  status?: true
+  motivoInativo?: true
   criadoEm?: true
   atualizadoEm?: true
   _all?: true
@@ -228,6 +240,8 @@ export type ClienteGroupByOutputType = {
   tags: string | null
   notas: string | null
   responsavel: string | null
+  status: string
+  motivoInativo: string | null
   criadoEm: Date
   atualizadoEm: Date
   _count: ClienteCountAggregateOutputType | null
@@ -268,6 +282,8 @@ export type ClienteWhereInput = {
   tags?: Prisma.StringNullableFilter<"Cliente"> | string | null
   notas?: Prisma.StringNullableFilter<"Cliente"> | string | null
   responsavel?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  status?: Prisma.StringFilter<"Cliente"> | string
+  motivoInativo?: Prisma.StringNullableFilter<"Cliente"> | string | null
   criadoEm?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   atualizadoEm?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   indicadoPor?: Prisma.XOR<Prisma.ClienteNullableScalarRelationFilter, Prisma.ClienteWhereInput> | null
@@ -292,6 +308,8 @@ export type ClienteOrderByWithRelationInput = {
   tags?: Prisma.SortOrderInput | Prisma.SortOrder
   notas?: Prisma.SortOrderInput | Prisma.SortOrder
   responsavel?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrderInput | Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   atualizadoEm?: Prisma.SortOrder
   indicadoPor?: Prisma.ClienteOrderByWithRelationInput
@@ -319,6 +337,8 @@ export type ClienteWhereUniqueInput = Prisma.AtLeast<{
   tags?: Prisma.StringNullableFilter<"Cliente"> | string | null
   notas?: Prisma.StringNullableFilter<"Cliente"> | string | null
   responsavel?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  status?: Prisma.StringFilter<"Cliente"> | string
+  motivoInativo?: Prisma.StringNullableFilter<"Cliente"> | string | null
   criadoEm?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   atualizadoEm?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   indicadoPor?: Prisma.XOR<Prisma.ClienteNullableScalarRelationFilter, Prisma.ClienteWhereInput> | null
@@ -343,6 +363,8 @@ export type ClienteOrderByWithAggregationInput = {
   tags?: Prisma.SortOrderInput | Prisma.SortOrder
   notas?: Prisma.SortOrderInput | Prisma.SortOrder
   responsavel?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrderInput | Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   atualizadoEm?: Prisma.SortOrder
   _count?: Prisma.ClienteCountOrderByAggregateInput
@@ -368,6 +390,8 @@ export type ClienteScalarWhereWithAggregatesInput = {
   tags?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   notas?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   responsavel?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
+  status?: Prisma.StringWithAggregatesFilter<"Cliente"> | string
+  motivoInativo?: Prisma.StringNullableWithAggregatesFilter<"Cliente"> | string | null
   criadoEm?: Prisma.DateTimeWithAggregatesFilter<"Cliente"> | Date | string
   atualizadoEm?: Prisma.DateTimeWithAggregatesFilter<"Cliente"> | Date | string
 }
@@ -386,6 +410,8 @@ export type ClienteCreateInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
@@ -410,6 +436,8 @@ export type ClienteUncheckedCreateInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
@@ -432,6 +460,8 @@ export type ClienteUpdateInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
@@ -456,6 +486,8 @@ export type ClienteUncheckedUpdateInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
@@ -479,6 +511,8 @@ export type ClienteCreateManyInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
 }
@@ -497,6 +531,8 @@ export type ClienteUpdateManyMutationInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -516,6 +552,8 @@ export type ClienteUncheckedUpdateManyInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -550,6 +588,8 @@ export type ClienteCountOrderByAggregateInput = {
   tags?: Prisma.SortOrder
   notas?: Prisma.SortOrder
   responsavel?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   atualizadoEm?: Prisma.SortOrder
 }
@@ -569,6 +609,8 @@ export type ClienteMaxOrderByAggregateInput = {
   tags?: Prisma.SortOrder
   notas?: Prisma.SortOrder
   responsavel?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   atualizadoEm?: Prisma.SortOrder
 }
@@ -588,6 +630,8 @@ export type ClienteMinOrderByAggregateInput = {
   tags?: Prisma.SortOrder
   notas?: Prisma.SortOrder
   responsavel?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   atualizadoEm?: Prisma.SortOrder
 }
@@ -713,6 +757,8 @@ export type ClienteCreateWithoutIndicacoesInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
@@ -736,6 +782,8 @@ export type ClienteUncheckedCreateWithoutIndicacoesInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   passos?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutClienteInput
@@ -762,6 +810,8 @@ export type ClienteCreateWithoutIndicadoPorInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteCreateNestedManyWithoutIndicadoPorInput
@@ -784,6 +834,8 @@ export type ClienteUncheckedCreateWithoutIndicadoPorInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
@@ -827,6 +879,8 @@ export type ClienteUpdateWithoutIndicacoesInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
@@ -850,6 +904,8 @@ export type ClienteUncheckedUpdateWithoutIndicacoesInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passos?: Prisma.ClientePassoUncheckedUpdateManyWithoutClienteNestedInput
@@ -891,6 +947,8 @@ export type ClienteScalarWhereInput = {
   tags?: Prisma.StringNullableFilter<"Cliente"> | string | null
   notas?: Prisma.StringNullableFilter<"Cliente"> | string | null
   responsavel?: Prisma.StringNullableFilter<"Cliente"> | string | null
+  status?: Prisma.StringFilter<"Cliente"> | string
+  motivoInativo?: Prisma.StringNullableFilter<"Cliente"> | string | null
   criadoEm?: Prisma.DateTimeFilter<"Cliente"> | Date | string
   atualizadoEm?: Prisma.DateTimeFilter<"Cliente"> | Date | string
 }
@@ -909,6 +967,8 @@ export type ClienteCreateWithoutPassosInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
@@ -932,6 +992,8 @@ export type ClienteUncheckedCreateWithoutPassosInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
@@ -969,6 +1031,8 @@ export type ClienteUpdateWithoutPassosInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
@@ -992,6 +1056,8 @@ export type ClienteUncheckedUpdateWithoutPassosInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
@@ -1013,6 +1079,8 @@ export type ClienteCreateWithoutMensagensInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
@@ -1036,6 +1104,8 @@ export type ClienteUncheckedCreateWithoutMensagensInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
@@ -1073,6 +1143,8 @@ export type ClienteUpdateWithoutMensagensInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
@@ -1096,6 +1168,8 @@ export type ClienteUncheckedUpdateWithoutMensagensInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
@@ -1117,6 +1191,8 @@ export type ClienteCreateWithoutRepresentacoesInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicadoPor?: Prisma.ClienteCreateNestedOneWithoutIndicacoesInput
@@ -1140,6 +1216,8 @@ export type ClienteUncheckedCreateWithoutRepresentacoesInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   indicacoes?: Prisma.ClienteUncheckedCreateNestedManyWithoutIndicadoPorInput
@@ -1177,6 +1255,8 @@ export type ClienteUpdateWithoutRepresentacoesInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicadoPor?: Prisma.ClienteUpdateOneWithoutIndicacoesNestedInput
@@ -1200,6 +1280,8 @@ export type ClienteUncheckedUpdateWithoutRepresentacoesInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
@@ -1221,6 +1303,8 @@ export type ClienteCreateManyIndicadoPorInput = {
   tags?: string | null
   notas?: string | null
   responsavel?: string | null
+  status?: string
+  motivoInativo?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
 }
@@ -1239,6 +1323,8 @@ export type ClienteUpdateWithoutIndicadoPorInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUpdateManyWithoutIndicadoPorNestedInput
@@ -1261,6 +1347,8 @@ export type ClienteUncheckedUpdateWithoutIndicadoPorInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   indicacoes?: Prisma.ClienteUncheckedUpdateManyWithoutIndicadoPorNestedInput
@@ -1283,6 +1371,8 @@ export type ClienteUncheckedUpdateManyWithoutIndicadoPorInput = {
   tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   notas?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1360,6 +1450,8 @@ export type ClienteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tags?: boolean
   notas?: boolean
   responsavel?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   criadoEm?: boolean
   atualizadoEm?: boolean
   indicadoPor?: boolean | Prisma.Cliente$indicadoPorArgs<ExtArgs>
@@ -1385,6 +1477,8 @@ export type ClienteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tags?: boolean
   notas?: boolean
   responsavel?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   criadoEm?: boolean
   atualizadoEm?: boolean
   indicadoPor?: boolean | Prisma.Cliente$indicadoPorArgs<ExtArgs>
@@ -1405,6 +1499,8 @@ export type ClienteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tags?: boolean
   notas?: boolean
   responsavel?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   criadoEm?: boolean
   atualizadoEm?: boolean
   indicadoPor?: boolean | Prisma.Cliente$indicadoPorArgs<ExtArgs>
@@ -1425,11 +1521,13 @@ export type ClienteSelectScalar = {
   tags?: boolean
   notas?: boolean
   responsavel?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   criadoEm?: boolean
   atualizadoEm?: boolean
 }
 
-export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "empresa" | "cargo" | "telefone" | "email" | "emailExtra" | "cnpj" | "indicadoPorNome" | "indicadoPorId" | "origem" | "tags" | "notas" | "responsavel" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["cliente"]>
+export type ClienteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "empresa" | "cargo" | "telefone" | "email" | "emailExtra" | "cnpj" | "indicadoPorNome" | "indicadoPorId" | "origem" | "tags" | "notas" | "responsavel" | "status" | "motivoInativo" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["cliente"]>
 export type ClienteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   indicadoPor?: boolean | Prisma.Cliente$indicadoPorArgs<ExtArgs>
   indicacoes?: boolean | Prisma.Cliente$indicacoesArgs<ExtArgs>
@@ -1469,6 +1567,8 @@ export type $ClientePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tags: string | null
     notas: string | null
     responsavel: string | null
+    status: string
+    motivoInativo: string | null
     criadoEm: Date
     atualizadoEm: Date
   }, ExtArgs["result"]["cliente"]>
@@ -1913,6 +2013,8 @@ export interface ClienteFieldRefs {
   readonly tags: Prisma.FieldRef<"Cliente", 'String'>
   readonly notas: Prisma.FieldRef<"Cliente", 'String'>
   readonly responsavel: Prisma.FieldRef<"Cliente", 'String'>
+  readonly status: Prisma.FieldRef<"Cliente", 'String'>
+  readonly motivoInativo: Prisma.FieldRef<"Cliente", 'String'>
   readonly criadoEm: Prisma.FieldRef<"Cliente", 'DateTime'>
   readonly atualizadoEm: Prisma.FieldRef<"Cliente", 'DateTime'>
 }

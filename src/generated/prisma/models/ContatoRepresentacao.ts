@@ -42,6 +42,8 @@ export type ContatoRepresentacaoMinAggregateOutputType = {
   email: string | null
   telefone: string | null
   observacoes: string | null
+  status: string | null
+  motivoInativo: string | null
   ordem: number | null
   criadoEm: Date | null
 }
@@ -54,6 +56,8 @@ export type ContatoRepresentacaoMaxAggregateOutputType = {
   email: string | null
   telefone: string | null
   observacoes: string | null
+  status: string | null
+  motivoInativo: string | null
   ordem: number | null
   criadoEm: Date | null
 }
@@ -66,6 +70,8 @@ export type ContatoRepresentacaoCountAggregateOutputType = {
   email: number
   telefone: number
   observacoes: number
+  status: number
+  motivoInativo: number
   ordem: number
   criadoEm: number
   _all: number
@@ -88,6 +94,8 @@ export type ContatoRepresentacaoMinAggregateInputType = {
   email?: true
   telefone?: true
   observacoes?: true
+  status?: true
+  motivoInativo?: true
   ordem?: true
   criadoEm?: true
 }
@@ -100,6 +108,8 @@ export type ContatoRepresentacaoMaxAggregateInputType = {
   email?: true
   telefone?: true
   observacoes?: true
+  status?: true
+  motivoInativo?: true
   ordem?: true
   criadoEm?: true
 }
@@ -112,6 +122,8 @@ export type ContatoRepresentacaoCountAggregateInputType = {
   email?: true
   telefone?: true
   observacoes?: true
+  status?: true
+  motivoInativo?: true
   ordem?: true
   criadoEm?: true
   _all?: true
@@ -211,6 +223,8 @@ export type ContatoRepresentacaoGroupByOutputType = {
   email: string | null
   telefone: string | null
   observacoes: string | null
+  status: string
+  motivoInativo: string | null
   ordem: number
   criadoEm: Date
   _count: ContatoRepresentacaoCountAggregateOutputType | null
@@ -246,6 +260,8 @@ export type ContatoRepresentacaoWhereInput = {
   email?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   telefone?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   observacoes?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
+  status?: Prisma.StringFilter<"ContatoRepresentacao"> | string
+  motivoInativo?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   ordem?: Prisma.IntFilter<"ContatoRepresentacao"> | number
   criadoEm?: Prisma.DateTimeFilter<"ContatoRepresentacao"> | Date | string
   representacao?: Prisma.XOR<Prisma.RepresentacaoScalarRelationFilter, Prisma.RepresentacaoWhereInput>
@@ -259,6 +275,8 @@ export type ContatoRepresentacaoOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   telefone?: Prisma.SortOrderInput | Prisma.SortOrder
   observacoes?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrderInput | Prisma.SortOrder
   ordem?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   representacao?: Prisma.RepresentacaoOrderByWithRelationInput
@@ -275,6 +293,8 @@ export type ContatoRepresentacaoWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   telefone?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   observacoes?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
+  status?: Prisma.StringFilter<"ContatoRepresentacao"> | string
+  motivoInativo?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   ordem?: Prisma.IntFilter<"ContatoRepresentacao"> | number
   criadoEm?: Prisma.DateTimeFilter<"ContatoRepresentacao"> | Date | string
   representacao?: Prisma.XOR<Prisma.RepresentacaoScalarRelationFilter, Prisma.RepresentacaoWhereInput>
@@ -288,6 +308,8 @@ export type ContatoRepresentacaoOrderByWithAggregationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   telefone?: Prisma.SortOrderInput | Prisma.SortOrder
   observacoes?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrderInput | Prisma.SortOrder
   ordem?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
   _count?: Prisma.ContatoRepresentacaoCountOrderByAggregateInput
@@ -308,6 +330,8 @@ export type ContatoRepresentacaoScalarWhereWithAggregatesInput = {
   email?: Prisma.StringNullableWithAggregatesFilter<"ContatoRepresentacao"> | string | null
   telefone?: Prisma.StringNullableWithAggregatesFilter<"ContatoRepresentacao"> | string | null
   observacoes?: Prisma.StringNullableWithAggregatesFilter<"ContatoRepresentacao"> | string | null
+  status?: Prisma.StringWithAggregatesFilter<"ContatoRepresentacao"> | string
+  motivoInativo?: Prisma.StringNullableWithAggregatesFilter<"ContatoRepresentacao"> | string | null
   ordem?: Prisma.IntWithAggregatesFilter<"ContatoRepresentacao"> | number
   criadoEm?: Prisma.DateTimeWithAggregatesFilter<"ContatoRepresentacao"> | Date | string
 }
@@ -319,6 +343,8 @@ export type ContatoRepresentacaoCreateInput = {
   email?: string | null
   telefone?: string | null
   observacoes?: string | null
+  status?: string
+  motivoInativo?: string | null
   ordem?: number
   criadoEm?: Date | string
   representacao: Prisma.RepresentacaoCreateNestedOneWithoutContatosInput
@@ -332,6 +358,8 @@ export type ContatoRepresentacaoUncheckedCreateInput = {
   email?: string | null
   telefone?: string | null
   observacoes?: string | null
+  status?: string
+  motivoInativo?: string | null
   ordem?: number
   criadoEm?: Date | string
 }
@@ -343,6 +371,8 @@ export type ContatoRepresentacaoUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   representacao?: Prisma.RepresentacaoUpdateOneRequiredWithoutContatosNestedInput
@@ -356,6 +386,8 @@ export type ContatoRepresentacaoUncheckedUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,6 +400,8 @@ export type ContatoRepresentacaoCreateManyInput = {
   email?: string | null
   telefone?: string | null
   observacoes?: string | null
+  status?: string
+  motivoInativo?: string | null
   ordem?: number
   criadoEm?: Date | string
 }
@@ -379,6 +413,8 @@ export type ContatoRepresentacaoUpdateManyMutationInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +427,8 @@ export type ContatoRepresentacaoUncheckedUpdateManyInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,6 +451,8 @@ export type ContatoRepresentacaoCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   observacoes?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
 }
@@ -429,6 +469,8 @@ export type ContatoRepresentacaoMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   observacoes?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
 }
@@ -441,6 +483,8 @@ export type ContatoRepresentacaoMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   observacoes?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  motivoInativo?: Prisma.SortOrder
   ordem?: Prisma.SortOrder
   criadoEm?: Prisma.SortOrder
 }
@@ -498,6 +542,8 @@ export type ContatoRepresentacaoCreateWithoutRepresentacaoInput = {
   email?: string | null
   telefone?: string | null
   observacoes?: string | null
+  status?: string
+  motivoInativo?: string | null
   ordem?: number
   criadoEm?: Date | string
 }
@@ -509,6 +555,8 @@ export type ContatoRepresentacaoUncheckedCreateWithoutRepresentacaoInput = {
   email?: string | null
   telefone?: string | null
   observacoes?: string | null
+  status?: string
+  motivoInativo?: string | null
   ordem?: number
   criadoEm?: Date | string
 }
@@ -550,6 +598,8 @@ export type ContatoRepresentacaoScalarWhereInput = {
   email?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   telefone?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   observacoes?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
+  status?: Prisma.StringFilter<"ContatoRepresentacao"> | string
+  motivoInativo?: Prisma.StringNullableFilter<"ContatoRepresentacao"> | string | null
   ordem?: Prisma.IntFilter<"ContatoRepresentacao"> | number
   criadoEm?: Prisma.DateTimeFilter<"ContatoRepresentacao"> | Date | string
 }
@@ -561,6 +611,8 @@ export type ContatoRepresentacaoCreateManyRepresentacaoInput = {
   email?: string | null
   telefone?: string | null
   observacoes?: string | null
+  status?: string
+  motivoInativo?: string | null
   ordem?: number
   criadoEm?: Date | string
 }
@@ -572,6 +624,8 @@ export type ContatoRepresentacaoUpdateWithoutRepresentacaoInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -583,6 +637,8 @@ export type ContatoRepresentacaoUncheckedUpdateWithoutRepresentacaoInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -594,6 +650,8 @@ export type ContatoRepresentacaoUncheckedUpdateManyWithoutRepresentacaoInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  motivoInativo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ordem?: Prisma.IntFieldUpdateOperationsInput | number
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -608,6 +666,8 @@ export type ContatoRepresentacaoSelect<ExtArgs extends runtime.Types.Extensions.
   email?: boolean
   telefone?: boolean
   observacoes?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   ordem?: boolean
   criadoEm?: boolean
   representacao?: boolean | Prisma.RepresentacaoDefaultArgs<ExtArgs>
@@ -621,6 +681,8 @@ export type ContatoRepresentacaoSelectCreateManyAndReturn<ExtArgs extends runtim
   email?: boolean
   telefone?: boolean
   observacoes?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   ordem?: boolean
   criadoEm?: boolean
   representacao?: boolean | Prisma.RepresentacaoDefaultArgs<ExtArgs>
@@ -634,6 +696,8 @@ export type ContatoRepresentacaoSelectUpdateManyAndReturn<ExtArgs extends runtim
   email?: boolean
   telefone?: boolean
   observacoes?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   ordem?: boolean
   criadoEm?: boolean
   representacao?: boolean | Prisma.RepresentacaoDefaultArgs<ExtArgs>
@@ -647,11 +711,13 @@ export type ContatoRepresentacaoSelectScalar = {
   email?: boolean
   telefone?: boolean
   observacoes?: boolean
+  status?: boolean
+  motivoInativo?: boolean
   ordem?: boolean
   criadoEm?: boolean
 }
 
-export type ContatoRepresentacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "representacaoId" | "nome" | "cargo" | "email" | "telefone" | "observacoes" | "ordem" | "criadoEm", ExtArgs["result"]["contatoRepresentacao"]>
+export type ContatoRepresentacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "representacaoId" | "nome" | "cargo" | "email" | "telefone" | "observacoes" | "status" | "motivoInativo" | "ordem" | "criadoEm", ExtArgs["result"]["contatoRepresentacao"]>
 export type ContatoRepresentacaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   representacao?: boolean | Prisma.RepresentacaoDefaultArgs<ExtArgs>
 }
@@ -675,6 +741,8 @@ export type $ContatoRepresentacaoPayload<ExtArgs extends runtime.Types.Extension
     email: string | null
     telefone: string | null
     observacoes: string | null
+    status: string
+    motivoInativo: string | null
     ordem: number
     criadoEm: Date
   }, ExtArgs["result"]["contatoRepresentacao"]>
@@ -1108,6 +1176,8 @@ export interface ContatoRepresentacaoFieldRefs {
   readonly email: Prisma.FieldRef<"ContatoRepresentacao", 'String'>
   readonly telefone: Prisma.FieldRef<"ContatoRepresentacao", 'String'>
   readonly observacoes: Prisma.FieldRef<"ContatoRepresentacao", 'String'>
+  readonly status: Prisma.FieldRef<"ContatoRepresentacao", 'String'>
+  readonly motivoInativo: Prisma.FieldRef<"ContatoRepresentacao", 'String'>
   readonly ordem: Prisma.FieldRef<"ContatoRepresentacao", 'Int'>
   readonly criadoEm: Prisma.FieldRef<"ContatoRepresentacao", 'DateTime'>
 }
