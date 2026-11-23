@@ -538,3 +538,52 @@ export async function listReportsAction(): Promise<CampaignReportItem[]> {
     generatedAt: r.generatedAt.toISOString(),
   }));
 }
+
+/** Remove em lote emails de retorno/erro (NDR/Undeliverable) da caixa de entrada */
+export async function limparUndeliverablesAction(): Promise<{ success?: string; error?: string; removidos?: number }> {
+  const user = await requireAuth();
+  const { ImapFlow } = await import("imapflow");
+  const host = process.env.IMAP_HOST || "mailserver";
+  const port = parseInt(process.env.IMAP_PORT || "993");
+  const pass = DEFAULT_MAIL_PASSWORD;
+
+  const PADROES = [
+    "undeliverable", "delivery status notification", "mail delivery failed",
+    "failure notice", "returned mail", "couldn't be delivered", "could not be delivered",
+    "delivery failure", "mailer-daemon", "non-delivery", "não foi possível entregar",
+    "nao foi possivel entregar", "mensagem não entregue", "mensagem nao entregue",
+  ];
+
+  const client = new ImapFlow({
+    host, port, secure: port === 993,
+    auth: { user: user.email, pass },
+    logger: false,
+    tls: { rejectUnauthorized: false },
+  });
+
+  try {
+    await client.connect();
+    const lock = await client.getMailboxLock("INBOX");
+    let removidos = 0;
+    const uids = (await client.search({ all: true }, { uid: true }) || []);
+
+    for (const uid of uids) {
+      const msg: any = await client.fetchOne(uid, { envelope: true }, { uid: true });
+      const assunto = (msg?.envelope?.subject || "").toLowerCase();
+      const de = (msg?.envelope?.from?.[0]?.address || "").toLowerCase();
+      if (PADROES.some((p) => assunto.includes(p)) || de.includes("mailer-daemon") || de.includes("postmaster@")) {
+        try {
+          await client.messageDelete(String(uid), { uid: true });
+          removidos++;
+        } catch {}
+      }
+    }
+    try { await client.noop(); } catch {}
+    lock.release();
+    await client.logout();
+    revalidatePath("/admin/email");
+    return { success: `${removidos} mensagem(ns) de erro removida(s).`, removidos };
+  } catch (err: any) {
+    return { error: err.message || "Erro ao limpar mensagens." };
+  }
+}

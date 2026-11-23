@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { MailboxItem, EmailSummary, EmailDetail } from "@/lib/imap";
-import { sendEmailAction, deleteEmailAction } from "@/lib/actions/email";
+import { sendEmailAction, deleteEmailAction, limparUndeliverablesAction } from "@/lib/actions/email";
 
 export default function WebmailClient({
   currentUser,
@@ -26,6 +26,8 @@ export default function WebmailClient({
   const [isPending, startTransition] = useTransition();
   const [sendResult, setSendResult] = useState<{ error?: string; success?: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [limpando, setLimpando] = useState(false);
+  const [aviso, setAviso] = useState("");
 
   const filteredEmails = emails.filter((m) => {
     if (!filterQuery) return true;
@@ -38,6 +40,18 @@ export default function WebmailClient({
     setReplyTo({ to, subject });
     setSendResult(null);
     setComposing(true);
+  };
+
+  const limparUndeliverables = async () => {
+    if (!window.confirm("Remover todos os emails de retorno/erro (Undeliverable, Delivery Status Notification) da Caixa de Entrada?")) return;
+    setLimpando(true);
+    try {
+      const res = await limparUndeliverablesAction();
+      if (res.error) setAviso(res.error);
+      else { setAviso(res.success || "Limpo."); window.location.reload(); }
+    } finally {
+      setLimpando(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -124,13 +138,24 @@ export default function WebmailClient({
           </div>
         </div>
 
-        <button
-          onClick={() => handleOpenCompose()}
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
-        >
-          <span>✏️</span>
-          <span className="hidden sm:inline">Nova Mensagem</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={limparUndeliverables}
+            disabled={limpando}
+            title="Remover emails de erro/retorno da caixa de entrada"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-50"
+          >
+            <span>🧹</span>
+            <span className="hidden lg:inline">{limpando ? "Limpando..." : "Limpar erros"}</span>
+          </button>
+          <button
+            onClick={() => handleOpenCompose()}
+            className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+          >
+            <span>✏️</span>
+            <span className="hidden sm:inline">Nova Mensagem</span>
+          </button>
+        </div>
       </div>
 
       {/* Cards de resumo por caixa de e-mail */}
@@ -326,7 +351,13 @@ export default function WebmailClient({
 
               {/* Corpo da mensagem */}
               <div className="flex-1 overflow-y-auto p-5 bg-white">
-                {(activeEmail as EmailDetail).htmlBody ? (
+                {aviso && (
+        <div className="mx-4 mt-3 rounded-lg bg-green-50 border border-green-200 p-3 text-xs text-green-700 font-medium">
+          {aviso}
+        </div>
+      )}
+
+      {(activeEmail as EmailDetail).htmlBody ? (
                   <div
                     className="prose prose-sm max-w-none text-slate-800 leading-relaxed"
                     dangerouslySetInnerHTML={{ __html: (activeEmail as EmailDetail).htmlBody }}
