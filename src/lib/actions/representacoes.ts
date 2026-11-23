@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/auth/guard";
+import { requireAuth } from "@/lib/auth/guard";
 
 export type RepresentacaoItem = {
   id: string; nome: string; slug: string; logoUrl: string | null;
@@ -18,7 +18,7 @@ function slugify(s: string) {
 }
 
 export async function listRepresentacoesAction(): Promise<RepresentacaoItem[]> {
-  await requireAdmin();
+  await requireAuth();
   const reps = await prisma.representacao.findMany({
     orderBy: { nome: "asc" },
     include: { _count: { select: { produtos: true, clientes: true } } },
@@ -33,7 +33,7 @@ export async function listRepresentacoesAction(): Promise<RepresentacaoItem[]> {
 }
 
 export async function getRepresentacaoAction(id: string) {
-  await requireAdmin();
+  await requireAuth();
   return prisma.representacao.findUnique({
     where: { id },
     include: {
@@ -47,7 +47,7 @@ export async function getRepresentacaoAction(id: string) {
 }
 
 export async function saveRepresentacaoAction(id: string | null, dados: Record<string, string>) {
-  await requireAdmin();
+  await requireAuth();
   const nome = (dados.nome || "").trim();
   if (!nome) return { error: "Informe o nome." };
   const payload = {
@@ -74,7 +74,7 @@ export async function saveRepresentacaoAction(id: string | null, dados: Record<s
 }
 
 export async function deleteRepresentacaoAction(id: string): Promise<{ success?: string; error?: string }> {
-  await requireAdmin();
+  await requireAuth();
   await prisma.representacao.delete({ where: { id } });
   revalidatePath("/admin/representacoes");
   return { success: "Representação removida." };
@@ -85,7 +85,7 @@ export async function deleteRepresentacaoAction(id: string): Promise<{ success?:
 export async function saveProdutoAction(id: string | null, representacaoId: string, dados: {
   nome: string; descricao?: string; categoria?: string; imagens?: string[]; destaque?: boolean; ordem?: number;
 }) {
-  await requireAdmin();
+  await requireAuth();
   if (!dados.nome?.trim()) return { error: "Informe o nome do produto." };
   const payload = {
     nome: dados.nome.trim(),
@@ -105,7 +105,7 @@ export async function saveProdutoAction(id: string | null, representacaoId: stri
 }
 
 export async function deleteProdutoAction(id: string) {
-  await requireAdmin();
+  await requireAuth();
   await prisma.produto.delete({ where: { id } });
   revalidatePath("/admin/representacoes");
   return { success: "Produto removido." };
@@ -114,7 +114,7 @@ export async function deleteProdutoAction(id: string) {
 /* ---------- VINCULO CLIENTE <-> REPRESENTACAO ---------- */
 
 export async function listVinculosAction(clienteId: string) {
-  await requireAdmin();
+  await requireAuth();
   const vinculos = await prisma.clienteRepresentacao.findMany({
     where: { clienteId },
     include: { representacao: { select: { id: true, nome: true, slug: true } } },
@@ -128,7 +128,7 @@ export async function listVinculosAction(clienteId: string) {
 }
 
 export async function toggleVinculoAction(clienteId: string, representacaoId: string) {
-  await requireAdmin();
+  await requireAuth();
   const existente = await prisma.clienteRepresentacao.findUnique({
     where: { clienteId_representacaoId: { clienteId, representacaoId } },
   });
@@ -143,7 +143,7 @@ export async function toggleVinculoAction(clienteId: string, representacaoId: st
 }
 
 export async function updateVinculoAction(id: string, dados: { status?: string; responsavel?: string; observacoes?: string }) {
-  await requireAdmin();
+  await requireAuth();
   await prisma.clienteRepresentacao.update({ where: { id }, data: dados });
   revalidatePath("/admin/clientes");
   return { success: "Vínculo atualizado." };
@@ -153,7 +153,7 @@ export async function updateVinculoAction(id: string, dados: { status?: string; 
 export async function importRepresentacoesAction(
   linhas: Array<Record<string, string>>,
 ): Promise<{ success?: string; error?: string }> {
-  await requireAdmin();
+  await requireAuth();
   if (!Array.isArray(linhas) || linhas.length === 0) return { error: "Nenhuma linha para importar." };
   let criadas = 0, atualizadas = 0;
   try {
@@ -195,7 +195,7 @@ export async function importRepresentacoesAction(
 export async function importProdutosAction(
   linhas: Array<Record<string, string>>,
 ): Promise<{ success?: string; error?: string }> {
-  await requireAdmin();
+  await requireAuth();
   if (!Array.isArray(linhas) || linhas.length === 0) return { error: "Nenhuma linha para importar." };
   let criados = 0, atualizados = 0, ignorados = 0;
   try {
