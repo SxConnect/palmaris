@@ -89,7 +89,7 @@ export default function ImportarCsv({
             value={colado}
             onChange={(e) => { setColado(e.target.value); processar(e.target.value); }}
             rows={6}
-            placeholder="nome,empresa,cargo,telefone,email,origem,tags,notas&#10;João Silva,ACME,Gerente,5521999999999,joao@acme.com.br,visita,cliente,Contato da visita"
+            placeholder="nome,empresa,cargo,telefone,email,origem,tags,notas,representacao&#10;João Silva,ACME,Gerente,5521999999999,joao@acme.com.br,visita,cliente,Contato da visita,ENGEZER"
             className="input font-mono text-xs"
           />
         </div>
@@ -106,6 +106,7 @@ export default function ImportarCsv({
                   {l.empresa && ` · ${l.empresa}`}
                   {l.telefone && ` · ${l.telefone}`}
                   {l.email && ` · ${l.email}`}
+                  {l.representacao && <span className="ml-1 rounded bg-brand-50 text-brand-700 px-1.5 py-0.5">🏢 {l.representacao}</span>}
                 </div>
               ))}
             </div>

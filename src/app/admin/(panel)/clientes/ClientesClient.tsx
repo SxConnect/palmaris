@@ -28,6 +28,7 @@ import EmailsTab from "./EmailsTab";
 import ImportarCsv from "./ImportarCsv";
 import WhatsappConnectModal from "./WhatsappConnectModal";
 import RepresentacoesDoCliente from "@/components/RepresentacoesDoCliente";
+import { listRepresentacoesAction } from "@/lib/actions/representacoes";
 
 type ClienteDetalhe = Awaited<ReturnType<typeof getClienteAction>>;
 
@@ -42,6 +43,8 @@ export default function ClientesClient() {
   const [novo, setNovo] = useState(false);
   const [importarCsv, setImportarCsv] = useState(false);
   const [whatsappModal, setWhatsappModal] = useState(false);
+  const [reps, setReps] = useState<any[]>([]);
+  const [filtroRep, setFiltroRep] = useState("");
   const [erro, setErro] = useState("");
   const [msg, setMsg] = useState("");
 
@@ -56,7 +59,17 @@ export default function ClientesClient() {
     setAba("dados");
   }, []);
 
-  useEffect(() => { carregar(); }, [carregar]);
+  useEffect(() => { carregar(); listRepresentacoesAction().then(setReps); }, [carregar]);
+
+  const carregarComFiltro = async (repId: string) => {
+    const list = await listClientesAction(repId || null);
+    setClientes(list);
+  };
+
+  const trocarFiltro = (repId: string) => {
+    setFiltroRep(repId);
+    carregarComFiltro(repId);
+  };
 
   const filtered = clientes.filter((c) => {
     if (!busca) return true;
@@ -116,6 +129,18 @@ export default function ClientesClient() {
         </div>
       )}
 
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs font-semibold text-slate-600">Filtrar por representação:</span>
+        <select
+          value={filtroRep}
+          onChange={(e) => trocarFiltro(e.target.value)}
+          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs"
+        >
+          <option value="">Todas as representações</option>
+          {reps.map((r) => <option key={r.id} value={r.id}>{r.nome}</option>)}
+        </select>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Lista de clientes */}
         <div className="lg:col-span-4 rounded-xl border border-slate-200 bg-white overflow-hidden">
@@ -156,8 +181,13 @@ export default function ClientesClient() {
                     )}
                   </div>
                 </div>
-                {c.indicadoPorNome && (
-                  <p className="text-[10px] text-brand-600 mt-1">indicado por {c.indicadoPorNome}</p>
+                {(c.representacoes?.length > 0 || c.indicadoPorNome) && (
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {c.representacoes?.map((rep) => (
+                      <span key={rep} className="text-[9px] rounded bg-brand-50 text-brand-700 px-1.5 py-0.5 font-bold">🏢 {rep}</span>
+                    ))}
+                    {c.indicadoPorNome && <span className="text-[10px] text-brand-600">indicado por {c.indicadoPorNome}</span>}
+                  </div>
                 )}
               </button>
             ))}
@@ -279,7 +309,7 @@ export default function ClientesClient() {
           onClose={() => setImportarCsv(false)}
           onImportado={async (msg) => {
             setMsg(msg);
-            await carregar();
+            await carregarComFiltro(filtroRep);
           }}
         />
       )}

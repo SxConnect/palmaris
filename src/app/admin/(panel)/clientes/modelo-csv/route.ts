@@ -8,9 +8,9 @@ export async function GET() {
   }
 
   const csv = [
-    "nome,empresa,cargo,telefone,email,emailExtra,origem,tags,notas",
-    "João Silva,ACME Industria,Gerente,5521999999999,joao@acme.com.br,,visita,cliente;automacao,Contato obtido na visita",
-    "Maria Souza,Tech Solutions,Compradora,5521988888888,maria@tech.com.br,,indicacao,compras,Indicada pelo João",
+    "nome,empresa,cargo,telefone,email,emailExtra,origem,tags,notas,representacao",
+    "João Silva,ACME Industria,Gerente,5521999999999,joao@acme.com.br,,visita,cliente;automacao,Contato obtido na visita,ENGEZER",
+    "Maria Souza,Tech Solutions,Compradora,5521988888888,maria@tech.com.br,,indicacao,compras,Indicada pelo João,PESCO;ENGEZER",
   ].join("\n");
 
   return new NextResponse("\uFEFF" + csv, {

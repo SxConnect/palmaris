@@ -22,14 +22,19 @@ export type ClienteItem = {
   passosCount: number;
   passosFeitos: number;
   msgsCount: number;
+  representacoes: string[];
 };
 
-export async function listClientesAction(): Promise<ClienteItem[]> {
+export async function listClientesAction(representacaoId?: string | null): Promise<ClienteItem[]> {
   await requireAuth();
   const clientes = await prisma.cliente.findMany({
+    where: representacaoId
+      ? { representacoes: { some: { representacaoId } } }
+      : undefined,
     orderBy: { atualizadoEm: "desc" },
     include: {
       indicadoPor: { select: { nome: true } },
+      representacoes: { include: { representacao: { select: { nome: true } } } },
       _count: { select: { passos: true, mensagens: true } },
     },
   });
@@ -51,6 +56,7 @@ export async function listClientesAction(): Promise<ClienteItem[]> {
     passosCount: c._count.passos,
     passosFeitos: 0,
     msgsCount: c._count.mensagens,
+    representacoes: c.representacoes.map((r) => r.representacao.nome),
   }));
 }
 
@@ -306,27 +312,70 @@ export async function importClientesAction(
     return { error: "Nenhum cliente para importar." };
   }
   let criados = 0;
+  let atualizados = 0;
+  let vinculos = 0;
   try {
+    const reps = await prisma.representacao.findMany({ select: { id: true, nome: true } });
+    const repPorNome = new Map(reps.map((r) => [r.nome.toUpperCase(), r.id]));
+
     for (const linha of linhas) {
       const nome = (linha.nome || "").trim();
       if (!nome) continue;
-      await prisma.cliente.create({
-        data: {
-          nome,
-          empresa: linha.empresa?.trim() || null,
-          cargo: linha.cargo?.trim() || null,
-          telefone: linha.telefone?.trim() || null,
-          email: linha.email?.trim().toLowerCase() || null,
-          emailExtra: linha.emailExtra?.trim().toLowerCase() || null,
-          origem: linha.origem?.trim() || "importacao",
-          tags: linha.tags?.trim() || null,
-          notas: linha.notas?.trim() || null,
-        },
-      });
-      criados++;
+      const email = linha.email?.trim().toLowerCase() || null;
+      const telefone = linha.telefone?.trim() || null;
+
+      // Evita duplicatas: busca por e-mail ou telefone
+      let cliente = email
+        ? await prisma.cliente.findFirst({ where: { email } })
+        : null;
+      if (!cliente && telefone) {
+        cliente = await prisma.cliente.findFirst({ where: { telefone: { contains: telefone.replace(/\D/g, "") } } });
+      }
+
+      const dados = {
+        nome,
+        empresa: linha.empresa?.trim() || null,
+        cargo: linha.cargo?.trim() || null,
+        telefone,
+        email,
+        emailExtra: linha.emailExtra?.trim().toLowerCase() || null,
+        origem: linha.origem?.trim() || "importacao",
+        tags: linha.tags?.trim() || null,
+        notas: linha.notas?.trim() || null,
+      };
+
+      if (cliente) {
+        await prisma.cliente.update({ where: { id: cliente.id }, data: dados });
+        atualizados++;
+      } else {
+        cliente = await prisma.cliente.create({ data: dados });
+        criados++;
+      }
+
+      // Vínculos com representações (separados por ; ou |)
+      const repRaw = (linha.representacao || "").trim();
+      if (repRaw && cliente) {
+        const nomes = repRaw.split(/[;|]/).map((n) => n.trim().toUpperCase()).filter(Boolean);
+        for (const repNome of nomes) {
+          const repId = repPorNome.get(repNome);
+          if (!repId) continue;
+          const existe = await prisma.clienteRepresentacao.findUnique({
+            where: { clienteId_representacaoId: { clienteId: cliente.id, representacaoId: repId } },
+          });
+          if (!existe) {
+            await prisma.clienteRepresentacao.create({
+              data: { clienteId: cliente.id, representacaoId: repId },
+            });
+            vinculos++;
+          }
+        }
+      }
     }
     revalidatePath("/admin/clientes");
-    return { success: `${criados} clientes importados.`, criados };
+    return {
+      success: `${criados} criado(s), ${atualizados} atualizado(s), ${vinculos} vínculo(s) de representação.`,
+      criados,
+    };
   } catch (e: any) {
     return { error: e.message || "Erro ao importar." };
   }
