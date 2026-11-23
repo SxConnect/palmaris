@@ -28,6 +28,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - palmaris-uploads:/app/public/uploads
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://${POSTGRES_USER:-palmaris}:${POSTGRES_PASSWORD:-1We5LDFlzqpVmnx}@db:5432/${POSTGRES_DB:-palmaris}?schema=public
@@ -73,6 +75,8 @@ services:
 
 volumes:
   palmaris-db:
+    driver: local
+  palmaris-uploads:
     driver: local
 
 networks:

@@ -50,6 +50,8 @@ RUN rm -rf node_modules/typescript node_modules/@types node_modules/eslint \
 # Assets estáticos
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+# Diretorio de uploads (volume montado em runtime)
+RUN mkdir -p /app/public/uploads && chown nextjs:nodejs /app/public/uploads
 # Schema, migrações e cliente gerado do Prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/src/generated ./src/generated

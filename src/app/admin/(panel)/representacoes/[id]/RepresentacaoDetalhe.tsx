@@ -12,6 +12,7 @@ import {
   deleteContatoRepAction,
 } from "@/lib/actions/representacoes";
 import ImportarRepresentacoes from "../ImportarRepresentacoes";
+import ImageUpload from "@/components/ImageUpload";
 
 type Detalhe = NonNullable<Awaited<ReturnType<typeof getRepresentacaoAction>>>;
 
@@ -87,27 +88,12 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
               <input name="endereco" defaultValue={(data as any).endereco || ""} className="input mt-1" />
             </label>
             <div className="sm:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">Logo da representação</label>
-              <div className="flex items-center gap-3 mt-1">
-                {(logoData || data.logoUrl) ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={logoData || data.logoUrl || ""} alt="Logo" className="h-16 w-auto object-contain rounded border border-slate-200" />
-                ) : (
-                  <div className="h-16 w-24 rounded border border-dashed border-slate-300 flex items-center justify-center text-slate-400 text-xs">Sem logo</div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (!f) return;
-                    const reader = new FileReader();
-                    reader.onload = () => setLogoData(String(reader.result));
-                    reader.readAsDataURL(f);
-                  }}
-                  className="text-xs flex-1"
-                />
-              </div>
+              <ImageUpload
+                label="Logo da representação"
+                value={logoData ? [logoData] : data.logoUrl ? [data.logoUrl] : []}
+                onChange={(urls) => setLogoData(urls[0] || "")}
+                max={1}
+              />
               <input type="hidden" name="logoUrl" value={logoData || data.logoUrl || ""} />
             </div>
             <label className="text-xs font-semibold text-slate-700">Segmento
@@ -386,14 +372,6 @@ function ModalProduto({
     try { return JSON.parse(produto?.imagens || "[]"); } catch { return []; }
   });
 
-  const adicionarFotos = (files: FileList | null) => {
-    if (!files) return;
-    Array.from(files).slice(0, 6 - fotos.length).forEach((f) => {
-      const reader = new FileReader();
-      reader.onload = () => setFotos((old) => [...old, String(reader.result)].slice(0, 6));
-      reader.readAsDataURL(f);
-    });
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
@@ -416,20 +394,12 @@ function ModalProduto({
           Produto em destaque
         </label>
 
-        <div>
-          <label className="block text-xs font-semibold text-slate-700">Fotos (até 6, opcional)</label>
-          <input type="file" accept="image/*" multiple onChange={(e) => adicionarFotos(e.target.files)} className="mt-1 text-xs w-full" />
-          <div className="grid grid-cols-3 gap-2 mt-2">
-            {fotos.map((f, i) => (
-              <div key={i} className="relative">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={f} alt="" className="w-full h-20 object-cover rounded-lg" />
-                <button type="button" onClick={() => setFotos(fotos.filter((_, j) => j !== i))} className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-[10px]">✕</button>
-              </div>
-            ))}
-            {fotos.length < 6 && <div className="h-20 rounded-lg border border-dashed border-slate-300 flex items-center justify-center text-slate-400 text-xl">+</div>}
-          </div>
-        </div>
+        <ImageUpload
+          label="Fotos do produto (até 6, opcional)"
+          value={fotos}
+          onChange={setFotos}
+          max={6}
+        />
 
         <div className="flex gap-2 justify-end pt-2">
           <button type="button" onClick={onClose} className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600">Cancelar</button>
