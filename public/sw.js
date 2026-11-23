@@ -1,6 +1,5 @@
-const CACHE_NAME = 'palmaris-v1';
+const CACHE_NAME = 'palmaris-v2';
 const APP_SHELL = [
-  '/admin/email',
   '/icon-192.png',
   '/icon-512.png',
 ];
@@ -26,20 +25,21 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  // Nao cachear API (dados dinamicos de email)
+  // Nao cachear API, admin, cartao (paginas dinamicas)
   if (url.pathname.startsWith('/api/')) return;
   if (url.pathname.startsWith('/admin')) return;
+  if (url.pathname.startsWith('/cartao')) return;
 
+  // Network first: sempre busca da rede; cache apenas como fallback offline
   event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((res) => {
+    fetch(req)
+      .then((res) => {
         if (res && res.status === 200) {
           const copy = res.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
         }
         return res;
-      }).catch(() => cached);
-    })
+      })
+      .catch(() => caches.match(req))
   );
 });
