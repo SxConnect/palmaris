@@ -148,3 +148,90 @@ export async function updateVinculoAction(id: string, dados: { status?: string; 
   revalidatePath("/admin/clientes");
   return { success: "Vínculo atualizado." };
 }
+
+/** Importa representações em lote via CSV (evita duplicatas por nome) */
+export async function importRepresentacoesAction(
+  linhas: Array<Record<string, string>>,
+): Promise<{ success?: string; error?: string }> {
+  await requireAdmin();
+  if (!Array.isArray(linhas) || linhas.length === 0) return { error: "Nenhuma linha para importar." };
+  let criadas = 0, atualizadas = 0;
+  try {
+    for (const l of linhas) {
+      const nome = (l.nome || "").trim();
+      if (!nome) continue;
+      const dados = {
+        nome,
+        slug: (l.slug || "").trim() || slugify(nome),
+        logoUrl: l.logoUrl?.trim() || null,
+        descricao: l.descricao?.trim() || null,
+        segmento: l.segmento?.trim() || null,
+        site: l.site?.trim() || null,
+        emailContato: l.emailcontato?.trim() || null,
+        telefone: l.telefone?.trim() || null,
+        responsavel: l.responsavel?.trim() || null,
+        status: l.status?.trim() || "ativa",
+        observacoes: l.observacoes?.trim() || null,
+      };
+      const existente = await prisma.representacao.findFirst({
+        where: { OR: [{ nome: { equals: nome, mode: "insensitive" } }, { slug: dados.slug }] },
+      });
+      if (existente) {
+        await prisma.representacao.update({ where: { id: existente.id }, data: dados });
+        atualizadas++;
+      } else {
+        await prisma.representacao.create({ data: dados });
+        criadas++;
+      }
+    }
+    revalidatePath("/admin/representacoes");
+    return { success: `${criadas} representação(ões) criada(s), ${atualizadas} atualizada(s).` };
+  } catch (e: any) {
+    return { error: e.message || "Erro ao importar." };
+  }
+}
+
+/** Importa produtos/serviços em lote via CSV, vinculando pela representação (nome ou slug) */
+export async function importProdutosAction(
+  linhas: Array<Record<string, string>>,
+): Promise<{ success?: string; error?: string }> {
+  await requireAdmin();
+  if (!Array.isArray(linhas) || linhas.length === 0) return { error: "Nenhuma linha para importar." };
+  let criados = 0, atualizados = 0, ignorados = 0;
+  try {
+    const reps = await prisma.representacao.findMany({ select: { id: true, nome: true, slug: true } });
+    for (const l of linhas) {
+      const nomeRep = (l.representacao || "").trim().toUpperCase();
+      const rep = reps.find((r) => r.nome.toUpperCase() === nomeRep || r.slug.toUpperCase() === nomeRep);
+      if (!rep) { ignorados++; continue; }
+      const nome = (l.nome || "").trim();
+      if (!nome) { ignorados++; continue; }
+      let imagens: string[] = [];
+      try { imagens = JSON.parse(l.imagens || "[]"); } catch {
+        imagens = (l.imagens || "").split(/[;|]/).map((u) => u.trim()).filter((u) => /^https?:\/\//.test(u)).slice(0, 6);
+      }
+      const dados = {
+        nome,
+        descricao: l.descricao?.trim() || null,
+        categoria: l.categoria?.trim() || null,
+        imagens: JSON.stringify(imagens.slice(0, 6)),
+        destaque: /^(1|true|sim|s)$/i.test((l.destaque || "").trim()),
+        ordem: parseInt(l.ordem || "0") || 0,
+      };
+      const existente = await prisma.produto.findFirst({
+        where: { representacaoId: rep.id, nome: { equals: nome, mode: "insensitive" } },
+      });
+      if (existente) {
+        await prisma.produto.update({ where: { id: existente.id }, data: dados });
+        atualizados++;
+      } else {
+        await prisma.produto.create({ data: { ...dados, representacaoId: rep.id } });
+        criados++;
+      }
+    }
+    revalidatePath("/admin/representacoes");
+    return { success: `${criados} produto(s) criado(s), ${atualizados} atualizado(s)${ignorados ? `, ${ignorados} ignorado(s)` : ""}.` };
+  } catch (e: any) {
+    return { error: e.message || "Erro ao importar." };
+  }
+}

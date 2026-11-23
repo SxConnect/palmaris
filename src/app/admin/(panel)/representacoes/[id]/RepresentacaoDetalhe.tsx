@@ -8,6 +8,7 @@ import {
   deleteProdutoAction,
   updateVinculoAction,
 } from "@/lib/actions/representacoes";
+import ImportarRepresentacoes from "../ImportarRepresentacoes";
 
 type Detalhe = NonNullable<Awaited<ReturnType<typeof getRepresentacaoAction>>>;
 
@@ -16,6 +17,8 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
   const [modal, setModal] = useState(false);
   const [editProd, setEditProd] = useState<any>(null);
   const [erro, setErro] = useState("");
+  const [importarProd, setImportarProd] = useState(false);
+  const [aviso, setAviso] = useState("");
 
   const carregar = async () => setData(await getRepresentacaoAction(id));
   useEffect(() => { carregar(); }, [id]);
@@ -36,12 +39,18 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
             <p className="text-sm text-slate-500">{data.segmento || "—"}{data.responsavel ? ` · 👤 ${data.responsavel}` : ""}</p>
           </div>
         </div>
-        <button onClick={() => { setEditProd(null); setModal(true); }} className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
-          + Produto/serviço
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setImportarProd(true)} className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+            📥 Importar CSV
+          </button>
+          <button onClick={() => { setEditProd(null); setModal(true); }} className="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+            + Produto/serviço
+          </button>
+        </div>
       </div>
 
       {erro && <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700">{erro}</div>}
+      {aviso && <div className="rounded-lg bg-green-50 border border-green-200 p-3 text-xs text-green-700">{aviso}</div>}
 
       {data.descricao && <p className="text-sm text-slate-600 bg-slate-50 rounded-lg p-4">{data.descricao}</p>}
 
@@ -123,6 +132,14 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
           </div>
         )}
       </section>
+
+      {importarProd && (
+        <ImportarRepresentacoes
+          tipo="produtos"
+          onClose={() => setImportarProd(false)}
+          onImportado={(msg) => { setAviso(msg); carregar(); }}
+        />
+      )}
 
       {modal && (
         <ModalProduto
