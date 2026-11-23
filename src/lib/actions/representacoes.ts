@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth/guard";
 
 export type RepresentacaoItem = {
-  id: string; nome: string; slug: string; logoUrl: string | null;
+  id: string; nome: string; slug: string; razaoSocial: string | null; endereco: string | null; logoUrl: string | null;
   descricao: string | null; segmento: string | null; site: string | null;
   emailContato: string | null; telefone: string | null; responsavel: string | null;
   status: string; observacoes: string | null;
@@ -24,7 +24,7 @@ export async function listRepresentacoesAction(): Promise<RepresentacaoItem[]> {
     include: { _count: { select: { produtos: true, clientes: true } } },
   });
   return reps.map((r) => ({
-    id: r.id, nome: r.nome, slug: r.slug, logoUrl: r.logoUrl,
+    id: r.id, nome: r.nome, slug: r.slug, razaoSocial: r.razaoSocial, endereco: r.endereco, logoUrl: r.logoUrl,
     descricao: r.descricao, segmento: r.segmento, site: r.site,
     emailContato: r.emailContato, telefone: r.telefone, responsavel: r.responsavel,
     status: r.status, observacoes: r.observacoes,
@@ -38,6 +38,7 @@ export async function getRepresentacaoAction(id: string) {
     where: { id },
     include: {
       produtos: { orderBy: [{ destaque: "desc" }, { ordem: "asc" }] },
+      contatos: { orderBy: { ordem: "asc" } },
       clientes: {
         include: { cliente: { select: { id: true, nome: true, empresa: true, email: true, telefone: true } } },
         orderBy: { criadoEm: "desc" },
@@ -53,6 +54,8 @@ export async function saveRepresentacaoAction(id: string | null, dados: Record<s
   const payload = {
     nome,
     slug: dados.slug?.trim() || slugify(nome),
+    razaoSocial: dados.razaoSocial?.trim() || null,
+    endereco: dados.endereco?.trim() || null,
     logoUrl: dados.logoUrl?.trim() || null,
     descricao: dados.descricao?.trim() || null,
     segmento: dados.segmento?.trim() || null,
@@ -234,4 +237,37 @@ export async function importProdutosAction(
   } catch (e: any) {
     return { error: e.message || "Erro ao importar." };
   }
+}
+
+/** Salva um contato de representacao */
+export async function saveContatoRepAction(
+  representacaoId: string,
+  id: string | null,
+  dados: { nome: string; cargo?: string; email?: string; telefone?: string; observacoes?: string },
+): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  if (!dados.nome?.trim()) return { error: "Informe o nome do contato." };
+  const payload = {
+    nome: dados.nome.trim(),
+    cargo: dados.cargo?.trim() || null,
+    email: dados.email?.trim() || null,
+    telefone: dados.telefone?.trim() || null,
+    observacoes: dados.observacoes?.trim() || null,
+  };
+  if (id) {
+    await prisma.contatoRepresentacao.update({ where: { id }, data: payload });
+  } else {
+    const count = await prisma.contatoRepresentacao.count({ where: { representacaoId } });
+    await prisma.contatoRepresentacao.create({ data: { ...payload, representacaoId, ordem: count } });
+  }
+  revalidatePath("/admin/representacoes");
+  return { success: "Contato salvo." };
+}
+
+/** Remove contato de representacao */
+export async function deleteContatoRepAction(id: string): Promise<{ success?: string; error?: string }> {
+  await requireAuth();
+  await prisma.contatoRepresentacao.delete({ where: { id } });
+  revalidatePath("/admin/representacoes");
+  return { success: "Contato removido." };
 }

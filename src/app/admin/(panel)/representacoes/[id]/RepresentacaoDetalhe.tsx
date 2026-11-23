@@ -7,6 +7,9 @@ import {
   saveProdutoAction,
   deleteProdutoAction,
   updateVinculoAction,
+  saveRepresentacaoAction,
+  saveContatoRepAction,
+  deleteContatoRepAction,
 } from "@/lib/actions/representacoes";
 import ImportarRepresentacoes from "../ImportarRepresentacoes";
 
@@ -19,6 +22,9 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
   const [erro, setErro] = useState("");
   const [importarProd, setImportarProd] = useState(false);
   const [aviso, setAviso] = useState("");
+  const [editandoRep, setEditandoRep] = useState(false);
+  const [modalContato, setModalContato] = useState(false);
+  const [editContato, setEditContato] = useState<any>(null);
 
   const carregar = async () => setData(await getRepresentacaoAction(id));
   useEffect(() => { carregar(); }, [id]);
@@ -52,7 +58,120 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
       {erro && <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700">{erro}</div>}
       {aviso && <div className="rounded-lg bg-green-50 border border-green-200 p-3 text-xs text-green-700">{aviso}</div>}
 
-      {data.descricao && <p className="text-sm text-slate-600 bg-slate-50 rounded-lg p-4">{data.descricao}</p>}
+      {/* Dados completos da representação */}
+      <section className="rounded-xl border border-slate-200 bg-white p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-bold text-slate-900">📋 Dados da representação</h2>
+          <button onClick={() => setEditandoRep(!editandoRep)} className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50">
+            {editandoRep ? "Cancelar" : "✏️ Editar dados"}
+          </button>
+        </div>
+        {editandoRep ? (
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            const fd = new FormData(e.currentTarget);
+            const dados: Record<string, string> = {};
+            fd.forEach((v, k) => { dados[k] = String(v); });
+            const r = await saveRepresentacaoAction(data.id, dados);
+            if ("error" in r) setErro(String(r.error));
+            else { setAviso(r.success || "Salvo."); setEditandoRep(false); carregar(); }
+          }} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label className="text-xs font-semibold text-slate-700">Nome *
+              <input name="nome" required defaultValue={data.nome} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">Razão social
+              <input name="razaoSocial" defaultValue={(data as any).razaoSocial || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700 sm:col-span-2">Endereço
+              <input name="endereco" defaultValue={(data as any).endereco || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700 sm:col-span-2">Logo (URL)
+              <input name="logoUrl" defaultValue={data.logoUrl || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">Segmento
+              <input name="segmento" defaultValue={data.segmento || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">Site
+              <input name="site" defaultValue={data.site || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">E-mail de contato
+              <input name="emailContato" defaultValue={data.emailContato || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">Telefone
+              <input name="telefone" defaultValue={data.telefone || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">Responsável
+              <input name="responsavel" defaultValue={data.responsavel || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">Status
+              <select name="status" defaultValue={data.status} className="input mt-1">
+                <option value="ativa">Ativa</option>
+                <option value="inativa">Inativa</option>
+              </select>
+            </label>
+            <label className="text-xs font-semibold text-slate-700 sm:col-span-2">Descrição
+              <textarea name="descricao" rows={2} defaultValue={data.descricao || ""} className="input mt-1" />
+            </label>
+            <label className="text-xs font-semibold text-slate-700 sm:col-span-2">Observações
+              <textarea name="observacoes" rows={2} defaultValue={data.observacoes || ""} className="input mt-1" />
+            </label>
+            <div className="sm:col-span-2">
+              <button type="submit" className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white">💾 Salvar dados</button>
+            </div>
+          </form>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+            <div><p className="text-slate-400 font-semibold">Nome</p><p className="text-slate-800">{data.nome}</p></div>
+            <div><p className="text-slate-400 font-semibold">Razão social</p><p className="text-slate-800">{(data as any).razaoSocial || "—"}</p></div>
+            <div><p className="text-slate-400 font-semibold">Segmento</p><p className="text-slate-800">{data.segmento || "—"}</p></div>
+            <div><p className="text-slate-400 font-semibold">Site</p><p className="text-slate-800">{data.site || "—"}</p></div>
+            <div><p className="text-slate-400 font-semibold">E-mail</p><p className="text-slate-800">{data.emailContato || "—"}</p></div>
+            <div><p className="text-slate-400 font-semibold">Telefone</p><p className="text-slate-800">{data.telefone || "—"}</p></div>
+            <div><p className="text-slate-400 font-semibold">Responsável</p><p className="text-slate-800">{data.responsavel || "—"}</p></div>
+            <div><p className="text-slate-400 font-semibold">Status</p><p className="text-slate-800">{data.status}</p></div>
+            <div className="sm:col-span-3"><p className="text-slate-400 font-semibold">Endereço</p><p className="text-slate-800">{(data as any).endereco || "—"}</p></div>
+            {data.descricao && <div className="sm:col-span-3"><p className="text-slate-400 font-semibold">Descrição</p><p className="text-slate-800">{data.descricao}</p></div>}
+            {data.observacoes && <div className="sm:col-span-3"><p className="text-slate-400 font-semibold">Observações</p><p className="text-slate-800">{data.observacoes}</p></div>}
+          </div>
+        )}
+      </section>
+
+      {/* Contatos da representação */}
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-bold text-slate-900">👥 Contatos da representação ({data.contatos.length})</h2>
+          <button onClick={() => { setEditContato(null); setModalContato(true); }} className="rounded-lg border border-brand-300 bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-100">
+            + Contato
+          </button>
+        </div>
+        {data.contatos.length === 0 ? (
+          <p className="text-sm text-slate-400">Nenhum contato cadastrado. Adicione nome, e-mail e telefone de quem atende nesta representação.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {data.contatos.map((ct: any) => (
+              <div key={ct.id} className="rounded-xl border border-slate-200 bg-white p-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="font-bold text-sm text-slate-900">{ct.nome}</p>
+                    {ct.cargo && <p className="text-[11px] text-brand-700">{ct.cargo}</p>}
+                  </div>
+                  <div className="flex gap-1">
+                    <button onClick={() => { setEditContato(ct); setModalContato(true); }} className="text-[11px] text-brand-700">Editar</button>
+                    <button onClick={async () => {
+                      if (!window.confirm("Remover contato?")) return;
+                      const r = await deleteContatoRepAction(ct.id);
+                      if ("error" in r) setErro(String(r.error)); else carregar();
+                    }} className="text-[11px] text-red-600">✕</button>
+                  </div>
+                </div>
+                {ct.email && <p className="text-[11px] text-slate-600 mt-2">✉️ <a href={`mailto:${ct.email}`} className="hover:underline">{ct.email}</a></p>}
+                {ct.telefone && <p className="text-[11px] text-slate-600">📞 {ct.telefone}</p>}
+                {ct.observacoes && <p className="text-[10px] text-slate-400 mt-1">{ct.observacoes}</p>}
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Produtos */}
       <section>
@@ -141,6 +260,19 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
         />
       )}
 
+      {modalContato && (
+        <ModalContato
+          contato={editContato}
+          representacaoId={id}
+          onClose={() => setModalContato(false)}
+          onSave={async (dados) => {
+            const r = await saveContatoRepAction(id, editContato?.id || null, dados);
+            if ("error" in r) setErro(String(r.error));
+            else { setModalContato(false); carregar(); }
+          }}
+        />
+      )}
+
       {modal && (
         <ModalProduto
           produto={editProd}
@@ -153,6 +285,52 @@ export default function RepresentacaoDetalhe({ id }: { id: string }) {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function ModalContato({
+  contato, representacaoId, onClose, onSave,
+}: {
+  contato: any; representacaoId: string; onClose: () => void;
+  onSave: (dados: any) => void;
+}) {
+  const [form, setForm] = useState({
+    nome: contato?.nome || "", cargo: contato?.cargo || "",
+    email: contato?.email || "", telefone: contato?.telefone || "",
+    observacoes: contato?.observacoes || "",
+  });
+  const campo = (k: keyof typeof form) => ({
+    value: form[k],
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm({ ...form, [k]: e.target.value }),
+  });
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-slate-900">{contato ? "Editar contato" : "Novo contato"}</h3>
+          <button onClick={onClose} className="text-slate-400 text-lg">✕</button>
+        </div>
+        <label className="block text-xs font-semibold text-slate-700">Nome *
+          <input required {...campo("nome")} className="input mt-1" />
+        </label>
+        <label className="block text-xs font-semibold text-slate-700">Cargo
+          <input {...campo("cargo")} className="input mt-1" placeholder="Ex.: Gerente de Vendas" />
+        </label>
+        <label className="block text-xs font-semibold text-slate-700">E-mail
+          <input type="email" {...campo("email")} className="input mt-1" />
+        </label>
+        <label className="block text-xs font-semibold text-slate-700">Telefone
+          <input {...campo("telefone")} className="input mt-1" />
+        </label>
+        <label className="block text-xs font-semibold text-slate-700">Observações
+          <textarea rows={2} {...campo("observacoes")} className="input mt-1" />
+        </label>
+        <div className="flex gap-2 justify-end pt-2">
+          <button type="button" onClick={onClose} className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600">Cancelar</button>
+          <button onClick={() => onSave(form)} className="rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white">💾 Salvar contato</button>
+        </div>
+      </div>
     </div>
   );
 }

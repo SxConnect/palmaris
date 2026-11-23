@@ -169,6 +169,11 @@ export type EmailRecebido = Prisma.EmailRecebidoModel
  */
 export type Representacao = Prisma.RepresentacaoModel
 /**
+ * Model ContatoRepresentacao
+ * Contato de uma representacao (nome, email, telefone, cargo).
+ */
+export type ContatoRepresentacao = Prisma.ContatoRepresentacaoModel
+/**
  * Model Produto
  * Produto ou servico de uma representacao (com ate 6 fotos opcionais).
  */

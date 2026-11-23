@@ -73,6 +73,7 @@ export const ModelName = {
   WhatsappMessage: 'WhatsappMessage',
   EmailRecebido: 'EmailRecebido',
   Representacao: 'Representacao',
+  ContatoRepresentacao: 'ContatoRepresentacao',
   Produto: 'Produto',
   ClienteRepresentacao: 'ClienteRepresentacao'
 } as const
@@ -408,6 +409,8 @@ export const RepresentacaoScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
   slug: 'slug',
+  razaoSocial: 'razaoSocial',
+  endereco: 'endereco',
   logoUrl: 'logoUrl',
   descricao: 'descricao',
   segmento: 'segmento',
@@ -422,6 +425,21 @@ export const RepresentacaoScalarFieldEnum = {
 } as const
 
 export type RepresentacaoScalarFieldEnum = (typeof RepresentacaoScalarFieldEnum)[keyof typeof RepresentacaoScalarFieldEnum]
+
+
+export const ContatoRepresentacaoScalarFieldEnum = {
+  id: 'id',
+  representacaoId: 'representacaoId',
+  nome: 'nome',
+  cargo: 'cargo',
+  email: 'email',
+  telefone: 'telefone',
+  observacoes: 'observacoes',
+  ordem: 'ordem',
+  criadoEm: 'criadoEm'
+} as const
+
+export type ContatoRepresentacaoScalarFieldEnum = (typeof ContatoRepresentacaoScalarFieldEnum)[keyof typeof ContatoRepresentacaoScalarFieldEnum]
 
 
 export const ProdutoScalarFieldEnum = {

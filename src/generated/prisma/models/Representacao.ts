@@ -28,6 +28,8 @@ export type RepresentacaoMinAggregateOutputType = {
   id: string | null
   nome: string | null
   slug: string | null
+  razaoSocial: string | null
+  endereco: string | null
   logoUrl: string | null
   descricao: string | null
   segmento: string | null
@@ -45,6 +47,8 @@ export type RepresentacaoMaxAggregateOutputType = {
   id: string | null
   nome: string | null
   slug: string | null
+  razaoSocial: string | null
+  endereco: string | null
   logoUrl: string | null
   descricao: string | null
   segmento: string | null
@@ -62,6 +66,8 @@ export type RepresentacaoCountAggregateOutputType = {
   id: number
   nome: number
   slug: number
+  razaoSocial: number
+  endereco: number
   logoUrl: number
   descricao: number
   segmento: number
@@ -81,6 +87,8 @@ export type RepresentacaoMinAggregateInputType = {
   id?: true
   nome?: true
   slug?: true
+  razaoSocial?: true
+  endereco?: true
   logoUrl?: true
   descricao?: true
   segmento?: true
@@ -98,6 +106,8 @@ export type RepresentacaoMaxAggregateInputType = {
   id?: true
   nome?: true
   slug?: true
+  razaoSocial?: true
+  endereco?: true
   logoUrl?: true
   descricao?: true
   segmento?: true
@@ -115,6 +125,8 @@ export type RepresentacaoCountAggregateInputType = {
   id?: true
   nome?: true
   slug?: true
+  razaoSocial?: true
+  endereco?: true
   logoUrl?: true
   descricao?: true
   segmento?: true
@@ -205,6 +217,8 @@ export type RepresentacaoGroupByOutputType = {
   id: string
   nome: string
   slug: string
+  razaoSocial: string | null
+  endereco: string | null
   logoUrl: string | null
   descricao: string | null
   segmento: string | null
@@ -243,6 +257,8 @@ export type RepresentacaoWhereInput = {
   id?: Prisma.StringFilter<"Representacao"> | string
   nome?: Prisma.StringFilter<"Representacao"> | string
   slug?: Prisma.StringFilter<"Representacao"> | string
+  razaoSocial?: Prisma.StringNullableFilter<"Representacao"> | string | null
+  endereco?: Prisma.StringNullableFilter<"Representacao"> | string | null
   logoUrl?: Prisma.StringNullableFilter<"Representacao"> | string | null
   descricao?: Prisma.StringNullableFilter<"Representacao"> | string | null
   segmento?: Prisma.StringNullableFilter<"Representacao"> | string | null
@@ -255,6 +271,7 @@ export type RepresentacaoWhereInput = {
   criadoEm?: Prisma.DateTimeFilter<"Representacao"> | Date | string
   atualizadoEm?: Prisma.DateTimeFilter<"Representacao"> | Date | string
   produtos?: Prisma.ProdutoListRelationFilter
+  contatos?: Prisma.ContatoRepresentacaoListRelationFilter
   clientes?: Prisma.ClienteRepresentacaoListRelationFilter
   funis?: Prisma.ClientePassoListRelationFilter
 }
@@ -263,6 +280,8 @@ export type RepresentacaoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  razaoSocial?: Prisma.SortOrderInput | Prisma.SortOrder
+  endereco?: Prisma.SortOrderInput | Prisma.SortOrder
   logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
   segmento?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -275,6 +294,7 @@ export type RepresentacaoOrderByWithRelationInput = {
   criadoEm?: Prisma.SortOrder
   atualizadoEm?: Prisma.SortOrder
   produtos?: Prisma.ProdutoOrderByRelationAggregateInput
+  contatos?: Prisma.ContatoRepresentacaoOrderByRelationAggregateInput
   clientes?: Prisma.ClienteRepresentacaoOrderByRelationAggregateInput
   funis?: Prisma.ClientePassoOrderByRelationAggregateInput
 }
@@ -286,6 +306,8 @@ export type RepresentacaoWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.RepresentacaoWhereInput | Prisma.RepresentacaoWhereInput[]
   OR?: Prisma.RepresentacaoWhereInput[]
   NOT?: Prisma.RepresentacaoWhereInput | Prisma.RepresentacaoWhereInput[]
+  razaoSocial?: Prisma.StringNullableFilter<"Representacao"> | string | null
+  endereco?: Prisma.StringNullableFilter<"Representacao"> | string | null
   logoUrl?: Prisma.StringNullableFilter<"Representacao"> | string | null
   descricao?: Prisma.StringNullableFilter<"Representacao"> | string | null
   segmento?: Prisma.StringNullableFilter<"Representacao"> | string | null
@@ -298,6 +320,7 @@ export type RepresentacaoWhereUniqueInput = Prisma.AtLeast<{
   criadoEm?: Prisma.DateTimeFilter<"Representacao"> | Date | string
   atualizadoEm?: Prisma.DateTimeFilter<"Representacao"> | Date | string
   produtos?: Prisma.ProdutoListRelationFilter
+  contatos?: Prisma.ContatoRepresentacaoListRelationFilter
   clientes?: Prisma.ClienteRepresentacaoListRelationFilter
   funis?: Prisma.ClientePassoListRelationFilter
 }, "id" | "nome" | "slug">
@@ -306,6 +329,8 @@ export type RepresentacaoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  razaoSocial?: Prisma.SortOrderInput | Prisma.SortOrder
+  endereco?: Prisma.SortOrderInput | Prisma.SortOrder
   logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
   segmento?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -329,6 +354,8 @@ export type RepresentacaoScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Representacao"> | string
   nome?: Prisma.StringWithAggregatesFilter<"Representacao"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Representacao"> | string
+  razaoSocial?: Prisma.StringNullableWithAggregatesFilter<"Representacao"> | string | null
+  endereco?: Prisma.StringNullableWithAggregatesFilter<"Representacao"> | string | null
   logoUrl?: Prisma.StringNullableWithAggregatesFilter<"Representacao"> | string | null
   descricao?: Prisma.StringNullableWithAggregatesFilter<"Representacao"> | string | null
   segmento?: Prisma.StringNullableWithAggregatesFilter<"Representacao"> | string | null
@@ -346,6 +373,8 @@ export type RepresentacaoCreateInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -358,6 +387,7 @@ export type RepresentacaoCreateInput = {
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   produtos?: Prisma.ProdutoCreateNestedManyWithoutRepresentacaoInput
+  contatos?: Prisma.ContatoRepresentacaoCreateNestedManyWithoutRepresentacaoInput
   clientes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutRepresentacaoInput
   funis?: Prisma.ClientePassoCreateNestedManyWithoutRepresentacaoInput
 }
@@ -366,6 +396,8 @@ export type RepresentacaoUncheckedCreateInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -378,6 +410,7 @@ export type RepresentacaoUncheckedCreateInput = {
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   produtos?: Prisma.ProdutoUncheckedCreateNestedManyWithoutRepresentacaoInput
+  contatos?: Prisma.ContatoRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
   clientes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
   funis?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutRepresentacaoInput
 }
@@ -386,6 +419,8 @@ export type RepresentacaoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -398,6 +433,7 @@ export type RepresentacaoUpdateInput = {
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produtos?: Prisma.ProdutoUpdateManyWithoutRepresentacaoNestedInput
+  contatos?: Prisma.ContatoRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
   clientes?: Prisma.ClienteRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
   funis?: Prisma.ClientePassoUpdateManyWithoutRepresentacaoNestedInput
 }
@@ -406,6 +442,8 @@ export type RepresentacaoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -418,6 +456,7 @@ export type RepresentacaoUncheckedUpdateInput = {
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produtos?: Prisma.ProdutoUncheckedUpdateManyWithoutRepresentacaoNestedInput
+  contatos?: Prisma.ContatoRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
   clientes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
   funis?: Prisma.ClientePassoUncheckedUpdateManyWithoutRepresentacaoNestedInput
 }
@@ -426,6 +465,8 @@ export type RepresentacaoCreateManyInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -443,6 +484,8 @@ export type RepresentacaoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -460,6 +503,8 @@ export type RepresentacaoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -482,6 +527,8 @@ export type RepresentacaoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  razaoSocial?: Prisma.SortOrder
+  endereco?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
   segmento?: Prisma.SortOrder
@@ -499,6 +546,8 @@ export type RepresentacaoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  razaoSocial?: Prisma.SortOrder
+  endereco?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
   segmento?: Prisma.SortOrder
@@ -516,6 +565,8 @@ export type RepresentacaoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nome?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  razaoSocial?: Prisma.SortOrder
+  endereco?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
   segmento?: Prisma.SortOrder
@@ -550,6 +601,20 @@ export type RepresentacaoUpdateOneWithoutFunisNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RepresentacaoUpdateToOneWithWhereWithoutFunisInput, Prisma.RepresentacaoUpdateWithoutFunisInput>, Prisma.RepresentacaoUncheckedUpdateWithoutFunisInput>
 }
 
+export type RepresentacaoCreateNestedOneWithoutContatosInput = {
+  create?: Prisma.XOR<Prisma.RepresentacaoCreateWithoutContatosInput, Prisma.RepresentacaoUncheckedCreateWithoutContatosInput>
+  connectOrCreate?: Prisma.RepresentacaoCreateOrConnectWithoutContatosInput
+  connect?: Prisma.RepresentacaoWhereUniqueInput
+}
+
+export type RepresentacaoUpdateOneRequiredWithoutContatosNestedInput = {
+  create?: Prisma.XOR<Prisma.RepresentacaoCreateWithoutContatosInput, Prisma.RepresentacaoUncheckedCreateWithoutContatosInput>
+  connectOrCreate?: Prisma.RepresentacaoCreateOrConnectWithoutContatosInput
+  upsert?: Prisma.RepresentacaoUpsertWithoutContatosInput
+  connect?: Prisma.RepresentacaoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RepresentacaoUpdateToOneWithWhereWithoutContatosInput, Prisma.RepresentacaoUpdateWithoutContatosInput>, Prisma.RepresentacaoUncheckedUpdateWithoutContatosInput>
+}
+
 export type RepresentacaoCreateNestedOneWithoutProdutosInput = {
   create?: Prisma.XOR<Prisma.RepresentacaoCreateWithoutProdutosInput, Prisma.RepresentacaoUncheckedCreateWithoutProdutosInput>
   connectOrCreate?: Prisma.RepresentacaoCreateOrConnectWithoutProdutosInput
@@ -582,6 +647,8 @@ export type RepresentacaoCreateWithoutFunisInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -594,6 +661,7 @@ export type RepresentacaoCreateWithoutFunisInput = {
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   produtos?: Prisma.ProdutoCreateNestedManyWithoutRepresentacaoInput
+  contatos?: Prisma.ContatoRepresentacaoCreateNestedManyWithoutRepresentacaoInput
   clientes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutRepresentacaoInput
 }
 
@@ -601,6 +669,8 @@ export type RepresentacaoUncheckedCreateWithoutFunisInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -613,6 +683,7 @@ export type RepresentacaoUncheckedCreateWithoutFunisInput = {
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   produtos?: Prisma.ProdutoUncheckedCreateNestedManyWithoutRepresentacaoInput
+  contatos?: Prisma.ContatoRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
   clientes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
 }
 
@@ -636,6 +707,112 @@ export type RepresentacaoUpdateWithoutFunisInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailContato?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  produtos?: Prisma.ProdutoUpdateManyWithoutRepresentacaoNestedInput
+  contatos?: Prisma.ContatoRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
+  clientes?: Prisma.ClienteRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
+}
+
+export type RepresentacaoUncheckedUpdateWithoutFunisInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailContato?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  responsavel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  produtos?: Prisma.ProdutoUncheckedUpdateManyWithoutRepresentacaoNestedInput
+  contatos?: Prisma.ContatoRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
+  clientes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
+}
+
+export type RepresentacaoCreateWithoutContatosInput = {
+  id?: string
+  nome: string
+  slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
+  logoUrl?: string | null
+  descricao?: string | null
+  segmento?: string | null
+  site?: string | null
+  emailContato?: string | null
+  telefone?: string | null
+  responsavel?: string | null
+  status?: string
+  observacoes?: string | null
+  criadoEm?: Date | string
+  atualizadoEm?: Date | string
+  produtos?: Prisma.ProdutoCreateNestedManyWithoutRepresentacaoInput
+  clientes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutRepresentacaoInput
+  funis?: Prisma.ClientePassoCreateNestedManyWithoutRepresentacaoInput
+}
+
+export type RepresentacaoUncheckedCreateWithoutContatosInput = {
+  id?: string
+  nome: string
+  slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
+  logoUrl?: string | null
+  descricao?: string | null
+  segmento?: string | null
+  site?: string | null
+  emailContato?: string | null
+  telefone?: string | null
+  responsavel?: string | null
+  status?: string
+  observacoes?: string | null
+  criadoEm?: Date | string
+  atualizadoEm?: Date | string
+  produtos?: Prisma.ProdutoUncheckedCreateNestedManyWithoutRepresentacaoInput
+  clientes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
+  funis?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutRepresentacaoInput
+}
+
+export type RepresentacaoCreateOrConnectWithoutContatosInput = {
+  where: Prisma.RepresentacaoWhereUniqueInput
+  create: Prisma.XOR<Prisma.RepresentacaoCreateWithoutContatosInput, Prisma.RepresentacaoUncheckedCreateWithoutContatosInput>
+}
+
+export type RepresentacaoUpsertWithoutContatosInput = {
+  update: Prisma.XOR<Prisma.RepresentacaoUpdateWithoutContatosInput, Prisma.RepresentacaoUncheckedUpdateWithoutContatosInput>
+  create: Prisma.XOR<Prisma.RepresentacaoCreateWithoutContatosInput, Prisma.RepresentacaoUncheckedCreateWithoutContatosInput>
+  where?: Prisma.RepresentacaoWhereInput
+}
+
+export type RepresentacaoUpdateToOneWithWhereWithoutContatosInput = {
+  where?: Prisma.RepresentacaoWhereInput
+  data: Prisma.XOR<Prisma.RepresentacaoUpdateWithoutContatosInput, Prisma.RepresentacaoUncheckedUpdateWithoutContatosInput>
+}
+
+export type RepresentacaoUpdateWithoutContatosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -649,12 +826,15 @@ export type RepresentacaoUpdateWithoutFunisInput = {
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produtos?: Prisma.ProdutoUpdateManyWithoutRepresentacaoNestedInput
   clientes?: Prisma.ClienteRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
+  funis?: Prisma.ClientePassoUpdateManyWithoutRepresentacaoNestedInput
 }
 
-export type RepresentacaoUncheckedUpdateWithoutFunisInput = {
+export type RepresentacaoUncheckedUpdateWithoutContatosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -668,12 +848,15 @@ export type RepresentacaoUncheckedUpdateWithoutFunisInput = {
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produtos?: Prisma.ProdutoUncheckedUpdateManyWithoutRepresentacaoNestedInput
   clientes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
+  funis?: Prisma.ClientePassoUncheckedUpdateManyWithoutRepresentacaoNestedInput
 }
 
 export type RepresentacaoCreateWithoutProdutosInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -685,6 +868,7 @@ export type RepresentacaoCreateWithoutProdutosInput = {
   observacoes?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
+  contatos?: Prisma.ContatoRepresentacaoCreateNestedManyWithoutRepresentacaoInput
   clientes?: Prisma.ClienteRepresentacaoCreateNestedManyWithoutRepresentacaoInput
   funis?: Prisma.ClientePassoCreateNestedManyWithoutRepresentacaoInput
 }
@@ -693,6 +877,8 @@ export type RepresentacaoUncheckedCreateWithoutProdutosInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -704,6 +890,7 @@ export type RepresentacaoUncheckedCreateWithoutProdutosInput = {
   observacoes?: string | null
   criadoEm?: Date | string
   atualizadoEm?: Date | string
+  contatos?: Prisma.ContatoRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
   clientes?: Prisma.ClienteRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
   funis?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutRepresentacaoInput
 }
@@ -728,6 +915,8 @@ export type RepresentacaoUpdateWithoutProdutosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -739,6 +928,7 @@ export type RepresentacaoUpdateWithoutProdutosInput = {
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contatos?: Prisma.ContatoRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
   clientes?: Prisma.ClienteRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
   funis?: Prisma.ClientePassoUpdateManyWithoutRepresentacaoNestedInput
 }
@@ -747,6 +937,8 @@ export type RepresentacaoUncheckedUpdateWithoutProdutosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -758,6 +950,7 @@ export type RepresentacaoUncheckedUpdateWithoutProdutosInput = {
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contatos?: Prisma.ContatoRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
   clientes?: Prisma.ClienteRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
   funis?: Prisma.ClientePassoUncheckedUpdateManyWithoutRepresentacaoNestedInput
 }
@@ -766,6 +959,8 @@ export type RepresentacaoCreateWithoutClientesInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -778,6 +973,7 @@ export type RepresentacaoCreateWithoutClientesInput = {
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   produtos?: Prisma.ProdutoCreateNestedManyWithoutRepresentacaoInput
+  contatos?: Prisma.ContatoRepresentacaoCreateNestedManyWithoutRepresentacaoInput
   funis?: Prisma.ClientePassoCreateNestedManyWithoutRepresentacaoInput
 }
 
@@ -785,6 +981,8 @@ export type RepresentacaoUncheckedCreateWithoutClientesInput = {
   id?: string
   nome: string
   slug: string
+  razaoSocial?: string | null
+  endereco?: string | null
   logoUrl?: string | null
   descricao?: string | null
   segmento?: string | null
@@ -797,6 +995,7 @@ export type RepresentacaoUncheckedCreateWithoutClientesInput = {
   criadoEm?: Date | string
   atualizadoEm?: Date | string
   produtos?: Prisma.ProdutoUncheckedCreateNestedManyWithoutRepresentacaoInput
+  contatos?: Prisma.ContatoRepresentacaoUncheckedCreateNestedManyWithoutRepresentacaoInput
   funis?: Prisma.ClientePassoUncheckedCreateNestedManyWithoutRepresentacaoInput
 }
 
@@ -820,6 +1019,8 @@ export type RepresentacaoUpdateWithoutClientesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -832,6 +1033,7 @@ export type RepresentacaoUpdateWithoutClientesInput = {
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produtos?: Prisma.ProdutoUpdateManyWithoutRepresentacaoNestedInput
+  contatos?: Prisma.ContatoRepresentacaoUpdateManyWithoutRepresentacaoNestedInput
   funis?: Prisma.ClientePassoUpdateManyWithoutRepresentacaoNestedInput
 }
 
@@ -839,6 +1041,8 @@ export type RepresentacaoUncheckedUpdateWithoutClientesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  razaoSocial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  endereco?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   segmento?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -851,6 +1055,7 @@ export type RepresentacaoUncheckedUpdateWithoutClientesInput = {
   criadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizadoEm?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   produtos?: Prisma.ProdutoUncheckedUpdateManyWithoutRepresentacaoNestedInput
+  contatos?: Prisma.ContatoRepresentacaoUncheckedUpdateManyWithoutRepresentacaoNestedInput
   funis?: Prisma.ClientePassoUncheckedUpdateManyWithoutRepresentacaoNestedInput
 }
 
@@ -861,12 +1066,14 @@ export type RepresentacaoUncheckedUpdateWithoutClientesInput = {
 
 export type RepresentacaoCountOutputType = {
   produtos: number
+  contatos: number
   clientes: number
   funis: number
 }
 
 export type RepresentacaoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   produtos?: boolean | RepresentacaoCountOutputTypeCountProdutosArgs
+  contatos?: boolean | RepresentacaoCountOutputTypeCountContatosArgs
   clientes?: boolean | RepresentacaoCountOutputTypeCountClientesArgs
   funis?: boolean | RepresentacaoCountOutputTypeCountFunisArgs
 }
@@ -891,6 +1098,13 @@ export type RepresentacaoCountOutputTypeCountProdutosArgs<ExtArgs extends runtim
 /**
  * RepresentacaoCountOutputType without action
  */
+export type RepresentacaoCountOutputTypeCountContatosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContatoRepresentacaoWhereInput
+}
+
+/**
+ * RepresentacaoCountOutputType without action
+ */
 export type RepresentacaoCountOutputTypeCountClientesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ClienteRepresentacaoWhereInput
 }
@@ -907,6 +1121,8 @@ export type RepresentacaoSelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   nome?: boolean
   slug?: boolean
+  razaoSocial?: boolean
+  endereco?: boolean
   logoUrl?: boolean
   descricao?: boolean
   segmento?: boolean
@@ -919,6 +1135,7 @@ export type RepresentacaoSelect<ExtArgs extends runtime.Types.Extensions.Interna
   criadoEm?: boolean
   atualizadoEm?: boolean
   produtos?: boolean | Prisma.Representacao$produtosArgs<ExtArgs>
+  contatos?: boolean | Prisma.Representacao$contatosArgs<ExtArgs>
   clientes?: boolean | Prisma.Representacao$clientesArgs<ExtArgs>
   funis?: boolean | Prisma.Representacao$funisArgs<ExtArgs>
   _count?: boolean | Prisma.RepresentacaoCountOutputTypeDefaultArgs<ExtArgs>
@@ -928,6 +1145,8 @@ export type RepresentacaoSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   nome?: boolean
   slug?: boolean
+  razaoSocial?: boolean
+  endereco?: boolean
   logoUrl?: boolean
   descricao?: boolean
   segmento?: boolean
@@ -945,6 +1164,8 @@ export type RepresentacaoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   nome?: boolean
   slug?: boolean
+  razaoSocial?: boolean
+  endereco?: boolean
   logoUrl?: boolean
   descricao?: boolean
   segmento?: boolean
@@ -962,6 +1183,8 @@ export type RepresentacaoSelectScalar = {
   id?: boolean
   nome?: boolean
   slug?: boolean
+  razaoSocial?: boolean
+  endereco?: boolean
   logoUrl?: boolean
   descricao?: boolean
   segmento?: boolean
@@ -975,9 +1198,10 @@ export type RepresentacaoSelectScalar = {
   atualizadoEm?: boolean
 }
 
-export type RepresentacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "logoUrl" | "descricao" | "segmento" | "site" | "emailContato" | "telefone" | "responsavel" | "status" | "observacoes" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["representacao"]>
+export type RepresentacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "slug" | "razaoSocial" | "endereco" | "logoUrl" | "descricao" | "segmento" | "site" | "emailContato" | "telefone" | "responsavel" | "status" | "observacoes" | "criadoEm" | "atualizadoEm", ExtArgs["result"]["representacao"]>
 export type RepresentacaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   produtos?: boolean | Prisma.Representacao$produtosArgs<ExtArgs>
+  contatos?: boolean | Prisma.Representacao$contatosArgs<ExtArgs>
   clientes?: boolean | Prisma.Representacao$clientesArgs<ExtArgs>
   funis?: boolean | Prisma.Representacao$funisArgs<ExtArgs>
   _count?: boolean | Prisma.RepresentacaoCountOutputTypeDefaultArgs<ExtArgs>
@@ -989,6 +1213,7 @@ export type $RepresentacaoPayload<ExtArgs extends runtime.Types.Extensions.Inter
   name: "Representacao"
   objects: {
     produtos: Prisma.$ProdutoPayload<ExtArgs>[]
+    contatos: Prisma.$ContatoRepresentacaoPayload<ExtArgs>[]
     clientes: Prisma.$ClienteRepresentacaoPayload<ExtArgs>[]
     funis: Prisma.$ClientePassoPayload<ExtArgs>[]
   }
@@ -996,6 +1221,8 @@ export type $RepresentacaoPayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     nome: string
     slug: string
+    razaoSocial: string | null
+    endereco: string | null
     logoUrl: string | null
     descricao: string | null
     segmento: string | null
@@ -1402,6 +1629,7 @@ readonly fields: RepresentacaoFieldRefs;
 export interface Prisma__RepresentacaoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   produtos<T extends Prisma.Representacao$produtosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Representacao$produtosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProdutoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contatos<T extends Prisma.Representacao$contatosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Representacao$contatosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContatoRepresentacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clientes<T extends Prisma.Representacao$clientesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Representacao$clientesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClienteRepresentacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   funis<T extends Prisma.Representacao$funisArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Representacao$funisArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientePassoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1436,6 +1664,8 @@ export interface RepresentacaoFieldRefs {
   readonly id: Prisma.FieldRef<"Representacao", 'String'>
   readonly nome: Prisma.FieldRef<"Representacao", 'String'>
   readonly slug: Prisma.FieldRef<"Representacao", 'String'>
+  readonly razaoSocial: Prisma.FieldRef<"Representacao", 'String'>
+  readonly endereco: Prisma.FieldRef<"Representacao", 'String'>
   readonly logoUrl: Prisma.FieldRef<"Representacao", 'String'>
   readonly descricao: Prisma.FieldRef<"Representacao", 'String'>
   readonly segmento: Prisma.FieldRef<"Representacao", 'String'>
@@ -1861,6 +2091,30 @@ export type Representacao$produtosArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ProdutoScalarFieldEnum | Prisma.ProdutoScalarFieldEnum[]
+}
+
+/**
+ * Representacao.contatos
+ */
+export type Representacao$contatosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContatoRepresentacao
+   */
+  select?: Prisma.ContatoRepresentacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContatoRepresentacao
+   */
+  omit?: Prisma.ContatoRepresentacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContatoRepresentacaoInclude<ExtArgs> | null
+  where?: Prisma.ContatoRepresentacaoWhereInput
+  orderBy?: Prisma.ContatoRepresentacaoOrderByWithRelationInput | Prisma.ContatoRepresentacaoOrderByWithRelationInput[]
+  cursor?: Prisma.ContatoRepresentacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContatoRepresentacaoScalarFieldEnum | Prisma.ContatoRepresentacaoScalarFieldEnum[]
 }
 
 /**

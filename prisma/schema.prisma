@@ -407,6 +407,8 @@ model Representacao {
   id            String   @id @default(cuid())
   nome          String   @unique
   slug          String   @unique
+  razaoSocial   String?
+  endereco      String?
   logoUrl       String?
   descricao     String?
   segmento      String?
@@ -420,10 +422,28 @@ model Representacao {
   atualizadoEm  DateTime @updatedAt
 
   produtos      Produto[]
+  contatos      ContatoRepresentacao[]
   clientes      ClienteRepresentacao[]
   funis         ClientePasso[]
 
   @@map("representacoes")
+}
+
+/// Contato de uma representacao (nome, email, telefone, cargo).
+model ContatoRepresentacao {
+  id              String   @id @default(cuid())
+  representacaoId String
+  representacao   Representacao @relation(fields: [representacaoId], references: [id], onDelete: Cascade)
+  nome            String
+  cargo           String?
+  email           String?
+  telefone        String?
+  observacoes     String?
+  ordem           Int      @default(0)
+  criadoEm        DateTime @default(now())
+
+  @@index([representacaoId])
+  @@map("contatos_representacao")
 }
 
 /// Produto ou servico de uma representacao (com ate 6 fotos opcionais).

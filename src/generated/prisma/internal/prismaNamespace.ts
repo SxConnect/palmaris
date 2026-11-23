@@ -419,6 +419,7 @@ export const ModelName = {
   WhatsappMessage: 'WhatsappMessage',
   EmailRecebido: 'EmailRecebido',
   Representacao: 'Representacao',
+  ContatoRepresentacao: 'ContatoRepresentacao',
   Produto: 'Produto',
   ClienteRepresentacao: 'ClienteRepresentacao'
 } as const
@@ -436,7 +437,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "campaignReport" | "emailBounce" | "emailOpen" | "cliente" | "clientePasso" | "whatsappMessage" | "emailRecebido" | "representacao" | "produto" | "clienteRepresentacao"
+    modelProps: "user" | "session" | "passwordResetToken" | "media" | "gallery" | "galleryImage" | "post" | "page" | "section" | "menuItem" | "contactMessage" | "setting" | "scheduledCampaign" | "emailSend" | "campaignReport" | "emailBounce" | "emailOpen" | "cliente" | "clientePasso" | "whatsappMessage" | "emailRecebido" | "representacao" | "contatoRepresentacao" | "produto" | "clienteRepresentacao"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2068,6 +2069,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContatoRepresentacao: {
+      payload: Prisma.$ContatoRepresentacaoPayload<ExtArgs>
+      fields: Prisma.ContatoRepresentacaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContatoRepresentacaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContatoRepresentacaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>
+        }
+        findFirst: {
+          args: Prisma.ContatoRepresentacaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContatoRepresentacaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>
+        }
+        findMany: {
+          args: Prisma.ContatoRepresentacaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>[]
+        }
+        create: {
+          args: Prisma.ContatoRepresentacaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>
+        }
+        createMany: {
+          args: Prisma.ContatoRepresentacaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContatoRepresentacaoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>[]
+        }
+        delete: {
+          args: Prisma.ContatoRepresentacaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>
+        }
+        update: {
+          args: Prisma.ContatoRepresentacaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContatoRepresentacaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContatoRepresentacaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContatoRepresentacaoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContatoRepresentacaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContatoRepresentacaoPayload>
+        }
+        aggregate: {
+          args: Prisma.ContatoRepresentacaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContatoRepresentacao>
+        }
+        groupBy: {
+          args: Prisma.ContatoRepresentacaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContatoRepresentacaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContatoRepresentacaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContatoRepresentacaoCountAggregateOutputType> | number
+        }
+      }
+    }
     Produto: {
       payload: Prisma.$ProdutoPayload<ExtArgs>
       fields: Prisma.ProdutoFieldRefs
@@ -2570,6 +2645,8 @@ export const RepresentacaoScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
   slug: 'slug',
+  razaoSocial: 'razaoSocial',
+  endereco: 'endereco',
   logoUrl: 'logoUrl',
   descricao: 'descricao',
   segmento: 'segmento',
@@ -2584,6 +2661,21 @@ export const RepresentacaoScalarFieldEnum = {
 } as const
 
 export type RepresentacaoScalarFieldEnum = (typeof RepresentacaoScalarFieldEnum)[keyof typeof RepresentacaoScalarFieldEnum]
+
+
+export const ContatoRepresentacaoScalarFieldEnum = {
+  id: 'id',
+  representacaoId: 'representacaoId',
+  nome: 'nome',
+  cargo: 'cargo',
+  email: 'email',
+  telefone: 'telefone',
+  observacoes: 'observacoes',
+  ordem: 'ordem',
+  criadoEm: 'criadoEm'
+} as const
+
+export type ContatoRepresentacaoScalarFieldEnum = (typeof ContatoRepresentacaoScalarFieldEnum)[keyof typeof ContatoRepresentacaoScalarFieldEnum]
 
 
 export const ProdutoScalarFieldEnum = {
@@ -2945,6 +3037,7 @@ export type GlobalOmitConfig = {
   whatsappMessage?: Prisma.WhatsappMessageOmit
   emailRecebido?: Prisma.EmailRecebidoOmit
   representacao?: Prisma.RepresentacaoOmit
+  contatoRepresentacao?: Prisma.ContatoRepresentacaoOmit
   produto?: Prisma.ProdutoOmit
   clienteRepresentacao?: Prisma.ClienteRepresentacaoOmit
 }
